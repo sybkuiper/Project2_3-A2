@@ -1,3 +1,7 @@
+package Players;
+
+import Hanze.GameClient;
+
 import java.util.*;
 
 public class Robot extends Player {
@@ -5,20 +9,16 @@ public class Robot extends Player {
     private String game;
     private Random randomGenerator;
 
-    public Robot(String ip, int port, int difficulty, String game){
-        super(ip, port);
+    public Robot(GameClient client, int difficulty, String game){
         this.difficulty = difficulty;
         this.game = game;
         randomGenerator = new Random();
-        setup(game +".A.I");
+        client.ConnectToServer(this);
+        client.getServerCommunication(this).logIN(game +".A.I.");
+        client.getServerCommunication(this).subscribe(game);
     }
 
-    private void setup(String name){
-        logIN(name);
-        subscribe(game);
-    }
-
-    String think(Map<String,String> gameState){
+    public String think(Map<String,String> gameState){
         String bestMove = "0";
         int bestScore = -10;
 
