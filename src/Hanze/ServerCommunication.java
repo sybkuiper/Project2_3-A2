@@ -74,8 +74,11 @@ public class ServerCommunication extends Thread {
 
     public void run(){
         while(true){
+            String response = in.nextLine();
+            System.out.println(response);
+            parse(response);
             try {
-                Thread.sleep(3000);
+                Thread.sleep(5000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -86,9 +89,6 @@ public class ServerCommunication extends Thread {
                 commandQueue.remove(commandQueue.get(0));
                 out.flush();
             }
-            String response = in.nextLine();
-            System.out.println(response);
-            parse(response);
         }
     }
 }
