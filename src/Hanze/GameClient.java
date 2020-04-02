@@ -29,8 +29,9 @@ public class GameClient {
     public GameClient() {
         sockets = new HashMap<>();
         serverCommunications = new HashMap<>();
-        Human human = new Human(this, "kees" );
-        Robot robot = new Robot(this, 0, "Tic-tac-toe");
+        new Human(this, "kees" );
+        new Robot(this, 0, "Tic-tac-toe");
+
     }
 
     /**

@@ -74,12 +74,16 @@ public class ServerCommunication extends Thread {
 
     public void run(){
         while(true){
-            while(!commandQueue.isEmpty()){
-                System.out.println(commandQueue);
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            if(!commandQueue.isEmpty()){
+                System.out.println(commandQueue.get(0));
                 out.println(commandQueue.get(0));
+                System.out.println("Send command: " + commandQueue.get(0));
                 commandQueue.remove(commandQueue.get(0));
-                //System.out.println("Send command: " + commandQueue.get(0));
-                //System.out.println(commandQueue);
                 out.flush();
             }
             String response = in.nextLine();
