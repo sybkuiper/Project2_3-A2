@@ -23,8 +23,6 @@ import java.util.List;
 public class GameClient {
     private final static String REMOTE_IP = "145.33.225.170";
     private final static int PORT = 7789;
-//    private Socket socket;
-//    private ServerCommunication serverCommunication;
     private HashMap<Player, Socket> sockets;
     private HashMap<Player, ServerCommunication> serverCommunications;
 
@@ -40,16 +38,10 @@ public class GameClient {
      */
     public void ConnectToServer(Player player){
         try {
-//            socket = new Socket("localhost", PORT);
-//            serverCommunication = new ServerCommunication(socket);
-//            serverCommunication.start();
-//            TestThreadCommands t = new TestThreadCommands(serverCommunication);
-//            t.start();
             Socket socket = new Socket("localhost",PORT);
             sockets.put(player, socket);
             serverCommunications.put(player, new ServerCommunication(socket));
             serverCommunications.get(player).start();
-
         } catch (IOException e) {
             e.printStackTrace();
         }
