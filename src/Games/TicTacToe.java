@@ -1,8 +1,14 @@
+/*package Games;
+
+import Players.Human;
+import Players.Player;
+import Players.Robot;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.*;
 
-//this class keeps the status of a running game of Tic-tac-toe
+
 public class TicTacToe {
     private Player player;
     private String playerName;
@@ -18,16 +24,13 @@ public class TicTacToe {
         startGame(this.player);
     }
 
-    //when starting the game. needs cleaning
     private void startGame(Player player){
-        //makes array that keeps track of the gameBoard
         for(int i=0;i<9;i++){
             gameState.put(Integer.toString(i),"E");
         }
         System.out.println(gameState);
         player.subscribe("Tic-tac-toe");
 
-        //before the game goes to running, watch who starts the game and then start the game.
         while (!runningGame){
             if(player.getServerResponse().get(0).contains("SVR GAME MATCH")){
                 runningGame = true;
@@ -38,7 +41,6 @@ public class TicTacToe {
         runningGame();
     }
 
-    //looks who's turn it is and gives them the turn.
     private void runningGame(){
         while(runningGame){
             System.out.println(player.myTurn);
@@ -50,7 +52,6 @@ public class TicTacToe {
         }
     }
 
-    //when it is the playersTurn wait for input. now via the commandline later via GUI.
     private void playersTurn(){
         try {
             String input = reader.readLine();
@@ -63,7 +64,6 @@ public class TicTacToe {
         }
     }
 
-    //when it is the AI's turn and let him make a move based on it's  algorithm.
     private void AITurn(){
         String move;
         move = AI.think(gameState);
@@ -75,3 +75,4 @@ public class TicTacToe {
     }
 
 }
+*/
