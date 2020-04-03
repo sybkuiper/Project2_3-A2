@@ -60,7 +60,8 @@ public class ServerCommunication extends Thread {
     }
 
     public void challenge(String player, String gameType){
-        addToCommandQueue("challenge " + player + " " + gameType);
+        addToCommandQueue("challenge " + player + " " + gameType + "");
+
     }
 
     public void acceptChallenge(String challengeNumber){
@@ -208,6 +209,11 @@ public class ServerCommunication extends Thread {
         }
         while(this.isRunning){
             parse(in.nextLine());
+            for (String player : client.getOnlinePlayers()){
+                if(!(player == getName())){
+                    challenge(player,"\"Tic-tac-toe\"");
+                }
+            }
             if(!commandQueue.isEmpty()){
                 out.println(commandQueue.get(0));
                 System.out.println(this.name + " : " + commandQueue.get(0));
