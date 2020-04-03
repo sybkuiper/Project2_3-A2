@@ -4,9 +4,7 @@ import Players.Player;
 
 import java.io.*;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class ServerCommunication extends Thread {
     private final static String LOCAL_IP = "localhost";
@@ -15,14 +13,14 @@ public class ServerCommunication extends Thread {
     private Socket socket;
     private Scanner in;
     private PrintWriter out;
-    private List<String> responses;
     private List<String> commandQueue;
     private boolean isRunning = false;
     private String name;
+    private GameClient client;
 
     public ServerCommunication(GameClient client, String name) throws IOException, InterruptedException {
         this.socket = new Socket(LOCAL_IP,PORT);
-        this.responses = new ArrayList<>();
+        this.client = client;
         this.commandQueue = new ArrayList<>();
         this.in = new Scanner(this.socket.getInputStream());
         this.out = new PrintWriter(this.socket.getOutputStream(),true);
@@ -61,20 +59,27 @@ public class ServerCommunication extends Thread {
         addToCommandQueue("subscribe " + game);
     }
 
+    public void challenge(String player, String gameType){
+        addToCommandQueue("challenge " + player + " " + gameType);
+    }
+
+    public void acceptChallenge(String challengeNumber){
+        addToCommandQueue("challenge accept " + challengeNumber);
+    }
+
     public void logout(){
         addToCommandQueue("logout");
     }
 
+    /**
+     * Geef een match op.
+     */
     public void forfeit(){
         addToCommandQueue("forfeit");
     }
 
     public void move(String move){
         addToCommandQueue("move " + move);
-    }
-
-    public List<String> getResponses() {
-        return responses;
     }
 
     private void parse(String input){
@@ -85,8 +90,110 @@ public class ServerCommunication extends Thread {
         ignoreList.add("OK");
 
         if(!ignoreList.contains(input)) {
-            responses.add(0, input);
-            System.out.println(input);
+            //https://stackoverflow.com/questions/9588516/how-to-convert-string-list-into-list-object-in-java
+            if(input.startsWith("SVR GAMELIST ")){
+                input = input.replace("SVR GAMELIST ","").replace("[","").replace("]","");
+                String[] split = input.split(",");
+                for(String str : split){
+                    client.getGames().add(str);
+                }
+            }
+            if(input.startsWith("SVR PLAYERLIST ")){
+                input = input.replace("SVR PLAYERLIST ","").replace("[","").replace("]","");
+                String[] split = input.split(",");
+                for(String str : split){
+                    client.getOnlinePlayers().add(str);
+                }
+            }
+            if(input.startsWith("SVR GAME CHALLENGE ")){
+                if(input.startsWith("SVR GAME CHALLENGE CANCELLED ")){
+                    input = input.replace("SVR GAME CHALLENGE CANCELLED {CHALLENGENUMBER: ","").replace("}","");
+                    //Todo: controller call die aangeeft dat de match uitnodiging voor ID is verlopen
+                } else {
+                    System.out.println(name + ": received game invite");
+                    //https://stackoverflow.com/questions/26485964/how-to-convert-string-into-hashmap-in-java
+                    input = input.replace("SVR GAME CHALLENGE ", "");
+                    input = input.substring(1, input.length() - 1);
+                    String[] keyvalue = input.split(", ");
+                    Map<String, String> map = new HashMap<>();
+                    for (String pair : keyvalue) {
+                        String[] entry = pair.split(": ");
+                        map.put(entry[0], entry[1]);
+                    }
+                    System.out.println(map);
+                }
+            }
+            if(input.startsWith("SVR GAME MATCH ")){
+                //https://stackoverflow.com/questions/26485964/how-to-convert-string-into-hashmap-in-java
+                input = input.replace("SVR GAME MATCH ", "");
+                input = input.substring(1, input.length() - 1);
+                String[] keyvalue = input.split(", ");
+                Map<String, String> map = new HashMap<>();
+                for (String pair : keyvalue) {
+                    String[] entry = pair.split(": ");
+                    map.put(entry[0], entry[1]);
+                }
+                System.out.println(map);
+                //Todo: Start game interface
+            }
+            if(input.startsWith("SVR GAME YOURTURN ")){
+                input = input.replace("SVR GAME YOURTURN ","");
+                input = input.substring(1,input.length()-1);
+                String[] entry = input.split(": ");
+                Map<String,String> map = new HashMap<>();
+                map.put(entry[0],entry[1]);
+                System.out.println(map);
+                //Todo: Enable ability to make a turn (should enable interface, the interface allows the method call move)
+            }
+            if(input.startsWith("SVR GAME MOVE ")){
+                input = input.replace("SVR GAME MOVE ","");
+                input = input.substring(1,input.length()-1);
+                String[] keyvalue = input.split(", ");
+                Map<String, String> map = new HashMap<>();
+                for (String pair : keyvalue) {
+                    String[] entry = pair.split(": ");
+                    map.put(entry[0], entry[1]);
+                }
+                System.out.println(map);
+                //Todo: verwerken reactie spel, hoe? testen
+            }
+            if(input.startsWith("SVR GAME ")){
+                input.replace("SVR GAME ","");
+                if(input.startsWith("WIN")){
+                    input = input.replace("WIN ","");
+                    input = input.substring(1,input.length()-1);
+                    String[] keyvalue = input.split(", ");
+                    Map<String, String> map = new HashMap<>();
+                    for (String pair : keyvalue) {
+                        String[] entry = pair.split(": ");
+                        map.put(entry[0], entry[1]);
+                    }
+                    System.out.println(map);
+                    //Todo: verwerken reactie spel, hoe? testen
+                } else if (input.startsWith("LOSS")){
+                    input = input.replace("LOSS ","");
+                    input = input.substring(1,input.length()-1);
+                    String[] keyvalue = input.split(", ");
+                    Map<String, String> map = new HashMap<>();
+                    for (String pair : keyvalue) {
+                        String[] entry = pair.split(": ");
+                        map.put(entry[0], entry[1]);
+                    }
+                    System.out.println(map);
+                    //Todo: verwerken reactie spel, hoe? testen
+                } else if (input.startsWith("DRAW")){
+                    input = input.replace("DRAW ","");
+                    input = input.substring(1,input.length()-1);
+                    String[] keyvalue = input.split(", ");
+                    Map<String, String> map = new HashMap<>();
+                    for (String pair : keyvalue) {
+                        String[] entry = pair.split(": ");
+                        map.put(entry[0], entry[1]);
+                    }
+                    System.out.println(map);
+                    //Todo: verwerken reactie spel, hoe? testen
+                }
+            }
         }
     }
 
@@ -101,7 +208,6 @@ public class ServerCommunication extends Thread {
         }
         while(this.isRunning){
             parse(in.nextLine());
-
             if(!commandQueue.isEmpty()){
                 out.println(commandQueue.get(0));
                 System.out.println(this.name + " : " + commandQueue.get(0));
@@ -109,5 +215,13 @@ public class ServerCommunication extends Thread {
                 out.flush();
             }
         }
+    }
+
+    public void getPlayerList() {
+        addToCommandQueue("get playerlist");
+    }
+
+    public void getGameList(){
+        addToCommandQueue("get gamelist");
     }
 }

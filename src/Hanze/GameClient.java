@@ -23,12 +23,24 @@ import java.util.List;
 public class GameClient {
     private List<Socket> sockets;
     private List<ServerCommunication> serverCommunications;
+    private List<String> onlinePlayers;
+    private List<String> games;
 
     public GameClient() throws IOException, InterruptedException {
         sockets = new ArrayList<>();
         serverCommunications = new ArrayList<>();
+        onlinePlayers = new ArrayList<>();
+        games = new ArrayList<>();
         new Human(this, "kees" );
         new Robot(this, 0, "Tic-tac-toe");
+    }
+
+    public List<String> getOnlinePlayers() {
+        return onlinePlayers;
+    }
+
+    public List<String> getGames() {
+        return games;
     }
 
     public List<Socket> getSockets() {
