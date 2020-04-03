@@ -21,57 +21,34 @@ import java.util.List;
  */
 
 public class GameClient {
-    private final static String REMOTE_IP = "145.33.225.170";
-    private final static int PORT = 7789;
-//    private Socket socket;
-//    private ServerCommunication serverCommunication;
-    private HashMap<Player, Socket> sockets;
-    private HashMap<Player, ServerCommunication> serverCommunications;
+    private List<Socket> sockets;
+    private List<ServerCommunication> serverCommunications;
+    private List<String> onlinePlayers;
+    private List<String> games;
 
-    public GameClient() {
-        sockets = new HashMap<>();
-        serverCommunications = new HashMap<>();
-        Human human = new Human(this, "kees" );
-        Robot robot = new Robot(this, 0, "Tic-tac-toe");
+    public GameClient() throws IOException, InterruptedException {
+        sockets = new ArrayList<>();
+        serverCommunications = new ArrayList<>();
+        onlinePlayers = new ArrayList<>();
+        games = new ArrayList<>();
+        new Human(this, "kees" );
+        new Robot(this, 0, "Tic-tac-toe");
     }
 
-    /**
-     * Creates a socket to connect to a server at a specific port.
-     */
-    public void ConnectToServer(Player player){
-        try {
-//            socket = new Socket("localhost", PORT);
-//            serverCommunication = new ServerCommunication(socket);
-//            serverCommunication.start();
-//            TestThreadCommands t = new TestThreadCommands(serverCommunication);
-//            t.start();
-            Socket socket = new Socket("localhost",PORT);
-            sockets.put(player, socket);
-            serverCommunications.put(player, new ServerCommunication(socket));
-            serverCommunications.get(player).start();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public List<String> getOnlinePlayers() {
+        return onlinePlayers;
     }
 
-    public ServerCommunication getServerCommunication(Player player){
-        return serverCommunications.get(player);
+    public List<String> getGames() {
+        return games;
     }
 
-    /**
-     * Closes the BufferedReader in, PrintWriter out and the Socket socket.
-     */
-    public void DisconnectFromServer(){
-        try {
-            for(Player player : sockets.keySet()) {
-                serverCommunications.get(player).getIn().close();
-                serverCommunications.get(player).getOut().close();
-                sockets.get(player).close();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public List<Socket> getSockets() {
+        return sockets;
+    }
+
+    public List<ServerCommunication> getServerCommunications() {
+        return serverCommunications;
     }
 
     public static void main(String[] args) throws IOException, InterruptedException {
