@@ -1,5 +1,7 @@
 package Hanze;
 
+import Players.Player;
+
 import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -7,22 +9,36 @@ import java.util.List;
 import java.util.Scanner;
 
 public class ServerCommunication extends Thread {
+    private final static String LOCAL_IP = "localhost";
+    private final static String REMOTE_IP = "145.33.225.170";
+    private final static int PORT = 7789;
+    private Socket socket;
     private Scanner in;
     private PrintWriter out;
     private List<String> responses;
     private List<String> commandQueue;
+    private boolean isRunning = false;
+    private String name;
 
-    public ServerCommunication(Socket socket){
+    public ServerCommunication(GameClient client, String name) throws IOException, InterruptedException {
+        this.socket = new Socket(LOCAL_IP,PORT);
         this.responses = new ArrayList<>();
         this.commandQueue = new ArrayList<>();
+        this.in = new Scanner(this.socket.getInputStream());
+        this.out = new PrintWriter(this.socket.getOutputStream(),true);
+        this.name = name;
+        //store socket and server thread in controller
+        client.getSockets().add(socket);
+        client.getServerCommunications().add(this);
+        //start thread
+        this.start();
+    }
 
-        try {
-            in = new Scanner(socket.getInputStream());
-            out = new PrintWriter(socket.getOutputStream(),true);
-        } catch (IOException e){
-            System.out.println("error, no inputstream " + e.getMessage());
-            e.printStackTrace();
-        }
+
+    public void disconnectFromServer() throws IOException {
+        this.in.close();
+        this.out.close();
+        this.socket.close();
     }
 
     public Scanner getIn() {
@@ -63,40 +79,35 @@ public class ServerCommunication extends Thread {
 
     private void parse(String input){
         //https://stackoverflow.com/questions/7347856/how-to-convert-a-string-into-an-arraylist
-        String[] responseType = {"GAMELIST","PLAYERLIST"};
-        if (input.contains(responseType[0])){
+        List<String> ignoreList = new ArrayList<>();
+        ignoreList.add("Strategic Game Server Fixed [Version 1.1.0]");
+        ignoreList.add("(C) Copyright 2015 Hanzehogeschool Groningen");
+        ignoreList.add("OK");
 
-        } else if (input.contains(responseType[1])){
-            
+        if(!ignoreList.contains(input)) {
+            responses.add(0, input);
+            System.out.println(input);
         }
-        responses.add(0, input);
     }
 
     public void run(){
-        while(true){
-            String response = in.nextLine();
-            System.out.println(response);
-            parse(response);
+        if(!this.isRunning){
             try {
-                Thread.sleep(5000);
+                this.sleep(5000);
+                this.isRunning = true;
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+        }
+        while(this.isRunning){
+            parse(in.nextLine());
+
             if(!commandQueue.isEmpty()){
-                System.out.println(commandQueue.get(0));
                 out.println(commandQueue.get(0));
-                System.out.println("Send command: " + commandQueue.get(0));
+                System.out.println(this.name + " : " + commandQueue.get(0));
                 commandQueue.remove(commandQueue.get(0));
                 out.flush();
             }
         }
     }
 }
-
-/*    Communication with server:
-
-        While listening:
-            While command queue is not empty
-                Send commands
-            Parse response
- */

@@ -21,50 +21,22 @@ import java.util.List;
  */
 
 public class GameClient {
-    private final static String REMOTE_IP = "145.33.225.170";
-    private final static int PORT = 7789;
-    private HashMap<Player, Socket> sockets;
-    private HashMap<Player, ServerCommunication> serverCommunications;
+    private List<Socket> sockets;
+    private List<ServerCommunication> serverCommunications;
 
-    public GameClient() {
-        sockets = new HashMap<>();
-        serverCommunications = new HashMap<>();
+    public GameClient() throws IOException, InterruptedException {
+        sockets = new ArrayList<>();
+        serverCommunications = new ArrayList<>();
         new Human(this, "kees" );
         new Robot(this, 0, "Tic-tac-toe");
-
     }
 
-    /**
-     * Creates a socket to connect to a server at a specific port.
-     */
-    public void ConnectToServer(Player player){
-        try {
-            Socket socket = new Socket("localhost",PORT);
-            sockets.put(player, socket);
-            serverCommunications.put(player, new ServerCommunication(socket));
-            serverCommunications.get(player).start();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public List<Socket> getSockets() {
+        return sockets;
     }
 
-    public ServerCommunication getServerCommunication(Player player){
-        return serverCommunications.get(player);
-    }
-
-    /**
-     * Closes the BufferedReader in, PrintWriter out and the Socket socket.
-     */
-    public void DisconnectFromServer(){
-        try {
-            for(Player player : sockets.keySet()) {
-                serverCommunications.get(player).getIn().close();
-                serverCommunications.get(player).getOut().close();
-                sockets.get(player).close();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public List<ServerCommunication> getServerCommunications() {
+        return serverCommunications;
     }
 
     public static void main(String[] args) throws IOException, InterruptedException {

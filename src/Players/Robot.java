@@ -1,7 +1,9 @@
 package Players;
 
 import Hanze.GameClient;
+import Hanze.ServerCommunication;
 
+import java.io.IOException;
 import java.util.*;
 
 public class Robot extends Player {
@@ -9,13 +11,14 @@ public class Robot extends Player {
     private String game;
     private Random randomGenerator;
 
-    public Robot(GameClient client, int difficulty, String game){
+
+    public Robot(GameClient client, int difficulty, String game) throws IOException, InterruptedException {
+        super(client,game +".A.I.",new ServerCommunication(client, game+".A.I."));
         this.difficulty = difficulty;
         this.game = game;
         randomGenerator = new Random();
-        client.ConnectToServer(this);
-        client.getServerCommunication(this).logIN(game +".A.I.");
-        client.getServerCommunication(this).subscribe(game);
+        getServerConnection().logIN(getName());
+        getServerConnection().subscribe(game);
     }
 
     public String think(Map<String,String> gameState){
