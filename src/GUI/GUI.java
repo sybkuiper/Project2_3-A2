@@ -21,7 +21,7 @@ public class GUI extends Application {
     public void start(Stage stage) throws Exception {
         
         
-        Parent root = FXMLLoader.load(getClass().getResource("LoginWindowView.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("GUI.LoginWindowView.fxml"));
         
         Scene scene = new Scene(root);
         

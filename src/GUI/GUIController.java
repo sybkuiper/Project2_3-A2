@@ -44,18 +44,19 @@ public class GUIController implements Initializable {
 	    void handleButtonTTT_SP(ActionEvent event) throws IOException {
 		   BorderPane pane = FXMLLoader.load(getClass().getResource("SpTicTacView.fxml"));
 	       rootPane.getChildren().setAll(pane);
-		    	
 	    }	
 	    
 	    @FXML
 	    void gotomenuscreen(ActionEvent event) throws IOException {
 	    	BorderPane pane = FXMLLoader.load(getClass().getResource("MenuWindowView.fxml"));
-            rootPane.getChildren().setAll(pane);
-	    	
+	    	rootPane.getChildren().setAll(pane);
 	    }
 	    
 
-
+		@FXML
+		void showPlayer(ActionEvent event) throws IOException {
+	    	
+		}
 
 
 	    @FXML

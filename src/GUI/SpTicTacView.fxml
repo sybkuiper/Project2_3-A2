@@ -11,16 +11,26 @@
    <center>
       <AnchorPane prefHeight="223.0" prefWidth="491.0" BorderPane.alignment="CENTER">
          <children>
-            <AnchorPane layoutX="106.0" layoutY="74.0" prefHeight="232.0" prefWidth="338.0">
+            <AnchorPane layoutX="74.0" layoutY="42.0" prefHeight="232.0" prefWidth="338.0">
                <children>
-                  <AnchorPane layoutX="250.0" layoutY="79.0" prefHeight="200.0" prefWidth="200.0" />
+                  <AnchorPane layoutX="250.0" layoutY="79.0" prefHeight="200.0" prefWidth="200.0">
+                     <children>
+                        <Button layoutX="14.0" layoutY="121.0" mnemonicParsing="false" onAction="#showPlayer" prefHeight="83.0" prefWidth="89.0" text="Button" />
+                     </children></AnchorPane>
                   <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="108.0" layoutY="55.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../../../Downloads/tttt.png" />
                      </image>
                   </ImageView>
+                  <Button layoutX="63.0" layoutY="14.0" mnemonicParsing="false" onAction="#showPlayer" prefHeight="83.0" prefWidth="89.0" text="Button" />
+                  <Button layoutX="63.0" layoutY="200.0" mnemonicParsing="false" onAction="#showPlayer" prefHeight="83.0" prefWidth="89.0" text="Button" />
+                  <Button layoutX="163.0" layoutY="200.0" mnemonicParsing="false" onAction="#showPlayer" prefHeight="83.0" prefWidth="89.0" text="Button" />
+                  <Button layoutX="63.0" layoutY="107.0" mnemonicParsing="false" onAction="#showPlayer" prefHeight="83.0" prefWidth="89.0" text="Button" />
+                  <Button layoutX="163.0" layoutY="107.0" mnemonicParsing="false" onAction="#showPlayer" prefHeight="83.0" prefWidth="89.0" text="Button" />
+                  <Button layoutX="263.0" layoutY="107.0" mnemonicParsing="false" onAction="#showPlayer" prefHeight="83.0" prefWidth="89.0" text="Button" />
+                  <Button layoutX="263.0" layoutY="14.0" mnemonicParsing="false" onAction="#showPlayer" prefHeight="83.0" prefWidth="89.0" text="Button" />
+                  <Button layoutX="163.0" layoutY="13.0" mnemonicParsing="false" onAction="#showPlayer" prefHeight="83.0" prefWidth="89.0" text="Button" />
                </children></AnchorPane>
-            <Button layoutX="31.0" layoutY="27.0" mnemonicParsing="false" onAction="#gotomenuscreen" text="Button" />
          </children>
          <effect>
             <Bloom />
