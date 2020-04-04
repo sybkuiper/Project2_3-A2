@@ -1,40 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.effect.Bloom?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.shape.Line?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #383b42;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.GUIController">
+<BorderPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="414.0" prefWidth="715.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.GUIController">
    <center>
-      <AnchorPane prefHeight="223.0" prefWidth="491.0" BorderPane.alignment="CENTER">
+      <AnchorPane prefHeight="394.0" prefWidth="544.0" style="-fx-background-color: #222222;" BorderPane.alignment="CENTER">
          <children>
-            <AnchorPane layoutX="74.0" layoutY="42.0" prefHeight="232.0" prefWidth="338.0">
-               <children>
-                  <AnchorPane layoutX="250.0" layoutY="79.0" prefHeight="200.0" prefWidth="200.0">
-                     <children>
-                        <Button layoutX="14.0" layoutY="121.0" mnemonicParsing="false" onAction="#showPlayer" prefHeight="83.0" prefWidth="89.0" text="Button" />
-                     </children></AnchorPane>
-                  <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="108.0" layoutY="55.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../../../../Downloads/tttt.png" />
-                     </image>
-                  </ImageView>
-                  <Button layoutX="63.0" layoutY="14.0" mnemonicParsing="false" onAction="#showPlayer" prefHeight="83.0" prefWidth="89.0" text="Button" />
-                  <Button layoutX="63.0" layoutY="200.0" mnemonicParsing="false" onAction="#showPlayer" prefHeight="83.0" prefWidth="89.0" text="Button" />
-                  <Button layoutX="163.0" layoutY="200.0" mnemonicParsing="false" onAction="#showPlayer" prefHeight="83.0" prefWidth="89.0" text="Button" />
-                  <Button layoutX="63.0" layoutY="107.0" mnemonicParsing="false" onAction="#showPlayer" prefHeight="83.0" prefWidth="89.0" text="Button" />
-                  <Button layoutX="163.0" layoutY="107.0" mnemonicParsing="false" onAction="#showPlayer" prefHeight="83.0" prefWidth="89.0" text="Button" />
-                  <Button layoutX="263.0" layoutY="107.0" mnemonicParsing="false" onAction="#showPlayer" prefHeight="83.0" prefWidth="89.0" text="Button" />
-                  <Button layoutX="263.0" layoutY="14.0" mnemonicParsing="false" onAction="#showPlayer" prefHeight="83.0" prefWidth="89.0" text="Button" />
-                  <Button layoutX="163.0" layoutY="13.0" mnemonicParsing="false" onAction="#showPlayer" prefHeight="83.0" prefWidth="89.0" text="Button" />
-               </children></AnchorPane>
+            <Button layoutX="123.0" layoutY="57.0" mnemonicParsing="false" onAction="#showPlayer" prefHeight="94.0" prefWidth="94.0" opacity="0" />
+            <Button layoutX="320.0" layoutY="251.0" mnemonicParsing="false" onAction="#showPlayer" prefHeight="92.0" prefWidth="95.0" opacity="0" />
+            <Button layoutX="219.0" layoutY="250.0" mnemonicParsing="false" onAction="#showPlayer" prefHeight="93.0" prefWidth="97.0" opacity="0" />
+            <Button layoutX="123.0" layoutY="250.0" mnemonicParsing="false" onAction="#showPlayer" prefHeight="95.0" prefWidth="94.0" opacity="0" />
+            <Button layoutX="123.0" layoutY="153.0" mnemonicParsing="false" onAction="#showPlayer" prefHeight="95.0" prefWidth="94.0" opacity="0" />
+            <Button layoutX="219.0" layoutY="154.0" mnemonicParsing="false" onAction="#showPlayer" prefHeight="93.0" prefWidth="98.0" opacity="0" />
+            <Button layoutX="320.0" layoutY="155.0" mnemonicParsing="false" onAction="#showPlayer" prefHeight="92.0" prefWidth="95.0" opacity="0" />
+            <Button layoutX="219.0" layoutY="57.0" mnemonicParsing="false" onAction="#showPlayer" prefHeight="94.0" prefWidth="98.0" opacity="0" />
+            <Button layoutX="320.0" layoutY="57.0" mnemonicParsing="false" onAction="#showPlayer" prefHeight="94.0" prefWidth="96.0" opacity="0" />
+            <Line endX="152.59991455078125" endY="-111.79998779296875" fill="WHITE" layoutX="268.0" layoutY="361.0" startX="-155.39999389648438" startY="-111.79998779296875" stroke="WHITE" />
+            <Line endX="150.79998779296875" endY="-114.79998779296875" fill="WHITE" layoutX="269.0" layoutY="268.0" startX="-151.60000610351562" startY="-114.79998779296875" stroke="WHITE" />
+            <Line endX="-60.600006103515625" endY="-19.4000244140625" fill="WHITE" layoutX="278.0" layoutY="371.0" startX="-60.600006103515625" startY="-317.79998779296875" stroke="WHITE" />
+            <Line endX="30.199951171875" endY="-32.5999755859375" fill="WHITE" layoutX="288.0" layoutY="381.0" startX="30.199951171875" startY="-330.20001220703125" stroke="WHITE" />
          </children>
-         <effect>
-            <Bloom />
-         </effect>
       </AnchorPane>
    </center>
+   <left>
+      <AnchorPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: #220440;" BorderPane.alignment="CENTER" />
+   </left>
 </BorderPane>

@@ -11,6 +11,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 
 
+
 public class GUI extends Application {
 
 
@@ -21,7 +22,7 @@ public class GUI extends Application {
     public void start(Stage stage) throws Exception {
         
         
-        Parent root = FXMLLoader.load(getClass().getResource("GUI.LoginWindowView.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("SpTicTacView.fxml"));
         
         Scene scene = new Scene(root);
         
@@ -33,4 +34,5 @@ public class GUI extends Application {
     public static void main(String[] args) {
         launch(args);
     }
+
 }
