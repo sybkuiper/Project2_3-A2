@@ -13,7 +13,8 @@ public class Robot extends Player {
 
 
     public Robot(GameClient client, int difficulty, String game) throws IOException, InterruptedException {
-        super(client,game +".A.I.",new ServerCommunication(client, game+".A.I."));
+        super(client,game +".A.I.");
+        setServerConnection(new ServerCommunication(client, this));
         this.difficulty = difficulty;
         this.game = game;
         randomGenerator = new Random();

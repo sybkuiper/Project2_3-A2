@@ -23,19 +23,23 @@ import java.util.List;
 public class GameClient {
     private List<Socket> sockets;
     private List<ServerCommunication> serverCommunications;
-    private HashMap<String, Player> robots;
+    private HashMap<String,Player> intelligences;
     private List<String> onlinePlayers;
     private List<String> games;
 
     public GameClient() throws IOException, InterruptedException {
         sockets = new ArrayList<>();
         serverCommunications = new ArrayList<>();
-        robots = new HashMap<>();
+        intelligences = new HashMap<>();
         onlinePlayers = new ArrayList<>();
         games = new ArrayList<>();
-        new Robot(this,0,"Reversi");
-        new Robot(this, 0, "Tic-tac-toe");
+        intelligences.put("Reversi",new Robot(this,0,"Reversi"));
+        intelligences.put("Tic-tac-toe",new Robot(this, 0, "Tic-tac-toe"));
         new Human(this, "kees" );
+    }
+
+    public HashMap<String, Player> getIntelligences() {
+        return intelligences;
     }
 
     public List<String> getOnlinePlayers() {
@@ -59,10 +63,10 @@ public class GameClient {
     }
 }
 
-    /**
-     * Sends a command through the PrintWriter out to the server.
-     * @param command the command to send to the server.
-     * public void sendCommand(String command) {
-     *         serverCommunication.getOut().println(command);
-     *     }
-     */
+/**
+ * Sends a command through the PrintWriter out to the server.
+ * @param command the command to send to the server.
+ * public void sendCommand(String command) {
+ *         serverCommunication.getOut().println(command);
+ *     }
+ */
