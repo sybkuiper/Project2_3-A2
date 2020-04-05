@@ -17,6 +17,7 @@ public class ServerCommunication extends Thread {
     private boolean isRunning = false;
     private String name;
     private GameClient client;
+    private String playersturn; //DIT IS PUUR VOOR TESTEN DIT MOET OP EEN ANDERE PLEK
 
     public ServerCommunication(GameClient client, String name) throws IOException, InterruptedException {
         this.socket = new Socket(LOCAL_IP,PORT);
@@ -133,6 +134,12 @@ public class ServerCommunication extends Thread {
                 for (String pair : keyvalue) {
                     String[] entry = pair.split(": ");
                     map.put(entry[0], entry[1]);
+
+                    //DIT IS VOOR TESTEN DIT MOET WAARSCHIJNLIJK OP EEN ANDERE PLEK:
+                    if(entry[0].equals("PLAYERTOMOVE")){
+                        playersturn = entry[1];
+                        System.out.println(entry[1]);
+                    }
                 }
                 System.out.println(map);
                 //Todo: Start game interface
@@ -208,10 +215,11 @@ public class ServerCommunication extends Thread {
             }
         }
         while(this.isRunning){
+            System.out.println(commandQueue.size());
             parse(in.nextLine());
             for (String player : client.getOnlinePlayers()){
                 if(!(player == getName())){
-                    challenge(player,"\"Tic-tac-toe\"");
+//                    challenge(player,"\"Tic-tac-toe\"");
                 }
             }
             if(!commandQueue.isEmpty()){
@@ -230,4 +238,7 @@ public class ServerCommunication extends Thread {
     public void getGameList(){
         addToCommandQueue("get gamelist");
     }
+
+    //DIT IS VOOR TESTEN DIT MOET VAST OP EEN ANDERE PLEK
+    public String getPlayersTurn(){return playersturn; }
 }

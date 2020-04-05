@@ -1,5 +1,6 @@
 package Hanze;
 
+import Games.TicTacToe;
 import Players.Human;
 import Players.Player;
 import Players.Robot;
@@ -12,6 +13,7 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Class that contains the game client for the application.
@@ -25,14 +27,17 @@ public class GameClient {
     private List<ServerCommunication> serverCommunications;
     private List<String> onlinePlayers;
     private List<String> games;
+    private Human human;
+    private Robot robot;
+    private TicTacToe ticTacToe;
 
     public GameClient() throws IOException, InterruptedException {
         sockets = new ArrayList<>();
         serverCommunications = new ArrayList<>();
         onlinePlayers = new ArrayList<>();
         games = new ArrayList<>();
-        new Human(this, "kees" );
-        new Robot(this, 0, "Tic-tac-toe");
+        human = new Human(this, "kees" );
+        robot = new Robot(this, 0, "Tic-tac-toe");
     }
 
     public List<String> getOnlinePlayers() {
@@ -50,6 +55,14 @@ public class GameClient {
     public List<ServerCommunication> getServerCommunications() {
         return serverCommunications;
     }
+
+    private void makeGame(String game){
+        if(game.equals("Tic-tac-toe")){
+            ticTacToe = new TicTacToe(human, robot);
+        }
+    }
+
+
 
     public static void main(String[] args) throws IOException, InterruptedException {
         new GameClient();
