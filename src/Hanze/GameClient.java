@@ -23,6 +23,7 @@ import java.util.List;
 public class GameClient {
     private List<Socket> sockets;
     private List<ServerCommunication> serverCommunications;
+    private Player player;
     private HashMap<String, Player> robots;
     private List<String> onlinePlayers;
     private List<String> games;
@@ -33,9 +34,14 @@ public class GameClient {
         robots = new HashMap<>();
         onlinePlayers = new ArrayList<>();
         games = new ArrayList<>();
-        new Robot(this,0,"Reversi");
-        new Robot(this, 0, "Tic-tac-toe");
-        new Human(this, "kees" );
+        robots.put("Reversi",new Robot(this,0,"Reversi"));
+        robots.put("Tic-tac-toe",new Robot(this, 0, "Tic-tac-toe"));
+        player = new Human(this, "kees" );
+        TestThread test = new TestThread(player);
+    }
+
+    public HashMap<String, Player> getRobots() {
+        return robots;
     }
 
     public List<String> getOnlinePlayers() {

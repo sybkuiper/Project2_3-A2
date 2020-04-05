@@ -12,7 +12,7 @@ public class Human extends Player {
         getServerConnection().logIN(getName());
         getServerConnection().getGameList();
         getServerConnection().getPlayerList();
-//        getServerConnection().challenge(client.getIntelligences().get("Reversi").getName(), "Reversi");
+//        getServerConnection().challenge(client.getRobots().get("Reversi").getName(), "Reversi");
 //        var test = client.getIntelligences().get("Othello").getName();
 //        System.out.println(test);
     }
