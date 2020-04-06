@@ -13,8 +13,7 @@ public class TestThread extends Thread {
 
     @Override
     public void run() {
-    while (true) {
-//        player.getServerConnection().challenge(player.getClient().getRobots().get("Tic-tac-toe").getName(), "Tic-tac-toe");
-    }
+        //player.getServerConnection().challenge("Test","Tic-tac-toe");
+        player.getServerConnection().challenge(player.getClient().getPlayerObjects().get("Tic-tac-toe").getName(), "Tic-tac-toe");
     }
 }

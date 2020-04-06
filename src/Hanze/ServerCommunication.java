@@ -1,7 +1,9 @@
 package Hanze;
 
 import Games.TicTacToe;
+import Players.Human;
 import Players.Player;
+import Players.Robot;
 
 import java.io.*;
 import java.net.Socket;
@@ -84,6 +86,18 @@ public class ServerCommunication extends Thread {
         addToCommandQueue("move " + move);
     }
 
+    private Map<String, String> createMap(String input) {
+        input = input.substring(1, input.length() - 1);
+        String[] keyvalue = input.split(", ");
+        Map<String, String> map = new HashMap<>();
+        for (String pair : keyvalue) {
+            String[] entry = pair.split(": ");
+            map.put(entry[0], entry[1]);
+        }
+        System.out.println(player.getName() + " : " + map);
+        return map;
+    }
+
     private void parse(String input){
         //https://stackoverflow.com/questions/7347856/how-to-convert-a-string-into-an-arraylist
         List<String> ignoreList = new ArrayList<>();
@@ -110,22 +124,19 @@ public class ServerCommunication extends Thread {
             if(input.startsWith("SVR GAME CHALLENGE ")){
                 if(input.startsWith("SVR GAME CHALLENGE CANCELLED ")){
                     input = input.replace("SVR GAME CHALLENGE CANCELLED {CHALLENGENUMBER: ","").replace("}","");
-                    System.out.println(input);
+                    System.out.println("Challenge " + input + " is geannuleerd");
                     //Todo: controller call die aangeeft dat de match uitnodiging voor ID is verlopen
                 } else {
                     System.out.println(player.getName() + ": received game invite");
                     //https://stackoverflow.com/questions/26485964/how-to-convert-string-into-hashmap-in-java
                     input = input.replace("SVR GAME CHALLENGE ", "");
-                    input = input.substring(1, input.length() - 1);
-                    String[] keyvalue = input.split(", ");
-                    Map<String, String> map = new HashMap<>();
-                    for (String pair : keyvalue) {
-                        String[] entry = pair.split(": ");
-                        map.put(entry[0], entry[1]);
+                    if(player instanceof Robot) {
+                        acceptChallenge(createMap(input).get("CHALLENGENUMBER").replace("\"", ""));
+                        client.startGame(createMap(input).get("GAMETYPE").replace("\"", ""), player, false);
                     }
-                    System.out.println(map);
                 }
             }
+
             if(input.startsWith("SVR GAME MATCH ")){
                 //https://stackoverflow.com/questions/26485964/how-to-convert-string-into-hashmap-in-java
                 input = input.replace("SVR GAME MATCH ", "");
@@ -136,9 +147,11 @@ public class ServerCommunication extends Thread {
                     String[] entry = pair.split(": ");
                     map.put(entry[0], entry[1]);
                     System.out.println(entry[0]+entry[1]);
-                    //DIT IS VOOR TESTEN DIT MOET WAARSCHIJNLIJK OP EEN ANDERE PLEK:
                 }
-                System.out.println(map);
+                if(player instanceof Human && player.getClient().getGame() == null) {
+                    client.startGame(map.get("GAMETYPE").replace("\"",""), true);
+                }
+                System.out.println(player.getName() + " : " + map);
                 //Todo: Start game interface
             }
             if(input.startsWith("SVR GAME YOURTURN ")){
@@ -148,59 +161,76 @@ public class ServerCommunication extends Thread {
                 Map<String,String> map = new HashMap<>();
                 map.put(entry[0],entry[1]);
                 System.out.println(map);
-                if(entry[0].equals("TURNMESSAGE")){
-                    client.turn(player.getName());
+                System.out.println(player.getName() + " : " + "it's my turn");
+                if(player.getClient().getGame() != null) {
+                    player.getClient().getGame().getGame().makeMove(player); //Todo: makeMove() function, where the AI should automatically make the best move, and the player should have the ability to move.
                 }
-                //Todo: Enable ability to make a turn (should enable interface, the interface allows the method call move)
             }
-            if(input.startsWith("SVR GAME MOVE ")){
-                input = input.replace("SVR GAME MOVE ","");
-                input = input.substring(1,input.length()-1);
-                String[] keyvalue = input.split(", ");
-                Map<String, String> map = new HashMap<>();
-                for (String pair : keyvalue) {
-                    String[] entry = pair.split(": ");
-                    map.put(entry[0], entry[1]);
-                }
-                System.out.println(map);
-                //Todo: verwerken reactie spel, hoe? testen
-            }
+//            if(input.startsWith("SVR GAME MOVE ")){
+//                input = input.replace("SVR GAME MOVE ","");
+//                input = input.substring(1,input.length()-1);
+//                String[] keyvalue = input.split(", ");
+//                Map<String, String> map = new HashMap<>();
+//                for (String pair : keyvalue) {
+//                    String[] entry = pair.split(": ");
+//                    map.put(entry[0], entry[1]);
+//                }
+//                System.out.println(map);
+//                //Todo: verwerken reactie spel, hoe? testen
+//            }
             if(input.startsWith("SVR GAME ")){
-                input.replace("SVR GAME ","");
-                if(input.startsWith("WIN")){
-                    input = input.replace("WIN ","");
-                    input = input.substring(1,input.length()-1);
-                    String[] keyvalue = input.split(", ");
-                    Map<String, String> map = new HashMap<>();
-                    for (String pair : keyvalue) {
-                        String[] entry = pair.split(": ");
-                        map.put(entry[0], entry[1]);
+                input = input.replace("SVR GAME ","");
+                    if(input.startsWith("WIN")){
+                        if(player instanceof Human) {
+                            //Todo: send alert that player won (interface call) + ability to request rematch
+                        }
+                        System.out.println(player.getName() + " : has won");
+                        client.setGame(null);
+//                        input = input.replace("WIN ","");
+//                        input = input.substring(1,input.length()-1);
+//                        System.out.println(input + "test1");
+//                        String[] keyvalue = input.split(", ");
+//                        Map<String, String> map = new HashMap<>();
+//                        for (String pair : keyvalue) {
+//                            String[] entry = pair.split(": ");
+//                            map.put(entry[0], entry[1]);
+//                        }
+//                        System.out.println(map);
+                        //Todo: verwerken reactie spel, hoe? testen
+                    } else if (input.startsWith("LOSS")){
+                        if(player instanceof Human) {
+                            //Todo: send alert that player lost (interface call) + ability to request rematch
+                        }
+                        System.out.println(player.getName() + " : has lost");
+                        client.setGame(null);
+//                        input = input.replace("LOSS ","");
+//                        input = input.substring(1,input.length()-1);
+//                        System.out.println(input + "test2");
+//                        String[] keyvalue = input.split(", ");
+//                        Map<String, String> map = new HashMap<>();
+//                        for (String pair : keyvalue) {
+//                            String[] entry = pair.split(": ");
+//                            map.put(entry[0], entry[1]);
+//                        }
+//                        System.out.println(map);
+                        //Todo: verwerken reactie spel, hoe? testen
+                    } else if (input.startsWith("DRAW")){
+                        if(player instanceof Human) {
+                            //Todo: send alert that player tied (interface call) + ability to request rematch
+                        }
+                        System.out.println(player.getName() + " : has tied");
+                        client.setGame(null);
+//                        input = input.replace("DRAW ","");
+//                        input = input.substring(1,input.length()-1);
+//                        String[] keyvalue = input.split(", ");
+//                        Map<String, String> map = new HashMap<>();
+//                        for (String pair : keyvalue) {
+//                            String[] entry = pair.split(": ");
+//                            map.put(entry[0], entry[1]);
+//                        }
+//                        System.out.println(map);
+                        //Todo: verwerken reactie spel, hoe? testen
                     }
-                    System.out.println(map);
-                    //Todo: verwerken reactie spel, hoe? testen
-                } else if (input.startsWith("LOSS")){
-                    input = input.replace("LOSS ","");
-                    input = input.substring(1,input.length()-1);
-                    String[] keyvalue = input.split(", ");
-                    Map<String, String> map = new HashMap<>();
-                    for (String pair : keyvalue) {
-                        String[] entry = pair.split(": ");
-                        map.put(entry[0], entry[1]);
-                    }
-                    System.out.println(map);
-                    //Todo: verwerken reactie spel, hoe? testen
-                } else if (input.startsWith("DRAW")){
-                    input = input.replace("DRAW ","");
-                    input = input.substring(1,input.length()-1);
-                    String[] keyvalue = input.split(", ");
-                    Map<String, String> map = new HashMap<>();
-                    for (String pair : keyvalue) {
-                        String[] entry = pair.split(": ");
-                        map.put(entry[0], entry[1]);
-                    }
-                    System.out.println(map);
-                    //Todo: verwerken reactie spel, hoe? testen
-                }
             }
         }
     }
@@ -216,11 +246,6 @@ public class ServerCommunication extends Thread {
         }
         while(this.isRunning){
             parse(in.nextLine());
- /*           for (String player : client.getOnlinePlayers()){
-                if(!(player == getName())){
-//                    challenge(player,"\"Tic-tac-toe\"");
-                }
-            }*/
             if(!commandQueue.isEmpty()){
                 out.println(commandQueue.get(0));
                 System.out.println(player.getName() + " : " + commandQueue.get(0));
