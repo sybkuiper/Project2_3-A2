@@ -20,19 +20,51 @@ public class Robot extends Player {
         getServerConnection().subscribe(game);
     }
 
-    public String think(Map<String,String> gameState){
+//    //look at all available spots and see what the effect is of going there
+//    public String think(Map<String,String> gameBoard){
+//        int bestScore = -99999;
+//        String move = "";
+//
+//        for (Map.Entry<String, String> entry : gameBoard.entrySet()) {
+//            String key = entry.getKey();
+//            Object value = entry.getValue();
+//
+//            if(value.equals("E")){
+//                gameBoard.replace(key, "X");
+//                int score = minimax(gameBoard, 0, true);
+//                gameBoard.replace(key, "E");
+//                if(score > bestScore){
+//                    bestScore = score;
+//                    move = key;
+//                }
+//            }
+//        }
+//        return move;
+//    }
+//
+//
+//    public int minimax(Map<String,String> gameBoard,int depth, boolean isMaximizing){
+//        String result = checkWinner(gameBoard);
+//    }
+
+
+
+
+
+
+
+    public String think(Map<String,String> gameBoard){
         String bestMove = "0";
         int bestScore = -1000;
-        int openSpots = openSpots(gameState);
 
         //get all empty spots and try going there to see what is the best spot
-        for (Map.Entry<String, String> entry : gameState.entrySet()) {
+        for (Map.Entry<String, String> entry : gameBoard.entrySet()) {
             String key = entry.getKey();
             Object value = entry.getValue();
             if(value.equals("E")){
-                gameState.replace(key, "X");
-                int score = minimax(gameState, 0, false, openSpots);
-                gameState.replace(key,"E");
+                gameBoard.replace(key, "X");
+                int score = minimax(gameBoard, 0, false);
+                gameBoard.replace(key,"E");
                 if(score>bestScore) {
                     bestScore = score;
                     bestMove = key;
@@ -42,8 +74,8 @@ public class Robot extends Player {
         return bestMove;
     }
 
-    private int minimax(Map<String, String> gameState, int steps, boolean isMaximizing, int openSpots){
-        String result = testTicTacToeWinner(gameState,openSpots);
+    private int minimax(Map<String, String> gameBoard, int steps, boolean isMaximizing){
+        String result = checkWinner(gameBoard);
         if(result != null){
             int score = 0;
             if(result.equals("TIE")){score = 0;}
@@ -53,13 +85,13 @@ public class Robot extends Player {
         }
         if(isMaximizing){
             int bestScore = -1000;
-            for (Map.Entry<String, String> entry : gameState.entrySet()) {
+            for (Map.Entry<String, String> entry : gameBoard.entrySet()) {
                 String key = entry.getKey();
                 Object value = entry.getValue();
                 if(value.equals("E")){
-                    gameState.replace(key, "X");
-                    int score = minimax(gameState, steps + 1, false, openSpots);
-                    gameState.replace(key,"E");
+                    gameBoard.replace(key, "X");
+                    int score = minimax(gameBoard, steps + 1, false);
+                    gameBoard.replace(key,"E");
                     if(score>bestScore) {
                         bestScore = score;
                     }
@@ -68,13 +100,13 @@ public class Robot extends Player {
             return bestScore;
         }else{
             int bestScore = 1000;
-            for (Map.Entry<String, String> entry : gameState.entrySet()) {
+            for (Map.Entry<String, String> entry : gameBoard.entrySet()) {
                 String key = entry.getKey();
                 Object value = entry.getValue();
                 if(value.equals("E")){
-                    gameState.replace(key, "O");
-                    int score = minimax(gameState, steps + 1, true, openSpots);
-                    gameState.replace(key,"E");
+                    gameBoard.replace(key, "O");
+                    int score = minimax(gameBoard, steps + 1, true);
+                    gameBoard.replace(key,"E");
                     if(score<bestScore) {
                         bestScore = score;
                     }
@@ -84,9 +116,9 @@ public class Robot extends Player {
         }
     }
 
-    private int openSpots(Map<String,String> gameState){
+    private int openSpots(Map<String,String> gameBoard){
         int openspots = 0;
-        for (Map.Entry<String, String> entry : gameState.entrySet()) {
+        for (Map.Entry<String, String> entry : gameBoard.entrySet()) {
             String key = entry.getKey();
             Object value = entry.getValue();
             if(value.equals("E")){
@@ -96,7 +128,7 @@ public class Robot extends Player {
         return openspots;
     }
 
-    private String testTicTacToeWinner(Map<String,String> gameState, int openSpots){
+    private String checkWinner(Map<String,String> gameBoard){
         String winner = null;
         String a;
         String b;
@@ -105,32 +137,33 @@ public class Robot extends Player {
 
         //horizontal
         for (int i = 0; i<3;i++){
-             a = gameState.get(Integer.toString(position));
-             b = gameState.get(Integer.toString(position+1));
-             c = gameState.get(Integer.toString(position+2));
+             a = gameBoard.get(Integer.toString(position));
+             b = gameBoard.get(Integer.toString(position+1));
+             c = gameBoard.get(Integer.toString(position+2));
             if (a.equals(b) && b.equals(c)){ if (!a.equals("E")){winner = a;}}
             position += 3; }
 
         //vertical
         for (int i = 0; i<3;i++){
-             a = gameState.get(Integer.toString(i));
-             b = gameState.get(Integer.toString(i+3));
-             c = gameState.get(Integer.toString(i+6));
+             a = gameBoard.get(Integer.toString(i));
+             b = gameBoard.get(Integer.toString(i+3));
+             c = gameBoard.get(Integer.toString(i+6));
             if (a.equals(b) && b.equals(c)){ if (!a.equals("E")){winner = a;}}}
 
         //diagonal
-         a = gameState.get(Integer.toString(0));
-         b = gameState.get(Integer.toString(4));
-         c = gameState.get(Integer.toString(8));
+         a = gameBoard.get(Integer.toString(0));
+         b = gameBoard.get(Integer.toString(4));
+         c = gameBoard.get(Integer.toString(8));
         if (a.equals(b) && b.equals(c)){ if (!a.equals("E")){winner = a;}}
 
-         a = gameState.get(Integer.toString(2));
-         b = gameState.get(Integer.toString(4));
-         c = gameState.get(Integer.toString(6));
+         a = gameBoard.get(Integer.toString(2));
+         b = gameBoard.get(Integer.toString(4));
+         c = gameBoard.get(Integer.toString(6));
         if (a.equals(b) && b.equals(c)){ if (!a.equals("E")){winner = a;}}
 
-        if(winner == null && openSpots == 0){winner = "TIE";}
+
+
+        if(winner == null && openSpots(gameBoard) == 0){winner = "TIE";}
         return winner;
-        System.out.println(winner);
     }
 }

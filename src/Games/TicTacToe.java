@@ -29,15 +29,13 @@ public class TicTacToe extends Game {
                 String input = reader.readLine();
                 getGameBoard().replace(input, "O"); //O = circle X = cross E = empty
                 player.getServerConnection().move(input);
-                System.out.println("Kees");
-                System.out.println(getGameBoard());
             } catch (Exception e) {
                 e.printStackTrace();
             }
         } else if (player instanceof Robot) {
+            System.out.println(getGameBoard());
             String move;
             move = ((Robot) player).think(getGameBoard());
-            System.out.println("AI");
             getGameBoard().replace(move, "X"); //O = round X = cross E = empty
             player.getServerConnection().move(move);
             System.out.println(move);
