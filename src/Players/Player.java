@@ -8,9 +8,12 @@ public abstract class Player {
     private String name;
     private ServerCommunication serverConnection;
 
-    public Player(GameClient client, String name, ServerCommunication serverConnection){
+    public Player(GameClient client, String name){
         this.client = client;
         this.name = name;
+    }
+
+    public void setServerConnection(ServerCommunication serverConnection) {
         this.serverConnection = serverConnection;
     }
 

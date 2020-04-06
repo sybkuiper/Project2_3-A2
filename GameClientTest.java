@@ -1,6 +1,5 @@
 package Hanze;
 
-import Games.TicTacToe;
 import Players.Human;
 import Players.Player;
 import Players.Robot;
@@ -13,7 +12,6 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Class that contains the game client for the application.
@@ -25,28 +23,23 @@ import java.util.concurrent.TimeUnit;
 public class GameClient {
     private List<Socket> sockets;
     private List<ServerCommunication> serverCommunications;
-    private Player player;
-    private HashMap<String, Player> robots;
+    private HashMap<String,Player> intelligences;
     private List<String> onlinePlayers;
     private List<String> games;
-    private Human human;
-    private Robot robot;
-    private TicTacToe ticTacToe;
 
     public GameClient() throws IOException, InterruptedException {
         sockets = new ArrayList<>();
         serverCommunications = new ArrayList<>();
-        robots = new HashMap<>();
+        intelligences = new HashMap<>();
         onlinePlayers = new ArrayList<>();
         games = new ArrayList<>();
-        robots.put("Reversi",new Robot(this,0,"Reversi"));
-        robots.put("Tic-tac-toe",new Robot(this, 0, "Tic-tac-toe"));
-        player = new Human(this, "kees" );
-        TestThread test = new TestThread(player);
+        intelligences.put("Reversi",new Robot(this,0,"Reversi"));
+        intelligences.put("Tic-tac-toe",new Robot(this, 0, "Tic-tac-toe"));
+        new Human(this, "kees" );
     }
 
-    public HashMap<String, Player> getRobots() {
-        return robots;
+    public HashMap<String, Player> getIntelligences() {
+        return intelligences;
     }
 
     public List<String> getOnlinePlayers() {
@@ -65,28 +58,15 @@ public class GameClient {
         return serverCommunications;
     }
 
-    public String getPlayerName(){
-        return human.getName();
-    }
-
     public static void main(String[] args) throws IOException, InterruptedException {
         new GameClient();
     }
-
-    public void playersTurn(){
-        ticTacToe.playersTurn();
-    }
-
-    public void aiTurn(){
-        ticTacToe.AITurn();
-    }
-
 }
 
-    /**
-     * Sends a command through the PrintWriter out to the server.
-     * @param command the command to send to the server.
-     * public void sendCommand(String command) {
-     *         serverCommunication.getOut().println(command);
-     *     }
-     */
+/**
+ * Sends a command through the PrintWriter out to the server.
+ * @param command the command to send to the server.
+ * public void sendCommand(String command) {
+ *         serverCommunication.getOut().println(command);
+ *     }
+ */

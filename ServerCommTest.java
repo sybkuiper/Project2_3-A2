@@ -1,7 +1,7 @@
 package Hanze;
 
-import Games.TicTacToe;
 import Players.Player;
+import Players.Robot;
 
 import java.io.*;
 import java.net.Socket;
@@ -18,7 +18,6 @@ public class ServerCommunication extends Thread {
     private boolean isRunning = false;
     private Player player;
     private GameClient client;
-    private String playersturn; //DIT IS PUUR VOOR TESTEN DIT MOET OP EEN ANDERE PLEK
 
     public ServerCommunication(GameClient client, Player player) throws IOException, InterruptedException {
         this.socket = new Socket(LOCAL_IP,PORT);
@@ -62,8 +61,8 @@ public class ServerCommunication extends Thread {
     }
 
     public void challenge(String player, String gameType){
-        //addToCommandQueue("challenge " + player + " " + gameType + "");
-        addToCommandQueue("challenge \"" + player + "\" \"" + gameType + "\"");
+        addToCommandQueue("challenge " + player + " " + gameType + "");
+
     }
 
     public void acceptChallenge(String challengeNumber){
@@ -90,7 +89,7 @@ public class ServerCommunication extends Thread {
         List<String> ignoreList = new ArrayList<>();
         ignoreList.add("Strategic Game Server Fixed [Version 1.1.0]");
         ignoreList.add("(C) Copyright 2015 Hanzehogeschool Groningen");
-//        ignoreList.add("OK");
+        ignoreList.add("OK");
 
         if(!ignoreList.contains(input)) {
             //https://stackoverflow.com/questions/9588516/how-to-convert-string-list-into-list-object-in-java
@@ -111,7 +110,6 @@ public class ServerCommunication extends Thread {
             if(input.startsWith("SVR GAME CHALLENGE ")){
                 if(input.startsWith("SVR GAME CHALLENGE CANCELLED ")){
                     input = input.replace("SVR GAME CHALLENGE CANCELLED {CHALLENGENUMBER: ","").replace("}","");
-                    System.out.println(input);
                     //Todo: controller call die aangeeft dat de match uitnodiging voor ID is verlopen
                 } else {
                     System.out.println(player.getName() + ": received game invite");
@@ -136,19 +134,6 @@ public class ServerCommunication extends Thread {
                 for (String pair : keyvalue) {
                     String[] entry = pair.split(": ");
                     map.put(entry[0], entry[1]);
-                    System.out.println(entry[0]+entry[1]);
-                    //DIT IS VOOR TESTEN DIT MOET WAARSCHIJNLIJK OP EEN ANDERE PLEK:
-                    if(entry[0].equals("PLAYERTOMOVE")){
-                        playersturn = entry[1];
-                        playersturn = playersturn.replace("\"","");
-                        if(this.name.equals(client.getPlayerName())){
-                            if(playersturn.equals(client.getPlayerName())){
-                                client.playersTurn();
-                            }else{
-                                client.aiTurn();
-                            }
-                        }
-                    }
                 }
                 System.out.println(map);
                 //Todo: Start game interface
@@ -170,18 +155,6 @@ public class ServerCommunication extends Thread {
                 for (String pair : keyvalue) {
                     String[] entry = pair.split(": ");
                     map.put(entry[0], entry[1]);
-                    if(entry[0].equals("MOVE")){
-                        System.out.println("MOVE");
-                        playersturn = entry[1];
-                        playersturn = playersturn.replace("\"","");
-                        if(this.name.equals(client.getPlayerName())){
-                            if(playersturn.equals(client.getPlayerName())){
-                                client.aiTurn();
-                            }else{
-                                client.playersTurn();
-                            }
-                        }
-                    }
                 }
                 System.out.println(map);
                 //Todo: verwerken reactie spel, hoe? testen
@@ -236,13 +209,7 @@ public class ServerCommunication extends Thread {
             }
         }
         while(this.isRunning){
-            System.out.println(commandQueue.size());
             parse(in.nextLine());
- /*           for (String player : client.getOnlinePlayers()){
-                if(!(player == getName())){
-//                    challenge(player,"\"Tic-tac-toe\"");
-                }
-            }*/
             if(!commandQueue.isEmpty()){
                 out.println(commandQueue.get(0));
                 System.out.println(player.getName() + " : " + commandQueue.get(0));
@@ -259,7 +226,4 @@ public class ServerCommunication extends Thread {
     public void getGameList(){
         addToCommandQueue("get gamelist");
     }
-
-    //DIT IS VOOR TESTEN DIT MOET VAST OP EEN ANDERE PLEK
-    public String getPlayersTurn(){return playersturn; }
 }
