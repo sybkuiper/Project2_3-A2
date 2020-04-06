@@ -26,29 +26,33 @@ public class GUIController implements Initializable {
         private BorderPane rPane;
 	    @FXML private TextField field;
 	    @FXML private Label label;
-	    @FXML private Button nextbutton;
+	    @FXML private Button nextbutton,menubutton,menu,xbutton;
 	    @FXML private Label counterlabel;
 
-
-	    // assign text field text to label on button click
-	    public void handleButton() {
-	        String text = field.getText();
-	        label.setText(text);
-	        field.clear();
-	    }
+	    @FXML private Button Sp_T_Button,AI_T_Button,Mp_T_Button,Sp_R_Button,Mp_R_Button;
 	    
 	    
 	    @FXML
 	    void handleButtonTTT_SP(ActionEvent event) throws IOException {
-		   	BorderPane pane = FXMLLoader.load(getClass().getResource("SpTicTacView.fxml"));
-	       	rPane.getChildren().setAll(pane);
+	        Stage stage;
+	        Parent root;
+	        stage = (Stage) Sp_T_Button.getScene().getWindow();
+	        root = FXMLLoader.load(getClass().getResource("SpTicTacView.fxml"));
+	        Scene scene = new Scene(root);
+	        stage.setScene(scene);
+	        stage.show();
 	    }	
 	    
 	    @FXML
 	    void gotomenuscreen(ActionEvent event) throws IOException {
-	    	BorderPane pane = FXMLLoader.load(getClass().getResource("MenuWindowView.fxml"));
-	    	rootPane.getChildren().setAll(pane);
-	    	this.rPane = pane;
+	        Stage stage;
+	        Parent root;
+            stage = (Stage) menu.getScene().getWindow();
+            root = FXMLLoader.load(getClass().getResource("MenuWindowView.fxml"));        
+	        Scene scene = new Scene(root);
+	        stage.setScene(scene);
+	        stage.show();
+
 	    }
 	    
 
@@ -72,20 +76,15 @@ public class GUIController implements Initializable {
 		}
 
 
-	    @FXML
-	    void handleButton(ActionEvent event) {
-	        String text = field.getText();
-	        label.setText(text);
-	        field.clear();
-	    }
-	    
+
+
 	    @FXML
 	    void handleButtonR_AI(ActionEvent event) {
 
 	    }
 
 	    @FXML
-	    void handleButtonR_PVP(ActionEvent event) {
+	    void handleButtonR_PVP(ActionEvent event) throws IOException {
 
 	    }
 
@@ -100,15 +99,17 @@ public class GUIController implements Initializable {
 	    }
 
 	    @FXML
-	    void handleButtonTTT_PVP(ActionEvent event) {
+	    void handleButtonTTT_PVP(ActionEvent event) throws IOException {
+	        Stage stage;
+	        Parent root;
+	        stage = (Stage) Mp_T_Button.getScene().getWindow();
+	        root = FXMLLoader.load(getClass().getResource("MpTicTacView.fxml"));
+	        Scene scene = new Scene(root);
+	        stage.setScene(scene);
+	        stage.show();
 
 	    }
 	    
-    	
-	    	
-
-	    
-
 
 	    
 

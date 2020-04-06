@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
@@ -12,9 +11,10 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
+
 <!-- The id of this BorderPane should be rootPane fx:id="rootPane"-->
-<BorderPane  maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #383b42;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.GUIController">
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #383b42;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.GUIController">
    <top>
       <VBox prefHeight="19.0" prefWidth="600.0" BorderPane.alignment="CENTER">
          <children>
@@ -48,14 +48,9 @@
             <HBox alignment="CENTER" layoutX="115.0" layoutY="161.0" spacing="20.0">
                <children>
                   <TextField fx:id="field" layoutX="201.0" layoutY="208.0" />
-                  <Button layoutX="381.0" layoutY="208.0" mnemonicParsing="false" onAction="#gotomenuscreen" text="Login" />
+                  <Button fx:id="menu" layoutX="381.0" layoutY="208.0" mnemonicParsing="false" onAction="#gotomenuscreen" text="Login" />
                </children>
             </HBox>
-            <Label fx:id="label" alignment="CENTER" layoutX="181.0" layoutY="131.0" text="Label" textFill="#c1b9b9">
-               <font>
-                  <Font size="20.0" />
-               </font>
-            </Label>
          </children>
          <effect>
             <Bloom />
