@@ -1,6 +1,7 @@
 package Hanze;
 
 import Players.Player;
+import Players.Robot;
 
 import java.io.*;
 import java.net.Socket;
@@ -83,6 +84,18 @@ public class ServerCommunication extends Thread {
         addToCommandQueue("move " + move);
     }
 
+    private Map<String, String> createMap(String input) {
+        input = input.substring(1, input.length() - 1);
+        String[] keyvalue = input.split(", ");
+        Map<String, String> map = new HashMap<>();
+        for (String pair : keyvalue) {
+            String[] entry = pair.split(": ");
+            map.put(entry[0], entry[1]);
+        }
+        System.out.println(player.getName() + " : " + map);
+        return map;
+    }
+
     private void parse(String input){
         //https://stackoverflow.com/questions/7347856/how-to-convert-a-string-into-an-arraylist
         List<String> ignoreList = new ArrayList<>();
@@ -109,20 +122,15 @@ public class ServerCommunication extends Thread {
             if(input.startsWith("SVR GAME CHALLENGE ")){
                 if(input.startsWith("SVR GAME CHALLENGE CANCELLED ")){
                     input = input.replace("SVR GAME CHALLENGE CANCELLED {CHALLENGENUMBER: ","").replace("}","");
-                    System.out.println(input);
+                    System.out.println("Challenge " + input + " is geannuleerd");
                     //Todo: controller call die aangeeft dat de match uitnodiging voor ID is verlopen
                 } else {
                     System.out.println(player.getName() + ": received game invite");
                     //https://stackoverflow.com/questions/26485964/how-to-convert-string-into-hashmap-in-java
                     input = input.replace("SVR GAME CHALLENGE ", "");
-                    input = input.substring(1, input.length() - 1);
-                    String[] keyvalue = input.split(", ");
-                    Map<String, String> map = new HashMap<>();
-                    for (String pair : keyvalue) {
-                        String[] entry = pair.split(": ");
-                        map.put(entry[0], entry[1]);
+                    if(player instanceof Robot){
+                        acceptChallenge(createMap(input).get("CHALLENGENUMBER").replace("\"",""));
                     }
-                    System.out.println(map);
                 }
             }
             if(input.startsWith("SVR GAME MATCH ")){
@@ -135,7 +143,13 @@ public class ServerCommunication extends Thread {
                     String[] entry = pair.split(": ");
                     map.put(entry[0], entry[1]);
                 }
-                System.out.println(map);
+                System.out.println(player.getName() + " : " + map);
+                //System.out.println(player.getName() + " : " + map.get("PLAYERTOMOVE").replace("\"",""));
+                //System.out.println((player.getName().equals(map.get("PLAYERTOMOVE").replace("\"", ""))));
+//                if(player.getName().equals(map.get("PLAYERTOMOVE").replace("\"",""))){
+//                    System.out.println(player.getName() + " : " + "it's my turn");
+//                    move("8");
+//                }
                 //Todo: Start game interface
             }
             if(input.startsWith("SVR GAME YOURTURN ")){
@@ -145,6 +159,8 @@ public class ServerCommunication extends Thread {
                 Map<String,String> map = new HashMap<>();
                 map.put(entry[0],entry[1]);
                 System.out.println(map);
+                System.out.println(player.getName() + " : " + "it's my turn");
+                player.getActiveGame().makeMove(); //Todo: makeMove() function, where the AI should automatically make the best move, and the player should have the ability to move.
                 //Todo: Enable ability to make a turn (should enable interface, the interface allows the method call move)
             }
             if(input.startsWith("SVR GAME MOVE ")){
