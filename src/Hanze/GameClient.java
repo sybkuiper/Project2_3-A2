@@ -27,27 +27,34 @@ public class GameClient {
     private List<Socket> sockets;
     private List<ServerCommunication> serverCommunications;
     private Player player;
-    private HashMap<String, Player> robots;
+    private HashMap<String, Player> playerObjects;
     private List<String> onlinePlayers;
     private List<String> games;
-    private Human human;
-    private Robot robot;
-    private TicTacToe tictac;
+    private Game game;
 
     public GameClient() throws IOException, InterruptedException {
         sockets = new ArrayList<>();
         serverCommunications = new ArrayList<>();
-        robots = new HashMap<>();
+        playerObjects = new HashMap<>();
         onlinePlayers = new ArrayList<>();
         games = new ArrayList<>();
-        robots.put("Reversi",new Robot(this,0,"Reversi"));
-        robots.put("Tic-tac-toe",new Robot(this, 0, "Tic-tac-toe"));
-        player = new Human(this, "kees" );
+        playerObjects.put("Reversi",new Robot(this,0,"Reversi"));
+        playerObjects.put("Tic-tac-toe",new Robot(this, 0, "Tic-tac-toe"));
+        playerObjects.put("Human",new Human(this, "kees" ));
+        player = playerObjects.get("Human");
         TestThread test = new TestThread(player);
     }
 
-    public HashMap<String, Player> getRobots() {
-        return robots;
+    public Game getGame() {
+        return game;
+    }
+
+    public void setGame(Game game) {
+        this.game = game;
+    }
+
+    public HashMap<String, Player> getPlayerObjects() {
+        return playerObjects;
     }
 
     public List<String> getOnlinePlayers() {
@@ -66,8 +73,12 @@ public class GameClient {
         return serverCommunications;
     }
 
-    public void startGame(String gameType, Player robot){
-        new Game(gameType, player, robot);
+    public void startGame(String gameType, Player robot, boolean online){
+        setGame(new Game(gameType, player, robot, online));
+    }
+
+    public void startGame(String gameType, boolean online){
+        setGame(new Game(gameType, player,null , online));
     }
 
     public static void main(String[] args) throws IOException, InterruptedException {

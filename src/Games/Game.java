@@ -18,20 +18,24 @@ public class Game {
 
     }
 
-    public Game(String gameType, Player player1, Player player2){
+    public Game(String gameType, Player player1, Player player2, boolean online){
         switch(gameType){
             case "Tic-tac-toe":
                 game = new TicTacToe(player1);
-                player1.setActiveGame(game);
-                if(player2 !=  null){
+                //player1.setActiveGame(game);
+                if(!online){
                     addSecondPlayer(player2);
-                    player2.setActiveGame(game);
+                //   player2.setActiveGame(game);
                 }
                 break;
             case "Othello":
                 game = new Reversi();
                 break;
         }
+    }
+
+    public Game getGame() {
+        return game;
     }
 
     private void addSecondPlayer(Player player){
