@@ -44,6 +44,58 @@ public class Robot extends Player {
     }
 
     private int minimax(Map<String, String> gameState, int steps, boolean isMaximizing){
+        System.out.println(testTicTacToeWinner(gameState));
         return 1;
+    }
+
+    private int openSpots(Map<String,String> gameState){
+        int openspots = 0;
+        for (Map.Entry<String, String> entry : gameState.entrySet()) {
+            String key = entry.getKey();
+            Object value = entry.getValue();
+            if(value.equals("E")){
+                openspots++;
+            }
+        }
+        return openspots;
+    }
+
+    private String testTicTacToeWinner(Map<String,String> gameState){
+        String winner = null;
+        String a = "";
+        String b = "";
+        String c = "";
+        int position = 0;
+
+        //horizontal
+        for (int i = 0; i<3;i++){
+             a = gameState.get(Integer.toString(position));
+             b = gameState.get(Integer.toString(position+1));
+             c = gameState.get(Integer.toString(position+2));
+            if (a.equals(b) && b.equals(c)){ if (!a.equals("E")){winner = a;}}
+            position += 3;
+        }
+
+        //vertical
+        for (int i = 0; i<3;i++){
+             a = gameState.get(Integer.toString(i));
+             b = gameState.get(Integer.toString(position+3));
+             c = gameState.get(Integer.toString(position+6));
+            if (a.equals(b) && b.equals(c)){ if (!a.equals("E")){winner = a;}}
+        }
+
+        //diagonal
+         a = gameState.get(Integer.toString(0));
+         b = gameState.get(Integer.toString(4));
+         c = gameState.get(Integer.toString(8));
+        if (a.equals(b) && b.equals(c)){ if (!a.equals("E")){winner = a;}}
+
+         a = gameState.get(Integer.toString(2));
+         b = gameState.get(Integer.toString(4));
+         c = gameState.get(Integer.toString(6));
+        if (a.equals(b) && b.equals(c)){ if (!a.equals("E")){winner = a;}}
+
+
+        return winner;
     }
 }

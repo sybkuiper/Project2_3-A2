@@ -1,5 +1,6 @@
 package Hanze;
 
+import Games.TicTacToe;
 import Players.Player;
 import Players.Robot;
 
@@ -142,6 +143,7 @@ public class ServerCommunication extends Thread {
                 for (String pair : keyvalue) {
                     String[] entry = pair.split(": ");
                     map.put(entry[0], entry[1]);
+                    System.out.println(entry[0]+entry[1]);
                 }
                 System.out.println(player.getName() + " : " + map);
                 //System.out.println(player.getName() + " : " + map.get("PLAYERTOMOVE").replace("\"",""));
@@ -159,8 +161,13 @@ public class ServerCommunication extends Thread {
                 Map<String,String> map = new HashMap<>();
                 map.put(entry[0],entry[1]);
                 System.out.println(map);
+
                 System.out.println(player.getName() + " : " + "it's my turn");
                 player.getActiveGame().makeMove(); //Todo: makeMove() function, where the AI should automatically make the best move, and the player should have the ability to move.
+
+                if(entry[0].equals("TURNMESSAGE")){
+                    client.turn(player.getName());
+                }
                 //Todo: Enable ability to make a turn (should enable interface, the interface allows the method call move)
             }
             if(input.startsWith("SVR GAME MOVE ")){
@@ -226,11 +233,6 @@ public class ServerCommunication extends Thread {
         }
         while(this.isRunning){
             parse(in.nextLine());
- /*           for (String player : client.getOnlinePlayers()){
-                if(!(player == getName())){
-                    challenge(player,"\"Tic-tac-toe\"");
-                }
-            }*/
             if(!commandQueue.isEmpty()){
                 out.println(commandQueue.get(0));
                 System.out.println(player.getName() + " : " + commandQueue.get(0));
