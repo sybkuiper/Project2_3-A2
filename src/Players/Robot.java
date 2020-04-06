@@ -20,39 +20,6 @@ public class Robot extends Player {
         getServerConnection().subscribe(game);
     }
 
-//    //look at all available spots and see what the effect is of going there
-//    public String think(Map<String,String> gameBoard){
-//        int bestScore = -99999;
-//        String move = "";
-//
-//        for (Map.Entry<String, String> entry : gameBoard.entrySet()) {
-//            String key = entry.getKey();
-//            Object value = entry.getValue();
-//
-//            if(value.equals("E")){
-//                gameBoard.replace(key, "X");
-//                int score = minimax(gameBoard, 0, true);
-//                gameBoard.replace(key, "E");
-//                if(score > bestScore){
-//                    bestScore = score;
-//                    move = key;
-//                }
-//            }
-//        }
-//        return move;
-//    }
-//
-//
-//    public int minimax(Map<String,String> gameBoard,int depth, boolean isMaximizing){
-//        String result = checkWinner(gameBoard);
-//    }
-
-
-
-
-
-
-
     public String think(Map<String,String> gameBoard){
         String bestMove = "0";
         int bestScore = -1000;
@@ -61,6 +28,8 @@ public class Robot extends Player {
         for (Map.Entry<String, String> entry : gameBoard.entrySet()) {
             String key = entry.getKey();
             Object value = entry.getValue();
+
+            //try all empty spots and make them X and do minimax on the gamboard
             if(value.equals("E")){
                 gameBoard.replace(key, "X");
                 int score = minimax(gameBoard, 0, false);
@@ -74,7 +43,10 @@ public class Robot extends Player {
         return bestMove;
     }
 
+    //looks to all posible outcomes of the game state
     private int minimax(Map<String, String> gameBoard, int steps, boolean isMaximizing){
+
+        //give a score to an outcome. the better the outcome, the higher score.
         String result = checkWinner(gameBoard);
         if(result != null){
             int score = 0;
@@ -83,6 +55,9 @@ public class Robot extends Player {
             if(result.equals("X")){score = 1;}
             return score;
         }
+
+
+        //if its the maximizing turn, the AI's turn, check all outcomes
         if(isMaximizing){
             int bestScore = -1000;
             for (Map.Entry<String, String> entry : gameBoard.entrySet()) {
@@ -98,6 +73,7 @@ public class Robot extends Player {
                 }
             }
             return bestScore;
+            //if its the minimizing turn, the other player, check all outcomes
         }else{
             int bestScore = 1000;
             for (Map.Entry<String, String> entry : gameBoard.entrySet()) {
@@ -116,6 +92,7 @@ public class Robot extends Player {
         }
     }
 
+    //check for open spots on the board
     private int openSpots(Map<String,String> gameBoard){
         int openspots = 0;
         for (Map.Entry<String, String> entry : gameBoard.entrySet()) {
@@ -128,6 +105,7 @@ public class Robot extends Player {
         return openspots;
     }
 
+    //check if the gamestate has a winner and return the winner or TIE
     private String checkWinner(Map<String,String> gameBoard){
         String winner = null;
         String a;
