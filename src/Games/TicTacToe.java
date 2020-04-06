@@ -23,9 +23,11 @@ public class TicTacToe {
 
     BufferedReader reader = new BufferedReader(new InputStreamReader(System.in)); //voor testen normaal komt de input van de GUI
 
-    public TicTacToe(Human player, Robot AI){
+    public TicTacToe(Player player, boolean online){
         this.player = player;
-        this.AI = AI;
+        if(!online){
+            this.AI = (Robot) player.getClient().getRobots().get("Tic-tac-toe");
+        }
         playerName = player.getName();
         playerServer = player.getServerConnection();
         AIServer = AI.getServerConnection();
@@ -34,22 +36,12 @@ public class TicTacToe {
         }
         playerServer.subscribe("Tic-tac-toe");
         runningGame = true;
-    }
 
-    private void runningGame(){
-        while(runningGame){
-            String nameOfPlayerWithTurn = playerServer.getPlayersTurn().replace("\"","");
-            System.out.println(nameOfPlayerWithTurn.equals(player.getName()));
-            if(nameOfPlayerWithTurn.equals(player.getName())){
-                playersTurn();
-            }else{
-                AITurn();
-            }
-        }
     }
 
     public void playersTurn(){
         try {
+            System.out.println("Your turn: give a number between 0 and 8");
             String input = reader.readLine();
             gameState.replace(input, "O"); //O = circle X = cross E = empty
             playerServer.move(input);

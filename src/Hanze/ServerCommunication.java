@@ -18,7 +18,6 @@ public class ServerCommunication extends Thread {
     private boolean isRunning = false;
     private Player player;
     private GameClient client;
-    private String playersturn; //DIT IS PUUR VOOR TESTEN DIT MOET OP EEN ANDERE PLEK
 
     public ServerCommunication(GameClient client, Player player) throws IOException, InterruptedException {
         this.socket = new Socket(LOCAL_IP,PORT);
@@ -138,17 +137,6 @@ public class ServerCommunication extends Thread {
                     map.put(entry[0], entry[1]);
                     System.out.println(entry[0]+entry[1]);
                     //DIT IS VOOR TESTEN DIT MOET WAARSCHIJNLIJK OP EEN ANDERE PLEK:
-                    if(entry[0].equals("PLAYERTOMOVE")){
-                        playersturn = entry[1];
-                        playersturn = playersturn.replace("\"","");
-                        if(this.name.equals(client.getPlayerName())){
-                            if(playersturn.equals(client.getPlayerName())){
-                                client.playersTurn();
-                            }else{
-                                client.aiTurn();
-                            }
-                        }
-                    }
                 }
                 System.out.println(map);
                 //Todo: Start game interface
@@ -160,6 +148,9 @@ public class ServerCommunication extends Thread {
                 Map<String,String> map = new HashMap<>();
                 map.put(entry[0],entry[1]);
                 System.out.println(map);
+                if(entry[0].equals("TURNMESSAGE")){
+                    client.turn(player.getName());
+                }
                 //Todo: Enable ability to make a turn (should enable interface, the interface allows the method call move)
             }
             if(input.startsWith("SVR GAME MOVE ")){
@@ -170,18 +161,18 @@ public class ServerCommunication extends Thread {
                 for (String pair : keyvalue) {
                     String[] entry = pair.split(": ");
                     map.put(entry[0], entry[1]);
-                    if(entry[0].equals("MOVE")){
-                        System.out.println("MOVE");
-                        playersturn = entry[1];
-                        playersturn = playersturn.replace("\"","");
-                        if(this.name.equals(client.getPlayerName())){
-                            if(playersturn.equals(client.getPlayerName())){
-                                client.aiTurn();
-                            }else{
-                                client.playersTurn();
-                            }
-                        }
-                    }
+//                    if(entry[0].equals("MOVE")){
+//                        System.out.println("MOVE");
+//                        playersturn = entry[1];
+//                        playersturn = playersturn.replace("\"","");
+//                        if(this.name.equals(client.getPlayerName())){
+//                            if(playersturn.equals(client.getPlayerName())){
+//                                client.aiTurn();
+//                            }else{
+//                                client.playersTurn();
+//                            }
+//                        }
+//                    }
                 }
                 System.out.println(map);
                 //Todo: verwerken reactie spel, hoe? testen
@@ -259,7 +250,4 @@ public class ServerCommunication extends Thread {
     public void getGameList(){
         addToCommandQueue("get gamelist");
     }
-
-    //DIT IS VOOR TESTEN DIT MOET VAST OP EEN ANDERE PLEK
-    public String getPlayersTurn(){return playersturn; }
 }

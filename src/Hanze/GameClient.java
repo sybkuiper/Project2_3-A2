@@ -31,7 +31,7 @@ public class GameClient {
     private List<String> games;
     private Human human;
     private Robot robot;
-    private TicTacToe ticTacToe;
+    private TicTacToe tictac;
 
     public GameClient() throws IOException, InterruptedException {
         sockets = new ArrayList<>();
@@ -42,7 +42,8 @@ public class GameClient {
         robots.put("Reversi",new Robot(this,0,"Reversi"));
         robots.put("Tic-tac-toe",new Robot(this, 0, "Tic-tac-toe"));
         player = new Human(this, "kees" );
-        TestThread test = new TestThread(player);
+//        TestThread test = new TestThread(player);
+         tictac = new TicTacToe(player, false);
     }
 
     public HashMap<String, Player> getRobots() {
@@ -65,20 +66,16 @@ public class GameClient {
         return serverCommunications;
     }
 
-    public String getPlayerName(){
-        return human.getName();
-    }
-
     public static void main(String[] args) throws IOException, InterruptedException {
         new GameClient();
     }
 
-    public void playersTurn(){
-        ticTacToe.playersTurn();
-    }
-
-    public void aiTurn(){
-        ticTacToe.AITurn();
+    public void turn(String name){
+        if(name.equals(player.getName())){
+            tictac.playersTurn();
+        }else if(name.equals(robots.get("Tic-tac-toe").getName())){
+            tictac.AITurn();
+        }
     }
 
 }
