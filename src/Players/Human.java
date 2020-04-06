@@ -11,6 +11,7 @@ public class Human extends Player {
         getServerConnection().logIN(super.getName());
         getServerConnection().getGameList();
         getServerConnection().getPlayerList();
+        getServerConnection().subscribe("Tic-tac-toe");
 
     }
 }

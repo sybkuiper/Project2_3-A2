@@ -33,11 +33,7 @@ public class TicTacToe {
             gameState.put(Integer.toString(i),"E");
         }
         playerServer.subscribe("Tic-tac-toe");
-        while(playerServer.getPlayersTurn() == null){
-            System.out.println("hello world");
-        }
         runningGame = true;
-        runningGame();
     }
 
     private void runningGame(){
@@ -52,9 +48,9 @@ public class TicTacToe {
         }
     }
 
-    private void playersTurn(){
+    public void playersTurn(){
         try {
-            String input = "1";
+            String input = reader.readLine();
             gameState.replace(input, "O"); //O = circle X = cross E = empty
             playerServer.move(input);
             System.out.println("Kees");
@@ -64,7 +60,7 @@ public class TicTacToe {
         }
     }
 
-    private void AITurn(){
+    public void AITurn(){
         String move;
         move = AI.think(gameState);
         System.out.println("AI");

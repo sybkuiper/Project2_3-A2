@@ -1,5 +1,6 @@
 package Hanze;
 
+import Games.TicTacToe;
 import Players.Player;
 
 import java.io.*;
@@ -134,11 +135,18 @@ public class ServerCommunication extends Thread {
                 for (String pair : keyvalue) {
                     String[] entry = pair.split(": ");
                     map.put(entry[0], entry[1]);
-
+                    System.out.println(entry[0]+entry[1]);
                     //DIT IS VOOR TESTEN DIT MOET WAARSCHIJNLIJK OP EEN ANDERE PLEK:
                     if(entry[0].equals("PLAYERTOMOVE")){
                         playersturn = entry[1];
-                        System.out.println(entry[1]);
+                        playersturn = playersturn.replace("\"","");
+                        if(this.name.equals(client.getPlayerName())){
+                            if(playersturn.equals(client.getPlayerName())){
+                                client.playersTurn();
+                            }else{
+                                client.aiTurn();
+                            }
+                        }
                     }
                 }
                 System.out.println(map);
@@ -161,6 +169,18 @@ public class ServerCommunication extends Thread {
                 for (String pair : keyvalue) {
                     String[] entry = pair.split(": ");
                     map.put(entry[0], entry[1]);
+                    if(entry[0].equals("MOVE")){
+                        System.out.println("MOVE");
+                        playersturn = entry[1];
+                        playersturn = playersturn.replace("\"","");
+                        if(this.name.equals(client.getPlayerName())){
+                            if(playersturn.equals(client.getPlayerName())){
+                                client.aiTurn();
+                            }else{
+                                client.playersTurn();
+                            }
+                        }
+                    }
                 }
                 System.out.println(map);
                 //Todo: verwerken reactie spel, hoe? testen

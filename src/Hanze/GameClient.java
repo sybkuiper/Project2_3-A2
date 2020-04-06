@@ -38,6 +38,7 @@ public class GameClient {
         games = new ArrayList<>();
         human = new Human(this, "kees" );
         robot = new Robot(this, 0, "Tic-tac-toe");
+        ticTacToe = new TicTacToe(human, robot);
     }
 
     public List<String> getOnlinePlayers() {
@@ -56,17 +57,22 @@ public class GameClient {
         return serverCommunications;
     }
 
-    private void makeGame(String game){
-        if(game.equals("Tic-tac-toe")){
-            ticTacToe = new TicTacToe(human, robot);
-        }
+    public String getPlayerName(){
+        return human.getName();
     }
-
-
 
     public static void main(String[] args) throws IOException, InterruptedException {
         new GameClient();
     }
+
+    public void playersTurn(){
+        ticTacToe.playersTurn();
+    }
+
+    public void aiTurn(){
+        ticTacToe.AITurn();
+    }
+
 }
 
     /**
