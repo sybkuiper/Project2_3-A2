@@ -10,56 +10,38 @@ import java.io.InputStreamReader;
 import java.util.*;
 
 
-public class TicTacToe {
-    private Player player;
-    private String playerName;
-    private ServerCommunication playerServer;
-    private ServerCommunication AIServer;
-    private Robot AI;
-
-    private boolean runningGame = false;
-
-    private Map<String,String> gameState = new HashMap<String,String>(); //game map
+public class TicTacToe extends Game {
 
     BufferedReader reader = new BufferedReader(new InputStreamReader(System.in)); //voor testen normaal komt de input van de GUI
 
-    public TicTacToe(Player player, boolean online){
-        this.player = player;
-        if(!online){
-            this.AI = (Robot) player.getClient().getRobots().get("Tic-tac-toe");
-        }
-        playerName = player.getName();
-        playerServer = player.getServerConnection();
-        AIServer = AI.getServerConnection();
-        for(int i=0;i<9;i++){
-            gameState.put(Integer.toString(i),"E");
-        }
-        playerServer.subscribe("Tic-tac-toe");
-        runningGame = true;
-
-    }
-
-    public void playersTurn(){
-        try {
-            System.out.println("Your turn: give a number between 0 and 8");
-            String input = reader.readLine();
-            gameState.replace(input, "O"); //O = circle X = cross E = empty
-            playerServer.move(input);
-            System.out.println("Kees");
-            System.out.println(gameState);
-        } catch (Exception e) {
-            e.printStackTrace();
+    public TicTacToe(Player player){
+        game = this;
+        player1 = player;
+        for(int i=0;i<9;i++) {
+            getGameBoard().put(Integer.toString(i), "E");
         }
     }
 
-    public void AITurn(){
-        String move;
-        move = AI.think(gameState);
-        System.out.println("AI");
-        gameState.replace(move, "X"); //O = round X = cross E = empty
-        AIServer.move(move);
-        System.out.println(move);
-        System.out.println(gameState);
+    public void makeMove(Player player){
+        if(player instanceof Human){
+            try {
+                System.out.println("Your turn: give a number between 0 and 8");
+                String input = reader.readLine();
+                getGameBoard().replace(input, "O"); //O = circle X = cross E = empty
+                player.getServerConnection().move(input);
+                System.out.println("Kees");
+                System.out.println(getGameBoard());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else if (player instanceof Robot) {
+            String move;
+            move = ((Robot) player).think(getGameBoard());
+            System.out.println("AI");
+            getGameBoard().replace(move, "X"); //O = round X = cross E = empty
+            player.getServerConnection().move(move);
+            System.out.println(move);
+            System.out.println(getGameBoard());
+        }
     }
-
 }

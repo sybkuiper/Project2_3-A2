@@ -131,6 +131,7 @@ public class ServerCommunication extends Thread {
                     input = input.replace("SVR GAME CHALLENGE ", "");
                     if(player instanceof Robot){
                         acceptChallenge(createMap(input).get("CHALLENGENUMBER").replace("\"",""));
+                        client.startGame(createMap(input).get("GAMETYPE").replace("\"",""), player);
                     }
                 }
             }
@@ -161,13 +162,9 @@ public class ServerCommunication extends Thread {
                 Map<String,String> map = new HashMap<>();
                 map.put(entry[0],entry[1]);
                 System.out.println(map);
-
                 System.out.println(player.getName() + " : " + "it's my turn");
-                player.getActiveGame().makeMove(); //Todo: makeMove() function, where the AI should automatically make the best move, and the player should have the ability to move.
+                player.getActiveGame().makeMove(player); //Todo: makeMove() function, where the AI should automatically make the best move, and the player should have the ability to move.
 
-                if(entry[0].equals("TURNMESSAGE")){
-                    client.turn(player.getName());
-                }
                 //Todo: Enable ability to make a turn (should enable interface, the interface allows the method call move)
             }
             if(input.startsWith("SVR GAME MOVE ")){
