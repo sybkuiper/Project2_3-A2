@@ -1,6 +1,7 @@
 import Controller.NetworkController;
 import Controller.ViewController;
 import javafx.application.Application;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -14,7 +15,9 @@ public class GameClient extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("View/LoginWindowView.fxml"));
+        //Parent root = FXMLLoader.load(getClass().getResource("View/LoginWindowView.fxml"));
+        //De volgende is voor testing purposes van de front-end
+        Parent root = FXMLLoader.load(getClass().getResource("View/OthelloView.fxml"));
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();

@@ -1,3 +1,4 @@
+import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -17,6 +18,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
 
@@ -25,6 +27,7 @@ public class GUIController implements Initializable {
 	private int counter = 0;
 	@FXML private BorderPane rootPane;
 	private BorderPane rPane;
+	@FXML private GridPane board;
 	@FXML private TextField field;
 	@FXML private CheckBox online;
 	@FXML private Label label;
@@ -99,7 +102,24 @@ public class GUIController implements Initializable {
 		}
 	}
 
-
+	@FXML
+	void gridClicked(javafx.scene.input.MouseEvent event) throws IOException {
+		Node clickedNode = event.getPickResult().getIntersectedNode();
+		if(clickedNode != board) {
+			Integer collIndex = GridPane.getColumnIndex(clickedNode);
+			Integer rowIndex = GridPane.getRowIndex(clickedNode);
+			if(collIndex == null){
+				collIndex = 0;
+			}
+			if(rowIndex == null){
+				rowIndex = 0;
+			}
+			collIndex += 1;
+			rowIndex += 1;
+			System.out.println("Clicked: " + collIndex + ", " + rowIndex);
+		}
+		clickedNode.
+	}
 
 
 	@FXML
