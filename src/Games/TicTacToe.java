@@ -22,6 +22,12 @@ public class TicTacToe extends Game {
         }
     }
 
+    public void printGameState(){
+        System.out.println(getGameBoard().get("0") + getGameBoard().get("1") + getGameBoard().get("2"));
+        System.out.println(getGameBoard().get("3") + getGameBoard().get("4") + getGameBoard().get("5"));
+        System.out.println(getGameBoard().get("6") + getGameBoard().get("7") + getGameBoard().get("8"));
+    }
+
     public void makeMove(Player player){
         if(player instanceof Human){
             try {
@@ -29,19 +35,16 @@ public class TicTacToe extends Game {
                 String input = reader.readLine();
                 getGameBoard().replace(input, "O"); //O = circle X = cross E = empty
                 player.getServerConnection().move(input);
-                System.out.println("Kees");
-                System.out.println(getGameBoard());
+                printGameState();
             } catch (Exception e) {
                 e.printStackTrace();
             }
         } else if (player instanceof Robot) {
             String move;
             move = ((Robot) player).think(getGameBoard());
-            System.out.println("AI");
             getGameBoard().replace(move, "X"); //O = round X = cross E = empty
             player.getServerConnection().move(move);
-            System.out.println(move);
-            System.out.println(getGameBoard());
+            printGameState();
         }
     }
 }
