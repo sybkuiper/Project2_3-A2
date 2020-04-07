@@ -20,16 +20,23 @@ public class NetworkController extends Thread {
     private List<String> availableGames;
     private List<String> onlinePlayers;
     private boolean isRunning = false;
+    private ViewController controller;
 
-    public NetworkController(String ip_address, int port) throws IOException {
+    public NetworkController(ViewController controller,String player,String ip_address, int port) throws IOException, InterruptedException {
+        this.controller = controller;
         socket = new Socket(ip_address,port);
         commandQueue = new ArrayList<>();
         ignoreList = new ArrayList<>();
         availableGames = new ArrayList<>();
+        onlinePlayers = new ArrayList<>();
         ignoreList.add("Strategic Game Server Fixed [Version 1.1.0]");
         ignoreList.add("(C) Copyright 2015 Hanzehogeschool Groningen");
+        ignoreList.add("OK");
         in = new Scanner(socket.getInputStream());
         out = new PrintWriter(socket.getOutputStream(),true);
+        logIN(player);
+        getGameList();
+        getPlayerList();
         this.start();
     }
 
@@ -88,69 +95,74 @@ public class NetworkController extends Thread {
         return map;
     }
 
-    private void parse(String input){
-        if(input.startsWith("SVR GAMELIST ")){
-            input = input.replace("SVR GAMELIST ","").replace("[","").replace("]","");
+
+
+    private void parse(String input) {
+        if (input.startsWith("SVR GAMELIST ")) {
+            input = input.replace("SVR GAMELIST ", "").replace("[", "").replace("]", "");
             String[] split = input.split(",");
-            availableGames.addAll(Arrays.asList(split));
-        }
-        if(input.startsWith("SVR PLAYERLIST ")){
-            input = input.replace("SVR PLAYERLIST ","").replace("[","").replace("]","");
-            String[] split = input.split(",");
-            onlinePlayers.addAll(Arrays.asList(split));
+            for (String game : split) {
+                availableGames.add(game);
+                subscribe(game);
+            }
+            System.out.println(availableGames);
+            controller.setAvailableGames(availableGames);
         }
 
-        if(input.startsWith("SVR GAME CHALLENGE ")){
-            if(input.startsWith("SVR GAME CHALLENGE CANCELLED ")){
-                input = input.replace("SVR GAME CHALLENGE CANCELLED {CHALLENGENUMBER: ","").replace("}","");
+        if (input.startsWith("SVR PLAYERLIST ")) {
+            input = input.replace("SVR PLAYERLIST ", "").replace("[", "").replace("]", "");
+            if (input.contains(",")) {
+                String[] split = input.split(",");
+                onlinePlayers.addAll(Arrays.asList(split));
+                controller.setOnlinePlayers(onlinePlayers);
+            } else {
+                onlinePlayers.add(input);
+                System.out.println(onlinePlayers);
+                controller.setOnlinePlayers(onlinePlayers);
+            }
+        }
+
+        if (input.startsWith("SVR GAME CHALLENGE ")) {
+            if (input.startsWith("SVR GAME CHALLENGE CANCELLED ")) {
+                input = input.replace("SVR GAME CHALLENGE CANCELLED {CHALLENGENUMBER: ", "").replace("}", "");
                 System.out.println("Challenge " + input + " is geannuleerd");
+//                controller.getInvitations.remove(input);
                 //Todo: controller call die aangeeft dat de match uitnodiging voor ID is verlopen
             } else {
+                /**
+                 * Automatically accept an invite when received
+                 */
                 input = input.replace("SVR GAME CHALLENGE ", "");
-                createMap(input).get("CHALLENGENUMBER").replace("\"", "");
-                createMap(input).get("GAMETYPE").replace("\"", "");
+                acceptChallenge(createMap(input).get("CHALLENGENUMBER").replace("\"", ""));
+
             }
         }
 
-        if(input.startsWith("SVR GAME MATCH ")){
-
-            input = input.replace("SVR GAME MATCH ", "");
-          //  if(player instanceof Human && player.getClient().getGame() == null) {
-          //      client.startGame(createMap(input).get("GAMETYPE").replace("\"",""), true);
-            }
-            //Todo: Start game interface
+        if (input.startsWith("SVR GAME MATCH ")) {
+            //           controller.initializeGame();
         }
-     //   if(input.startsWith("SVR GAME YOURTURN ")){
-     //       if(player.getClient().getGame() != null) {
-     //           player.getClient().getGame().getGame().makeMove(player); //Todo: makeMove() function, where the AI should automatically make the best move, and the player should have the ability to move.
-    //        }
-     //   }
+        //Todo: Start game interface
+
+        if (input.startsWith("SVR GAME YOURTURN ")) {
+            //           controller.getAI().think();
+        }
 
 //        if(input.startsWith("SVR GAME ")){
 //            input = input.replace("SVR GAME ","");
 //            if(input.startsWith("WIN")){
-//                if(player instanceof Human) {
-//                    //Todo: send alert that player won (interface call) + ability to request rematch
-//                }
-//                System.out.println(player.getName() + " : has won");
+//                controller.alertGameState("WIN");
 //                client.setGame(null);
 //                //Todo: verwerken reactie spel, hoe? testen
 //            } else if (input.startsWith("LOSS")){
-//                if(player instanceof Human) {
-//                    //Todo: send alert that player lost (interface call) + ability to request rematch
-//                }
-//                System.out.println(player.getName() + " : has lost");
+//                controller.alertGameState("LOSS");
 //                client.setGame(null);
 //            } else if (input.startsWith("DRAW")){
-//                if(player instanceof Human) {
-//                    //Todo: send alert that player tied (interface call) + ability to request rematch
-//                }
-//                System.out.println(player.getName() + " : has tied");
+//                controller.alertGameState("DRAW");
 //                client.setGame(null);
 //            }
 //        }
 //    }
-
+    }
 
     public void run(){
         if(!this.isRunning){

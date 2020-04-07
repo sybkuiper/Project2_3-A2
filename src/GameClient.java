@@ -9,8 +9,6 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class GameClient extends Application {
-    ViewController viewController;
-    NetworkController networkController;
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -18,8 +16,6 @@ public class GameClient extends Application {
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
-        //viewController = new ViewController();
-        //networkController = new NetworkController();
     }
 
     public static void main(String[] args) throws IOException {
