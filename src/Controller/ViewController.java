@@ -56,13 +56,6 @@ public class ViewController implements Initializable {
 	public void createView(){
 	}
 
-//    public Game getGame() {
-//        return game;
-//    }
-//
-//    public void setGame(Game game) { this.game = game; }
-//
-
 	public void updateView(){
 
 	}

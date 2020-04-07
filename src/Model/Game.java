@@ -1,58 +1,62 @@
-//package Model;
-//
-//import Players.*;
-//
-//import java.util.HashMap;
-//import java.util.Map;
-//
-//public class Game {
-//
-//    Game game;
-//    Player player1;
-//    Player player2;
-//    private Map<String,String> gameBoard = new HashMap<String,String>(); //game map
-//
-//    public Game(){
-//
-//    }
-//
-//    public Game(String gameType, Player player1, Player player2, boolean online){
-//        switch(gameType){
-//            case "Tic-tac-toe":
-//                game = new TicTacToe(player1);
-//                //player1.setActiveGame(game);
-//                if(!online){
-//                    addSecondPlayer(player2);
-//                //   player2.setActiveGame(game);
-//                }
-//                break;
-//            case "Othello":
-//                game = new Reversi();
-//                break;
-//        }
-//    }
-//
-//    public void startGame(String gameType, Player robot, boolean online){
-//        setGame(new Game(gameType, player, robot, online));
-//    }
-//
-//    public void startGame(String gameType, boolean online){
-//        setGame(new Game(gameType, player,null , online));
-//    }
-//
-//
-//    public Game getGame() {
-//        return game;
-//    }
-//
-//    private void addSecondPlayer(Player player){
-//        player2 = player;
-//    }
-//
-//    public Map<String, String> getGameBoard() {
-//        return gameBoard;
-//    }
-//
-//    public void makeMove(Player player){
-//    }
-//}
+package Model;
+
+import java.util.HashMap;
+import java.util.Map;
+
+public abstract class Game {
+
+    private Game game;
+    private Map<Integer,String> gameBoard = new HashMap<>(); //game map
+    private int rows;
+    private int columns;
+
+    public Game(int rows, int columns){
+        this.rows = rows;
+        this.columns = columns;
+        generateGameBoard();
+    }
+
+    public Map<Integer, String> getGameBoard() {
+        return gameBoard;
+    }
+
+    public void generateGameBoard(){
+        if(game instanceof Reversi) {
+            for (int row = 0; row < rows; row++) {
+                for (int column = 0; column < columns; column++) {
+                    gameBoard.put(row, "E");
+                }
+            }
+        } else if (game instanceof TicTacToe){
+            for(int row = 0; row < rows; row++) {
+                for (int column = 0; column < columns; column++) {
+                    getGameBoard().put(row, "E");
+                }
+            }
+        }
+    }
+
+    public void printGameState(){
+        if(game instanceof Reversi){
+            String gameState = "";
+            for (int row = 0; row < rows; row++) {
+                for (int column = 0; column < columns; column++) {
+                    gameState = gameState.concat(getGameBoard().get(row + column));
+                }
+            }
+        } else if (game instanceof TicTacToe){
+            String gameState = "";
+            for(int row = 0; row < rows; row++) {
+                for (int column = 0; column < columns; column++) {
+                    gameState = gameState.concat(getGameBoard().get(row + column));
+                }
+                System.out.println(gameState);
+            }
+        }
+    }
+
+    public abstract String think(Map<String,String> gameBoard);
+    public abstract int minimax(Map<String, String> gameBoard, int steps, boolean isMaximizing);
+    public abstract int openSpots(Map<String,String> gameBoard);
+    public abstract String checkWinner(Map<String,String> gameBoard);
+}
