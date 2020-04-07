@@ -106,7 +106,7 @@ public class Robot extends Player {
     }
 
     //check if the gamestate has a winner and return the winner or TIE
-    private String checkWinner(Map<String,String> gameBoard){
+    public String checkWinner(Map<String,String> gameBoard){
         String winner = null;
         String a;
         String b;

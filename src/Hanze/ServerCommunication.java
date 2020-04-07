@@ -132,7 +132,7 @@ public class ServerCommunication extends Thread {
                     input = input.replace("SVR GAME CHALLENGE ", "");
                     if(player instanceof Robot) {
                         acceptChallenge(createMap(input).get("CHALLENGENUMBER").replace("\"", ""));
-                        client.startGame(createMap(input).get("GAMETYPE").replace("\"", ""), player, false);
+                        client.startGame(createMap(input).get("GAMETYPE").replace("\"", ""), player, true);
                     }
                 }
             }

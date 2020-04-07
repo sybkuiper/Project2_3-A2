@@ -43,6 +43,7 @@ public class GameClient {
         playerObjects.put("Human",new Human(this, "kees" ));
         player = playerObjects.get("Human");
         TestThread test = new TestThread(player);
+        startGame("Tic-tac-toe",playerObjects.get("Tic-tac-toe"), false);
     }
 
     public Game getGame() {
