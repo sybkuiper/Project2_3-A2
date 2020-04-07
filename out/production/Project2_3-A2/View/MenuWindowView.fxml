@@ -5,43 +5,32 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #383b42;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.GUIController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #383b42;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUIController">
    <center>
       <AnchorPane prefHeight="223.0" prefWidth="491.0" BorderPane.alignment="CENTER">
          <children>
             <AnchorPane layoutX="106.0" layoutY="74.0" prefHeight="232.0" prefWidth="338.0">
                <children>
-                  <Button fx:id="Sp_T_Button" layoutX="21.0" layoutY="19.0" mnemonicParsing="false" onAction="#handleButtonTTT_SP" prefHeight="83.0" prefWidth="89.0" style="-fx-background-color: #9081a3;" text="TIC TAC TOE">
+                  <Button fx:id="Sp_T_Button" layoutX="79.0" layoutY="19.0" mnemonicParsing="false" onAction="#handleButtonTTT_SP" prefHeight="83.0" prefWidth="89.0" style="-fx-background-color: #9081a3;" text="TIC TAC TOE">
                      <effect>
                         <Glow level="0.55" />
                      </effect>
                   </Button>
-                  <Button fx:id="AI_T_Button" layoutX="225.0" layoutY="19.0" mnemonicParsing="false" onAction="#handleButtonTTT_AI" prefHeight="83.0" prefWidth="89.0" style="-fx-background-color: #9081a3;" text="TTT AI VS AI">
+                  <Button fx:id="Mp_T_Button" layoutX="223.0" layoutY="19.0" mnemonicParsing="false" onAction="#handleButtonTTT_PVP" prefHeight="83.0" prefWidth="89.0" style="-fx-background-color: #9081a3;" text="PVP TTT">
                      <effect>
                         <Glow level="0.55" />
                      </effect>
                   </Button>
-                  <Button fx:id="Mp_T_Button" layoutX="124.0" layoutY="19.0" mnemonicParsing="false" onAction="#handleButtonTTT_PVP" prefHeight="83.0" prefWidth="89.0" style="-fx-background-color: #9081a3;" text="PVP TTT">
+                  <Button fx:id="Sp_R_Button" layoutX="79.0" layoutY="124.0" mnemonicParsing="false" onAction="#handleButtonR_SP" prefHeight="83.0" prefWidth="89.0" style="-fx-background-color: #9081a3;" text="REVERSI">
                      <effect>
                         <Glow level="0.55" />
                      </effect>
                   </Button>
-                  <Button fx:id="Sp_R_Button" layoutX="21.0" layoutY="124.0" mnemonicParsing="false" onAction="#handleButtonR_SP" prefHeight="83.0" prefWidth="89.0" style="-fx-background-color: #9081a3;" text="REVERSI">
+                  <Button fx:id="Mp_R_Button" layoutX="223.0" layoutY="124.0" mnemonicParsing="false" onAction="#handleButtonR_PVP" prefHeight="83.0" prefWidth="89.0" style="-fx-background-color: #9081a3;" text="PVP REVERSI">
                      <effect>
                         <Glow level="0.55" />
                      </effect>
                   </Button>
-                  <Button fx:id="Mp_R_Button" layoutX="124.0" layoutY="124.0" mnemonicParsing="false" onAction="#handleButtonR_PVP" prefHeight="83.0" prefWidth="89.0" style="-fx-background-color: #9081a3;" text="PVP REVERSI">
-                     <effect>
-                        <Glow level="0.55" />
-                     </effect>
-                  </Button>
-                  <Button layoutX="225.0" layoutY="124.0" mnemonicParsing="false" onAction="#handleButtonR_AI" prefHeight="83.0" prefWidth="89.0" style="-fx-background-color: #9081a3;" text="R AI VS AI">
-                     <effect>
-                        <Glow level="0.55" />
-                     </effect>
-                  </Button>
-                  <AnchorPane fx:id="AI_R_Button" layoutX="250.0" layoutY="79.0" prefHeight="200.0" prefWidth="200.0" />
                </children></AnchorPane>
          </children>
       </AnchorPane>

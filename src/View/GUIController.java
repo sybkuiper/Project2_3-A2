@@ -2,6 +2,7 @@ import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.concurrent.TimeUnit;
 
 import Controller.ViewController;
 import javafx.event.ActionEvent;
@@ -20,6 +21,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.shape.Circle;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import static javafx.scene.paint.Color.*;
@@ -31,10 +33,11 @@ public class GUIController implements Initializable {
 	private BorderPane rPane;
 	@FXML private GridPane board;
 	@FXML private TextField field;
+	@FXML private Text textOthello;
 	@FXML private CheckBox online;
 	@FXML private Label label;
 	@FXML private TextField IP, port;
-	@FXML private Button nextbutton,menubutton,menu,xbutton;
+	@FXML private Button nextbutton,menubutton,menu,xbutton, rematchButton;
 	@FXML private Label counterlabel;
 	@FXML private Button Sp_T_Button,AI_T_Button,Mp_T_Button,Sp_R_Button,Mp_R_Button;
 	private ViewController viewController;
@@ -44,7 +47,7 @@ public class GUIController implements Initializable {
 		Stage stage;
 		Parent root;
 		stage = (Stage) Sp_T_Button.getScene().getWindow();
-		root = FXMLLoader.load(getClass().getResource("SpTicTacView.fxml"));
+		root = FXMLLoader.load(getClass().getResource("View/SpTicTacView.fxml"));
 		Scene scene = new Scene(root);
 		stage.setScene(scene);
 		stage.show();
@@ -54,11 +57,11 @@ public class GUIController implements Initializable {
 	void gotomenuscreen(ActionEvent event) throws IOException {
 		Stage stage;
 		Parent root;
-		if(online.isSelected()){
-			viewController = new ViewController(IP.getText(),Integer.parseInt(port.getText()));
-		} else {
-			viewController = new ViewController();
-		}
+//		if(online.isSelected()){
+//			viewController = new ViewController(IP.getText(),Integer.parseInt(port.getText()));
+//		} else {
+//			viewController = new ViewController();
+//		}
 		stage = (Stage) menu.getScene().getWindow();
 		root = FXMLLoader.load(getClass().getResource("View/MenuWindowView.fxml"));
 		Scene scene = new Scene(root);
@@ -69,14 +72,14 @@ public class GUIController implements Initializable {
 
 
 	@FXML
-	void showPlayer(ActionEvent event) throws IOException {
+	void showPlayer(ActionEvent event) {
 		Image image = null;
-		char player = 'X';
+		char player = 'O';
 		//TODO make sure we can check who plays with which symbol
 		if(player == 'X') {
-			image = new Image(getClass().getResourceAsStream("img/cross.png"));
+			image = new Image(getClass().getResourceAsStream("Img/cross.png"));
 		}else{
-			image = new Image(getClass().getResourceAsStream("img/circle.png"));
+			image = new Image(getClass().getResourceAsStream("Img/circle.png"));
 		}
 		Button button = (Button) event.getSource();
 		button.setDisable(true);
@@ -87,13 +90,11 @@ public class GUIController implements Initializable {
 			imageTemp.setFitWidth(80);
 			button.setGraphic(imageTemp);
 		}
-		counter++;
-		System.out.print(counter);
 
 	}
 
 	@FXML
-	void onlinePlay(ActionEvent event) throws IOException {
+	void onlinePlay(ActionEvent event) {
 		CheckBox box = (CheckBox) event.getSource();
 		if(box.isSelected()){
 			IP.setVisible(true);
@@ -105,7 +106,7 @@ public class GUIController implements Initializable {
 	}
 
 	@FXML
-	void gridClicked(javafx.scene.input.MouseEvent event) throws IOException {
+	void gridClicked(javafx.scene.input.MouseEvent event) {
 		Node clickedNode = event.getPickResult().getIntersectedNode();
 		if(clickedNode != board) {
 			Integer collIndex = GridPane.getColumnIndex(clickedNode);
@@ -133,24 +134,49 @@ public class GUIController implements Initializable {
 				clickedNodes.setStroke(WHITE);
 			}
 		}
+	}
 
+	@FXML
+	void givenUp(ActionEvent event) {
+		textOthello.setVisible(true);
+		textOthello.setText("Je hebt opgegeven");
+		Button button = (Button) event.getSource();
+		button.setVisible(false);
+		rematchButton.setVisible(true);
 	}
 
 
-
 	@FXML
-	void handleButtonR_AI(ActionEvent event) {
-
+	void handleButtonR_AI(ActionEvent event) throws IOException{
+		Stage stage;
+		Parent root;
+		stage = (Stage) textOthello.getScene().getWindow();
+		root = FXMLLoader.load(getClass().getResource("View/OthelloView.fxml"));
+		Scene scene = new Scene(root);
+		stage.setScene(scene);
+		stage.show();
 	}
 
 	@FXML
 	void handleButtonR_PVP(ActionEvent event) throws IOException {
-
+		Stage stage;
+		Parent root;
+		stage = (Stage) textOthello.getScene().getWindow();
+		root = FXMLLoader.load(getClass().getResource("View/OthelloView.fxml"));
+		Scene scene = new Scene(root);
+		stage.setScene(scene);
+		stage.show();
 	}
 
 	@FXML
-	void handleButtonR_SP(ActionEvent event) {
-
+	void handleButtonR_SP(ActionEvent event) throws IOException{
+		Stage stage;
+		Parent root;
+		stage = (Stage) Sp_R_Button.getScene().getWindow();
+		root = FXMLLoader.load(getClass().getResource("View/OthelloView.fxml"));
+		Scene scene = new Scene(root);
+		stage.setScene(scene);
+		stage.show();
 	}
 
 	@FXML
