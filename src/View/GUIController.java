@@ -19,8 +19,10 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 
+import static javafx.scene.paint.Color.*;
 
 
 public class GUIController implements Initializable {
@@ -118,8 +120,22 @@ public class GUIController implements Initializable {
 			rowIndex += 1;
 			System.out.println("Clicked: " + collIndex + ", " + rowIndex);
 		}
+		if (clickedNode instanceof Circle) {
+			Circle clickedNodes = (Circle) clickedNode;
+			clickedNodes.setOpacity(1);
+			//TODO make a variable that declares who has which color
+			char color = 'Z';
+			if (color == 'Z') {
+				clickedNodes.setFill(BLACK);
+				clickedNodes.setStroke(BLACK);
+			} else {
+				clickedNodes.setFill(WHITE);
+				clickedNodes.setStroke(WHITE);
+			}
+		}
 
 	}
+
 
 
 	@FXML
