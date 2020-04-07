@@ -11,6 +11,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -21,16 +22,18 @@ import javafx.stage.Stage;
 
 
 public class GUIController implements Initializable {
-	private int counter = 0;
+		private int counter = 0;
         @FXML private BorderPane rootPane;
         private BorderPane rPane;
 	    @FXML private TextField field;
+	    @FXML private CheckBox online;
 	    @FXML private Label label;
+	    @FXML private TextField IP, port;
 	    @FXML private Button nextbutton,menubutton,menu,xbutton;
 	    @FXML private Label counterlabel;
-
 	    @FXML private Button Sp_T_Button,AI_T_Button,Mp_T_Button,Sp_R_Button,Mp_R_Button;
-	    
+	    private String ipSafe;
+	    private String portSafe;
 	    
 	    @FXML
 	    void handleButtonTTT_SP(ActionEvent event) throws IOException {
@@ -47,6 +50,10 @@ public class GUIController implements Initializable {
 	    void gotomenuscreen(ActionEvent event) throws IOException {
 	        Stage stage;
 	        Parent root;
+	        if(online.isSelected()){
+	        	ipSafe = IP.getText();
+	        	portSafe = port.getText();
+			}
             stage = (Stage) menu.getScene().getWindow();
             root = FXMLLoader.load(getClass().getResource("MenuWindowView.fxml"));        
 	        Scene scene = new Scene(root);
@@ -78,6 +85,18 @@ public class GUIController implements Initializable {
 			counter++;
 			System.out.print(counter);
 
+		}
+
+		@FXML
+		void onlinePlay(ActionEvent event) throws IOException {
+	    	CheckBox box = (CheckBox) event.getSource();
+	    	if(box.isSelected()){
+				IP.setVisible(true);
+				port.setVisible(true);
+			}else{
+	    		IP.setVisible(false);
+	    		port.setVisible(false);
+			}
 		}
 
 
