@@ -58,18 +58,23 @@ public class GUIController implements Initializable {
 
 		@FXML
 		void showPlayer(ActionEvent event) throws IOException {
-	    	Image image;
+	    	Image image = null;
 	    	char player = 'X';
 			//TODO make sure we can check who plays with which symbol
-//			if(player == 'X'){
-//				image = new Image(getClass().getResourceAsStream("/img/cross.png"));
-//			}else{
-//				image = new Image(getClass().getResourceAsStream("/img/circle.png"));
-//			}
+			if(player == 'X') {
+				image = new Image(getClass().getResourceAsStream("img/cross.png"));
+			}else{
+				image = new Image(getClass().getResourceAsStream("img/circle.png"));
+			}
 			Button button = (Button) event.getSource();
 			button.setDisable(true);
 			button.setOpacity(1.0);
-//			button.setGraphic(new ImageView(image));
+			if(image != null) {
+				ImageView imageTemp = new ImageView(image);
+				imageTemp.setFitHeight(80);
+				imageTemp.setFitWidth(80);
+				button.setGraphic(imageTemp);
+			}
 			counter++;
 			System.out.print(counter);
 
