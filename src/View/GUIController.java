@@ -118,7 +118,7 @@ public class GUIController implements Initializable {
 			rowIndex += 1;
 			System.out.println("Clicked: " + collIndex + ", " + rowIndex);
 		}
-		clickedNode.
+
 	}
 
 
