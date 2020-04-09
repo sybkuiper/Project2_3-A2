@@ -38,7 +38,7 @@ public class ViewController implements Initializable {
 	@FXML private BorderPane rootPane;
 	private BorderPane rPane;
 	@FXML GridPane board;
-	@FXML private TextField field;
+	@FXML public TextField field;
 	@FXML private Text textOthello;
 	@FXML private CheckBox online;
 	@FXML private Label label;
@@ -49,7 +49,6 @@ public class ViewController implements Initializable {
 	private NetworkController networkController;
 	private List<String> onlinePlayers;
 	private Game game;
-	//private List<String> availableGames;
 
 	@FXML
 	void handleButtonTTT_SP(ActionEvent event) throws IOException {
@@ -62,6 +61,7 @@ public class ViewController implements Initializable {
 		stage.show();
 	}
 
+	/*
 	public String whatPlayerAmI() {
 		if(field.equals(game.getPlayerOne())){
 			return "X";
@@ -76,22 +76,7 @@ public class ViewController implements Initializable {
 		} else {
 			return "X";
 		}
-	}
-
-	public void createView(){
-	}
-
-	public void updateView(){
-
-	}
-
-	public void createModel(){
-
-	}
-
-	public void updateModel(){
-
-	}
+	}*/
 
 	void initializeGame(String gameType, String playerOne){
 		if(game != null){

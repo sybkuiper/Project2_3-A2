@@ -13,8 +13,7 @@ public class TicTacToe extends Game {
     }
 
     @Override
-    public Integer think(){
-        Map<Integer, String> gameBoard = getGameBoard();
+    public Integer think(Map<Integer,String> gameBoard){
         Integer bestMove = 0;
         int bestScore = -1000;
 
@@ -25,8 +24,8 @@ public class TicTacToe extends Game {
 
             //try all empty spots and make them X and do minimax on the gamboard
             if(value.equals("E")){
-                gameBoard.replace(key, getController().whatPlayerAmI());
-                int score = minimax( 0, false);
+                gameBoard.replace(key, "X");
+                int score = minimax(gameBoard, 0, false);
                 gameBoard.replace(key,"E");
                 if(score>bestScore) {
                     bestScore = score;
@@ -39,10 +38,9 @@ public class TicTacToe extends Game {
 
     //looks to all posible outcomes of the game state
     @Override
-    public int minimax(int steps, boolean isMaximizing){
-        Map<Integer, String> gameBoard = getGameBoard();
+    public int minimax(Map<Integer,String> gameBoard,int steps, boolean isMaximizing){
         //give a score to an outcome. the better the outcome, the higher score.
-        String result = checkWinner();
+        String result = checkWinner(gameBoard);
         if(result != null){
             int score = 0;
             if(result.equals("TIE")){score = 0;}
@@ -59,8 +57,8 @@ public class TicTacToe extends Game {
                 Integer key = entry.getKey();
                 Object value = entry.getValue();
                 if(value.equals("E")){
-                    gameBoard.replace(key, getController().whatPlayerAmI());
-                    int score = minimax(steps + 1, false);
+                    gameBoard.replace(key, "X");
+                    int score = minimax(gameBoard,steps + 1, false);
                     gameBoard.replace(key,"E");
                     if(score>bestScore) {
                         bestScore = score;
@@ -75,8 +73,8 @@ public class TicTacToe extends Game {
                 Integer key = entry.getKey();
                 Object value = entry.getValue();
                 if(value.equals("E")){
-                    gameBoard.replace(key, getController().getOtherPlayer());
-                    int score = minimax(steps + 1, true);
+                    gameBoard.replace(key, "O");
+                    int score = minimax(gameBoard,steps + 1, true);
                     gameBoard.replace(key,"E");
                     if(score<bestScore) {
                         bestScore = score;
@@ -89,8 +87,7 @@ public class TicTacToe extends Game {
 
     //check for open spots on the board
     @Override
-    public int openSpots(){
-        Map<Integer, String> gameBoard = getGameBoard();
+    public int openSpots(Map<Integer,String> gameBoard){
         int openspots = 0;
         for (Map.Entry<Integer, String> entry : gameBoard.entrySet()) {
             Integer key = entry.getKey();
@@ -105,8 +102,7 @@ public class TicTacToe extends Game {
 
     //check if the gamestate has a winner and return the winner or TIE
     @Override
-    public String checkWinner(){
-        Map<Integer, String> gameBoard = getGameBoard();
+    public String checkWinner(Map<Integer,String> gameBoard){
         String winner = null;
         String a;
         String b;
@@ -141,7 +137,7 @@ public class TicTacToe extends Game {
 
 
 
-        if(winner == null && openSpots() == 0){winner = "TIE";}
+        if(winner == null && openSpots(gameBoard) == 0){winner = "TIE";}
         return winner;
     }
 }

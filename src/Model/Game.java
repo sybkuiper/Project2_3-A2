@@ -37,13 +37,14 @@ public abstract class Game {
     public void generateGameBoard(){
         int sizeOfBoard = rows * columns;
         for(int field = 0; field < sizeOfBoard; field++){
+            System.out.println(field);
             gameBoard.put(field,"E");
         }
     }
 
     public void updateGameBoard(Integer move, String player){
         int key = move;
-        if(player.equals(playerOne)) {
+        if(player.equals(controller.field.getText())) {//playerOne)) {
             gameBoard.replace(key, "X");
         } else {
             gameBoard.replace(key, "O");
@@ -73,8 +74,8 @@ public abstract class Game {
         }
     }
 
-    public abstract Integer think();
-    public abstract int minimax(int steps, boolean isMaximizing);
-    public abstract int openSpots();
-    public abstract String checkWinner();
+    public abstract Integer think(Map<Integer,String> gameBoard);
+    public abstract int minimax(Map<Integer,String> gameBoard,int steps, boolean isMaximizing);
+    public abstract int openSpots(Map<Integer,String> gameBoard);
+    public abstract String checkWinner(Map<Integer,String> gameBoard);
 }

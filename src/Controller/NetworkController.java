@@ -151,7 +151,7 @@ public class NetworkController extends Thread {
         }
 
         if (input.startsWith("SVR GAME YOURTURN ")) {
-            move(Integer.toString(controller.getGame().think()));
+            move(Integer.toString(controller.getGame().think(controller.getGame().getGameBoard())));
         }
 
         if(input.startsWith("SVR GAME ")){

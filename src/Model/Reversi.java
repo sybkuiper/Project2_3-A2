@@ -12,22 +12,22 @@ public class Reversi extends Game {
     }
 
     @Override
-    public Integer think() {
+    public Integer think(Map<Integer,String> gameBoard) {
         return null;
     }
 
     @Override
-    public int minimax(int steps, boolean isMaximizing) {
+    public int minimax(Map<Integer,String> gameBoard,int steps, boolean isMaximizing) {
         return 0;
     }
 
     @Override
-    public int openSpots() {
+    public int openSpots(Map<Integer,String> gameBoard) {
         return 0;
     }
 
     @Override
-    public String checkWinner() {
+    public String checkWinner(Map<Integer,String> gameBoard) {
         return null;
     }
 }
