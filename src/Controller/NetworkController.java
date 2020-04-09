@@ -148,32 +148,24 @@ public class NetworkController extends Thread {
             //           controller.getAI().think();
         }
 
-//        if(input.startsWith("SVR GAME ")){
-//            input = input.replace("SVR GAME ","");
-//            if(input.startsWith("WIN")){
-//                controller.alertGameState("WIN");
-//                client.setGame(null);
-//                //Todo: verwerken reactie spel, hoe? testen
-//            } else if (input.startsWith("LOSS")){
-//                controller.alertGameState("LOSS");
-//                client.setGame(null);
-//            } else if (input.startsWith("DRAW")){
-//                controller.alertGameState("DRAW");
-//                client.setGame(null);
-//            }
-//        }
-//    }
+        if(input.startsWith("SVR GAME ")){
+            input = input.replace("SVR GAME ","");
+            if(input.startsWith("WIN")){
+                //controller.alertGameState("WIN");
+                //client.setGame(null);
+                //Todo: verwerken reactie spel, hoe? testen
+            } else if (input.startsWith("LOSS")){
+                //controller.alertGameState("LOSS");
+                //client.setGame(null);
+            } else if (input.startsWith("DRAW")){
+                //controller.alertGameState("DRAW");
+                //client.setGame(null);
+            }
+        }
     }
 
     public void run(){
-        if(!this.isRunning){
-            try {
-                this.sleep(5000);
-                this.isRunning = true;
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
+        this.isRunning = true;
         while(this.isRunning){
             String newLine = in.nextLine();
             if(!ignoreList.contains(newLine)) {
