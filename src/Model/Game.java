@@ -1,5 +1,7 @@
 package Model;
 
+import Controller.ViewController;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -9,11 +11,23 @@ public abstract class Game {
     private Map<Integer,String> gameBoard = new HashMap<>(); //game map
     private int rows;
     private int columns;
+    private String playerOne;
+    private ViewController controller;
 
-    public Game(int rows, int columns){
+    public Game(int rows, int columns, String playerOne, ViewController controller){
         this.rows = rows;
         this.columns = columns;
+        this.playerOne = playerOne;
+        this.controller = controller;
         generateGameBoard();
+    }
+
+    public ViewController getController() {
+        return controller;
+    }
+
+    protected void setGame(Game game){
+        this.game = game;
     }
 
     public Map<Integer, String> getGameBoard() {
@@ -21,42 +35,46 @@ public abstract class Game {
     }
 
     public void generateGameBoard(){
-        if(game instanceof Reversi) {
-            for (int row = 0; row < rows; row++) {
-                for (int column = 0; column < columns; column++) {
-                    gameBoard.put(row, "E");
-                }
-            }
-        } else if (game instanceof TicTacToe){
-            for(int row = 0; row < rows; row++) {
-                for (int column = 0; column < columns; column++) {
-                    getGameBoard().put(row, "E");
-                }
-            }
+        int sizeOfBoard = rows * columns;
+        for(int field = 0; field < sizeOfBoard; field++){
+            gameBoard.put(field,"E");
         }
+    }
+
+    public void updateGameBoard(Integer move, String player){
+        int key = move;
+        if(player.equals(playerOne)) {
+            gameBoard.replace(key, "X");
+        } else {
+            gameBoard.replace(key, "O");
+        }
+        System.out.println(player + " has placed move: " + move);
+        printGameState();
+    }
+
+    public String getPlayerOne() {
+        return playerOne;
     }
 
     public void printGameState(){
-        if(game instanceof Reversi){
-            String gameState = "";
-            for (int row = 0; row < rows; row++) {
-                for (int column = 0; column < columns; column++) {
-                    gameState = gameState.concat(getGameBoard().get(row + column));
+        for(int row = 1; row <= rows; row++){
+            int rowToPrint = row*columns;
+            int printed = row*columns-columns;
+            String rowString = "";
+            while(printed < rowToPrint) {
+                if ((printed + 1) < rowToPrint) {
+                    rowString = rowString.concat(gameBoard.get(printed) + ", ");
+                } else {
+                    rowString = rowString.concat(gameBoard.get(printed));
                 }
+                printed++;
             }
-        } else if (game instanceof TicTacToe){
-            String gameState = "";
-            for(int row = 0; row < rows; row++) {
-                for (int column = 0; column < columns; column++) {
-                    gameState = gameState.concat(getGameBoard().get(row + column));
-                }
-                System.out.println(gameState);
-            }
+            System.out.println(rowString);
         }
     }
 
-    public abstract String think(Map<String,String> gameBoard);
-    public abstract int minimax(Map<String, String> gameBoard, int steps, boolean isMaximizing);
-    public abstract int openSpots(Map<String,String> gameBoard);
-    public abstract String checkWinner(Map<String,String> gameBoard);
+    public abstract Integer think();
+    public abstract int minimax(int steps, boolean isMaximizing);
+    public abstract int openSpots();
+    public abstract String checkWinner();
 }

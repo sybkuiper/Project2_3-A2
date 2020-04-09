@@ -140,26 +140,29 @@ public class NetworkController extends Thread {
         }
 
         if (input.startsWith("SVR GAME MATCH ")) {
-            //           controller.initializeGame();
+            input = input.replace("SVR GAME MATCH ", "");
+            controller.initializeGame("Tic-tac-toe", createMap(input).get("PLAYERTOMOVE").replace("\"", ""));
         }
         //Todo: Start game interface
 
+        if(input.startsWith("SVR GAME MOVE ")){
+            input = input.replace("SVR GAME MOVE ", "");
+            controller.getGame().updateGameBoard(Integer.parseInt(createMap(input).get("MOVE").replace("\"", "")), createMap(input).get("PLAYER").replace("\"", ""));
+        }
+
         if (input.startsWith("SVR GAME YOURTURN ")) {
-            //           controller.getAI().think();
+            move(Integer.toString(controller.getGame().think()));
         }
 
         if(input.startsWith("SVR GAME ")){
             input = input.replace("SVR GAME ","");
             if(input.startsWith("WIN")){
-                //controller.alertGameState("WIN");
-                //client.setGame(null);
+                controller.alertGameState("WIN");
                 //Todo: verwerken reactie spel, hoe? testen
             } else if (input.startsWith("LOSS")){
-                //controller.alertGameState("LOSS");
-                //client.setGame(null);
+                controller.alertGameState("LOSS");
             } else if (input.startsWith("DRAW")){
-                //controller.alertGameState("DRAW");
-                //client.setGame(null);
+                controller.alertGameState("DRAW");
             }
         }
     }

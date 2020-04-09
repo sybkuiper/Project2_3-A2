@@ -8,6 +8,9 @@ import java.util.ResourceBundle;
 import java.util.concurrent.TimeUnit;
 
 import Controller.NetworkController;
+import Model.Game;
+import Model.Reversi;
+import Model.TicTacToe;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -45,6 +48,7 @@ public class ViewController implements Initializable {
 	@FXML private Button Sp_T_Button,AI_T_Button,Mp_T_Button,Sp_R_Button,Mp_R_Button;
 	private NetworkController networkController;
 	private List<String> onlinePlayers;
+	private Game game;
 	//private List<String> availableGames;
 
 	@FXML
@@ -56,6 +60,22 @@ public class ViewController implements Initializable {
 		Scene scene = new Scene(root);
 		stage.setScene(scene);
 		stage.show();
+	}
+
+	public String whatPlayerAmI() {
+		if(field.equals(game.getPlayerOne())){
+			return "X";
+		} else {
+			return "O";
+		}
+	}
+
+	public String getOtherPlayer() {
+		if(field.equals(game.getPlayerOne())){
+			return "O";
+		} else {
+			return "X";
+		}
 	}
 
 	public void createView(){
@@ -73,8 +93,19 @@ public class ViewController implements Initializable {
 
 	}
 
-	public void selectGameMode(){
+	void initializeGame(String gameType, String playerOne){
+		if(game != null){
+			game = null;
+		}
+		if(gameType == "Reversi"){
+			game = new Reversi(8,8, playerOne, this);
+		} else if (gameType == "Tic-tac-toe"){
+			game = new TicTacToe(3,3, playerOne, this);
+		}
+	}
 
+	public Game getGame() {
+		return game;
 	}
 
 	@FXML
@@ -210,6 +241,9 @@ public class ViewController implements Initializable {
 		stage.show();
 	}
 
+	void alertGameState(String state){
+
+	}
 
 	@FXML
 	void handleButtonTTT_AI(ActionEvent event) {
