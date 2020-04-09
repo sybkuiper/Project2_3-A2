@@ -204,18 +204,6 @@ public class ViewController implements Initializable {
 	}
 
 	@FXML
-	void handleButtonR_PVP(ActionEvent event) throws IOException {
-		Stage stage;
-		Parent root;
-		stage = (Stage) textOthello.getScene().getWindow();
-		root = FXMLLoader.load(getClass().getResource("../View/OthelloView.fxml"));
-		Scene scene = new Scene(root);
-		stage.setScene(scene);
-		stage.show();
-	}
-
-
-	@FXML
 	void handleButtonR_SP(ActionEvent event) throws IOException{
 		Stage stage;
 		Parent root;
@@ -234,21 +222,6 @@ public class ViewController implements Initializable {
 	void handleButtonTTT_AI(ActionEvent event) {
 
 	}
-
-	@FXML
-	void handleButtonTTT_PVP(ActionEvent event) throws IOException {
-		Stage stage;
-		Parent root;
-		stage = (Stage) Mp_T_Button.getScene().getWindow();
-		root = FXMLLoader.load(getClass().getResource("../View/MpTicTacView.fxml"));
-		Scene scene = new Scene(root);
-		stage.setScene(scene);
-		stage.show();
-
-	}
-
-
-
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
