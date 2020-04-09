@@ -17,7 +17,7 @@ public class NetworkController extends Thread {
     private PrintWriter out;
     private List<String> commandQueue;
     private List<String> ignoreList;
-    private List<String> availableGames;
+    //private List<String> availableGames;
     private List<String> onlinePlayers;
     private boolean isRunning = false;
     private ViewController controller;
@@ -27,7 +27,7 @@ public class NetworkController extends Thread {
         socket = new Socket(ip_address,port);
         commandQueue = new ArrayList<>();
         ignoreList = new ArrayList<>();
-        availableGames = new ArrayList<>();
+        //availableGames = new ArrayList<>();
         onlinePlayers = new ArrayList<>();
         ignoreList.add("Strategic Game Server Fixed [Version 1.1.0]");
         ignoreList.add("(C) Copyright 2015 Hanzehogeschool Groningen");
@@ -35,7 +35,7 @@ public class NetworkController extends Thread {
         in = new Scanner(socket.getInputStream());
         out = new PrintWriter(socket.getOutputStream(),true);
         logIN(player);
-        getGameList();
+        //getGameList();
         getPlayerList();
         this.start();
     }
@@ -80,9 +80,9 @@ public class NetworkController extends Thread {
         addToCommandQueue("get playerlist");
     }
 
-    public void getGameList(){
+    /*public void getGameList(){
         addToCommandQueue("get gamelist");
-    }
+    }*/
 
     private Map<String, String> createMap(String input) {
         input = input.substring(1, input.length() - 1);
@@ -98,6 +98,7 @@ public class NetworkController extends Thread {
 
 
     private void parse(String input) {
+        /*
         if (input.startsWith("SVR GAMELIST ")) {
             input = input.replace("SVR GAMELIST ", "").replace("[", "").replace("]", "");
             String[] split = input.split(",");
@@ -107,7 +108,7 @@ public class NetworkController extends Thread {
             }
             System.out.println(availableGames);
             controller.setAvailableGames(availableGames);
-        }
+        }*/
 
         if (input.startsWith("SVR PLAYERLIST ")) {
             input = input.replace("SVR PLAYERLIST ", "").replace("[", "").replace("]", "");

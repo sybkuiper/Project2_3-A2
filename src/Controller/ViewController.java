@@ -1,14 +1,13 @@
 package Controller;
 
-import java.io.BufferedReader;
+import java.awt.event.MouseEvent;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.concurrent.TimeUnit;
 
-import Controller.ViewController;
-import javafx.application.Application;
+import Controller.NetworkController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -23,31 +22,37 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.shape.Circle;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+import static javafx.scene.paint.Color.*;
 
 
 public class ViewController implements Initializable {
 	private int counter = 0;
 	@FXML private BorderPane rootPane;
 	private BorderPane rPane;
+	@FXML GridPane board;
 	@FXML private TextField field;
+	@FXML private Text textOthello;
 	@FXML private CheckBox online;
 	@FXML private Label label;
 	@FXML private TextField IP, port;
-	@FXML private Button nextbutton,menubutton,menu,xbutton;
+	@FXML private Button nextbutton,menubutton,menu,xbutton,rematchButton;
 	@FXML private Label counterlabel;
 	@FXML private Button Sp_T_Button,AI_T_Button,Mp_T_Button,Sp_R_Button,Mp_R_Button;
 	private NetworkController networkController;
 	private List<String> onlinePlayers;
-	private List<String> availableGames;
+	//private List<String> availableGames;
 
 	@FXML
 	void handleButtonTTT_SP(ActionEvent event) throws IOException {
 		Stage stage;
 		Parent root;
 		stage = (Stage) Sp_T_Button.getScene().getWindow();
-		root = FXMLLoader.load(getClass().getResource("SpTicTacView.fxml"));
+		root = FXMLLoader.load(getClass().getResource("../View/SpTicTacView.fxml"));
 		Scene scene = new Scene(root);
 		stage.setScene(scene);
 		stage.show();
@@ -81,16 +86,16 @@ public class ViewController implements Initializable {
 			networkController = new NetworkController(this, field.getText(),IP.getText(),Integer.parseInt(port.getText()));
 		}
 		stage = (Stage) menu.getScene().getWindow();
-		root = FXMLLoader.load(getClass().getResource("View/MenuWindowView.fxml"));
+		root = FXMLLoader.load(getClass().getResource("../View/MenuWindowView.fxml"));
 		Scene scene = new Scene(root);
 		stage.setScene(scene);
 		stage.show();
 
 	}
 
-	public void setAvailableGames(List<String> availableGames) {
+	/*public void setAvailableGames(List<String> availableGames) {
 		this.availableGames = availableGames;
-	}
+	}*/
 
 	public void setOnlinePlayers(List<String> onlinePlayers) {
 		this.onlinePlayers = onlinePlayers;
@@ -99,12 +104,12 @@ public class ViewController implements Initializable {
 	@FXML
 	void showPlayer(ActionEvent event) throws IOException {
 		Image image = null;
-		char player = 'X';
+		char player = 'O';
 		//TODO make sure we can check who plays with which symbol
 		if(player == 'X') {
-			image = new Image(getClass().getResourceAsStream("img/cross.png"));
+			image = new Image(getClass().getResourceAsStream("../Img/cross.png"));
 		}else{
-			image = new Image(getClass().getResourceAsStream("img/circle.png"));
+			image = new Image(getClass().getResourceAsStream("../Img/circle.png"));
 		}
 		Button button = (Button) event.getSource();
 		button.setDisable(true);
@@ -115,8 +120,6 @@ public class ViewController implements Initializable {
 			imageTemp.setFitWidth(80);
 			button.setGraphic(imageTemp);
 		}
-		counter++;
-		System.out.print(counter);
 	}
 
 	@FXML
@@ -131,23 +134,82 @@ public class ViewController implements Initializable {
 		}
 	}
 
+	@FXML
+	void gridClicked(javafx.scene.input.MouseEvent event) {
+		Node clickedNode = event.getPickResult().getIntersectedNode();
+		if(clickedNode != board) {
+			Integer collIndex = GridPane.getColumnIndex(clickedNode);
+			Integer rowIndex = GridPane.getRowIndex(clickedNode);
+			if(collIndex == null){
+				collIndex = 0;
+			}
+			if(rowIndex == null){
+				rowIndex = 0;
+			}
+			collIndex += 1;
+			rowIndex += 1;
+			System.out.println("Clicked: " + collIndex + ", " + rowIndex);
+		}
+		if (clickedNode instanceof Circle) {
+			Circle clickedNodes = (Circle) clickedNode;
+			clickedNodes.setOpacity(1);
+			//TODO make a variable that declares who has which color
+			char color = 'Z';
+			if (color == 'Z') {
+				clickedNodes.setFill(BLACK);
+				clickedNodes.setStroke(BLACK);
+			} else {
+				clickedNodes.setFill(WHITE);
+				clickedNodes.setStroke(WHITE);
+			}
+		}
+	}
+
+	@FXML
+	void givenUp(ActionEvent event) {
+		textOthello.setVisible(true);
+		textOthello.setText("Je hebt opgegeven");
+		Button button = (Button) event.getSource();
+		button.setVisible(false);
+		rematchButton.setVisible(true);
+	}
 
 
 
 	@FXML
-	void handleButtonR_AI(ActionEvent event) {
-
+	void handleButtonR_AI(ActionEvent event) throws IOException{
+		Stage stage;
+		Parent root;
+		stage = (Stage) textOthello.getScene().getWindow();
+		root = FXMLLoader.load(getClass().getResource("../View/OthelloView.fxml"));
+		Scene scene = new Scene(root);
+		stage.setScene(scene);
+		stage.show();
 	}
 
 	@FXML
 	void handleButtonR_PVP(ActionEvent event) throws IOException {
-
+		Stage stage;
+		Parent root;
+		stage = (Stage) textOthello.getScene().getWindow();
+		root = FXMLLoader.load(getClass().getResource("../View/OthelloView.fxml"));
+		Scene scene = new Scene(root);
+		stage.setScene(scene);
+		stage.show();
 	}
+
 
 	@FXML
-	void handleButtonR_SP(ActionEvent event) {
-
+	void handleButtonR_SP(ActionEvent event) throws IOException{
+		Stage stage;
+		Parent root;
+		stage = (Stage) Sp_R_Button.getScene().getWindow();
+		root = FXMLLoader.load(getClass().getResource("../View/OthelloView.fxml"));
+		Scene scene = new Scene(root);
+		stage.setScene(scene);
+		stage.show();
 	}
+
 
 	@FXML
 	void handleButtonTTT_AI(ActionEvent event) {
@@ -159,7 +221,7 @@ public class ViewController implements Initializable {
 		Stage stage;
 		Parent root;
 		stage = (Stage) Mp_T_Button.getScene().getWindow();
-		root = FXMLLoader.load(getClass().getResource("MpTicTacView.fxml"));
+		root = FXMLLoader.load(getClass().getResource("../View/MpTicTacView.fxml"));
 		Scene scene = new Scene(root);
 		stage.setScene(scene);
 		stage.show();
