@@ -5,11 +5,13 @@ import Controller.ViewController;
 import java.util.Map;
 
 public class Reversi extends Game {
-    public Reversi(int rows, int columns, String playerOne, ViewController controller){
-        super(rows, columns, playerOne, controller);
-        setGame(this);
+    public Reversi(int rows, int columns, String playerOne, ViewController controller, boolean online){
+        super(rows, columns, playerOne, controller, online);
         generateGameBoard();
     }
+
+    @Override
+    public void makeMove(Integer move){}
 
     @Override
     public Integer think(Map<Integer,String> gameBoard) {

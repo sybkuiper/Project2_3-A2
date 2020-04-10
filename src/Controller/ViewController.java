@@ -36,6 +36,7 @@ import static javafx.scene.paint.Color.*;
 public class ViewController implements Initializable {
 	private int counter = 0;
 	@FXML private BorderPane rootPane;
+	@FXML private Button test;
 	private BorderPane rPane;
 	@FXML GridPane board;
 	@FXML public TextField field;
@@ -48,44 +49,30 @@ public class ViewController implements Initializable {
 	@FXML private Button Sp_T_Button,AI_T_Button,Mp_T_Button,Sp_R_Button,Mp_R_Button;
 	private NetworkController networkController;
 	private List<String> onlinePlayers;
+	public String playerName;
 	private Game game;
+	private ViewController controller;
 
 	@FXML
 	void handleButtonTTT_SP(ActionEvent event) throws IOException {
+		new TicTacToe(3,3,playerName, this, false);
 		Stage stage;
-		Parent root;
 		stage = (Stage) Sp_T_Button.getScene().getWindow();
-		root = FXMLLoader.load(getClass().getResource("../View/SpTicTacView.fxml"));
-		Scene scene = new Scene(root);
-		stage.setScene(scene);
-		stage.show();
+		changeView(stage,"../View/SpTicTacView.fxml");
 	}
 
-	/*
-	public String whatPlayerAmI() {
-		if(field.equals(game.getPlayerOne())){
-			return "X";
-		} else {
-			return "O";
-		}
+	public void setGame(Game game) {
+		this.game = game;
 	}
-
-	public String getOtherPlayer() {
-		if(field.equals(game.getPlayerOne())){
-			return "O";
-		} else {
-			return "X";
-		}
-	}*/
 
 	void initializeGame(String gameType, String playerOne){
 		if(game != null){
 			game = null;
 		}
 		if(gameType == "Reversi"){
-			game = new Reversi(8,8, playerOne, this);
+			game = new Reversi(8,8, playerOne, this, true);
 		} else if (gameType == "Tic-tac-toe"){
-			game = new TicTacToe(3,3, playerOne, this);
+			game = new TicTacToe(3,3, playerOne, this, true);
 		}
 	}
 
@@ -93,25 +80,34 @@ public class ViewController implements Initializable {
 		return game;
 	}
 
+	public CheckBox getOnline() {
+		return online;
+	}
+
 	@FXML
 	void gotomenuscreen(ActionEvent event) throws IOException, InterruptedException {
 		Stage stage;
-		Parent root;
+		playerName = field.getText();
 		if(online.isSelected()){
 			System.out.println(field.getText());
 			networkController = new NetworkController(this, field.getText(),IP.getText(),Integer.parseInt(port.getText()));
 		}
 		stage = (Stage) menu.getScene().getWindow();
-		root = FXMLLoader.load(getClass().getResource("../View/MenuWindowView.fxml"));
-		Scene scene = new Scene(root);
-		stage.setScene(scene);
-		stage.show();
+		//root = FXMLLoader.load(getClass().getResource("../View/MenuWindowView.fxml"));
+		changeView(stage,"../View/MenuWindowView.fxml");
 
 	}
 
-	/*public void setAvailableGames(List<String> availableGames) {
-		this.availableGames = availableGames;
-	}*/
+	private void changeView(Stage stage, String path) throws IOException {
+		Parent root;
+		FXMLLoader loader = new FXMLLoader();
+		loader.setLocation(getClass().getResource(path));
+		loader.setController(this);
+		root = loader.load();
+		Scene scene = new Scene(root);
+		stage.setScene(scene);
+		stage.show();
+	}
 
 	public void setOnlinePlayers(List<String> onlinePlayers) {
 		this.onlinePlayers = onlinePlayers;
@@ -135,6 +131,30 @@ public class ViewController implements Initializable {
 			imageTemp.setFitHeight(80);
 			imageTemp.setFitWidth(80);
 			button.setGraphic(imageTemp);
+		}
+		Integer test = Integer.parseInt(button.getText());
+		System.out.println(playerName);
+		System.out.println(game);
+		game.makeMove(test);
+	}
+
+	@FXML
+	public void showPlayer(Integer move){
+		Image image = null;
+		char player = 'X';
+		//TODO make sure we can check who plays with which symbol
+		if(player == 'X') {
+			image = new Image(getClass().getResourceAsStream("../Img/cross.png"));
+		}else{
+			image = new Image(getClass().getResourceAsStream("../Img/circle.png"));
+		}
+		test.setDisable(true);
+		test.setOpacity(1.0);
+		if(image != null) {
+			ImageView imageTemp = new ImageView(image);
+			imageTemp.setFitHeight(80);
+			imageTemp.setFitWidth(80);
+			test.setGraphic(imageTemp);
 		}
 	}
 
@@ -195,9 +215,9 @@ public class ViewController implements Initializable {
 	@FXML
 	void handleButtonR_AI(ActionEvent event) throws IOException{
 		Stage stage;
-		Parent root;
+        Parent root;
 		stage = (Stage) textOthello.getScene().getWindow();
-		root = FXMLLoader.load(getClass().getResource("../View/OthelloView.fxml"));
+		root = FXMLLoader.load(getClass().getResource("../View/MenuWindowView.fxml"));
 		Scene scene = new Scene(root);
 		stage.setScene(scene);
 		stage.show();
@@ -208,7 +228,7 @@ public class ViewController implements Initializable {
 		Stage stage;
 		Parent root;
 		stage = (Stage) Sp_R_Button.getScene().getWindow();
-		root = FXMLLoader.load(getClass().getResource("../View/OthelloView.fxml"));
+		root = FXMLLoader.load(getClass().getResource("../View/MenuWindowView.fxml"));
 		Scene scene = new Scene(root);
 		stage.setScene(scene);
 		stage.show();
@@ -220,7 +240,7 @@ public class ViewController implements Initializable {
 
 	@FXML
 	void handleButtonTTT_AI(ActionEvent event) {
-
+		initializeGame("Tic-tac-toe", field.getText());
 	}
 
 	@Override
@@ -230,4 +250,7 @@ public class ViewController implements Initializable {
 	}
 
 
+	public void setController(ViewController controller) {
+		this.controller = controller;
+	}
 }

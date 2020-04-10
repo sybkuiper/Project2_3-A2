@@ -1,3 +1,4 @@
+import Controller.ViewController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -10,8 +11,12 @@ public class GameClient extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("View/LoginWindowView.fxml"));
-        Scene scene = new Scene(root);
+        ViewController controller = new ViewController();
+        controller.setController(controller);
+        FXMLLoader root = new FXMLLoader(getClass().getResource("View/LoginWindowView.fxml"));
+        root.setController(controller);
+        Parent parentroot = root.load();
+        Scene scene = new Scene(parentroot);
         stage.setScene(scene);
         stage.show();
     }

@@ -7,9 +7,21 @@ import java.util.Map;
 
 public class TicTacToe extends Game {
 
-    public TicTacToe(int rows, int columns, String playerOne, ViewController controller){
-        super(rows, columns, playerOne, controller);
-        setGame(this);
+    public TicTacToe(int rows, int columns, String playerOne, ViewController controller, boolean online){
+        super(rows, columns, playerOne, controller, online);
+        controller.setGame(this);
+    }
+
+    @Override
+    public void makeMove(Integer move){
+        if (playersTurn.equals("AI")){
+            updateGameBoard(move,playersTurn);
+            playersTurn = getController().playerName;
+        } else if(playersTurn.equals(getController().field.getText())){
+            updateGameBoard(move, playersTurn);
+            playersTurn = "AI";
+            makeMove(think(getGameBoard()));
+        }
     }
 
     @Override

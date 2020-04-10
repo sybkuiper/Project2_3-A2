@@ -4,17 +4,26 @@ import Controller.ViewController;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 public abstract class Game {
 
-    private Game game;
     private Map<Integer,String> gameBoard = new HashMap<>(); //game map
+    private Map<String, String> players;
     private int rows;
     private int columns;
     private String playerOne;
+    protected String playersTurn;
     private ViewController controller;
 
-    public Game(int rows, int columns, String playerOne, ViewController controller){
+    public Game(int rows, int columns, String playerOne, ViewController controller, boolean online){
+        if(!online){
+            // game is played offline
+            playersTurn = getFirstPlayer(controller.playerName);
+            if(playersTurn == "AI"){
+                makeMove(think(getGameBoard()));
+            }
+        }
         this.rows = rows;
         this.columns = columns;
         this.playerOne = playerOne;
@@ -22,12 +31,19 @@ public abstract class Game {
         generateGameBoard();
     }
 
-    public ViewController getController() {
-        return controller;
+    public String getFirstPlayer(String player){
+        int random = new Random().nextInt(2);
+        /*switch(random){
+            case 0:
+                return player;
+            case 1:
+                return "AI";
+        }*/
+        return player; // als AI geretourneerd wordt als 1e speler crasht de applicatie
     }
 
-    protected void setGame(Game game){
-        this.game = game;
+    public ViewController getController() {
+        return controller;
     }
 
     public Map<Integer, String> getGameBoard() {
@@ -42,10 +58,20 @@ public abstract class Game {
         }
     }
 
+    public void offline() {
+        String winner = checkWinner(getGameBoard());
+        if (winner != null) {
+            System.out.println("Game end, result : " + winner);
+        } else {
+            makeMove(think(getGameBoard()));
+        }
+    }
+
     public void updateGameBoard(Integer move, String player){
         int key = move;
-        if(player.equals(controller.field.getText())) {//playerOne)) {
+        if(player.equals("AI")) {//playerOne)) {
             gameBoard.replace(key, "X");
+            getController().showPlayer(key);
         } else {
             gameBoard.replace(key, "O");
         }
@@ -74,6 +100,7 @@ public abstract class Game {
         }
     }
 
+    public abstract void makeMove(Integer move);
     public abstract Integer think(Map<Integer,String> gameBoard);
     public abstract int minimax(Map<Integer,String> gameBoard,int steps, boolean isMaximizing);
     public abstract int openSpots(Map<Integer,String> gameBoard);
