@@ -65,14 +65,11 @@ public class ViewController implements Initializable {
 		this.game = game;
 	}
 
-	void initializeGame(String gameType, String playerOne){
-		if(game != null){
-			game = null;
-		}
+	void initializeGame(String gameType, String playerOne, String playerTwo){
 		if(gameType == "Reversi"){
-			game = new Reversi(8,8, playerOne, this, true);
+			game = new Reversi(8,8, playerOne,playerTwo, this, true);
 		} else if (gameType == "Tic-tac-toe"){
-			game = new TicTacToe(3,3, playerOne, this, true);
+			game = new TicTacToe(3,3, playerOne,playerTwo, this, true);
 		}
 	}
 
@@ -95,7 +92,6 @@ public class ViewController implements Initializable {
 		stage = (Stage) menu.getScene().getWindow();
 		//root = FXMLLoader.load(getClass().getResource("../View/MenuWindowView.fxml"));
 		changeView(stage,"../View/MenuWindowView.fxml");
-
 	}
 
 	private void changeView(Stage stage, String path) throws IOException {
@@ -225,13 +221,10 @@ public class ViewController implements Initializable {
 
 	@FXML
 	void handleButtonR_SP(ActionEvent event) throws IOException{
-		Stage stage;
-		Parent root;
-		stage = (Stage) Sp_R_Button.getScene().getWindow();
-		root = FXMLLoader.load(getClass().getResource("../View/MenuWindowView.fxml"));
-		Scene scene = new Scene(root);
-		stage.setScene(scene);
-		stage.show();
+		new Reversi(8,8,playerName, this, false);
+		Stage stage = (Stage) Sp_R_Button.getScene().getWindow();
+		changeView(stage,"../View/OthelloView.fxml");
+		game.printGameState();
 	}
 
 	void alertGameState(String state){
@@ -240,7 +233,7 @@ public class ViewController implements Initializable {
 
 	@FXML
 	void handleButtonTTT_AI(ActionEvent event) {
-		initializeGame("Tic-tac-toe", field.getText());
+
 	}
 
 	@Override

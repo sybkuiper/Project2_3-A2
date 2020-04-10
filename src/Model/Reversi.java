@@ -7,29 +7,143 @@ import java.util.Map;
 public class Reversi extends Game {
     public Reversi(int rows, int columns, String playerOne, ViewController controller, boolean online){
         super(rows, columns, playerOne, controller, online);
-        generateGameBoard();
+        controller.setGame(this);
+    }
+
+    public Reversi(int rows, int columns, String playerOne, String playerTwo, ViewController controller, boolean online){
+        super(rows, columns, playerOne, playerTwo, controller, online);
+        controller.setGame(this);
     }
 
     @Override
-    public void makeMove(Integer move){}
-
-    @Override
     public Integer think(Map<Integer,String> gameBoard) {
-        return null;
+        Integer bestMove = 0;
+        int bestScore = -1000;
+
+        //get all empty spots and try going there to see what is the best spot
+        for (Map.Entry<Integer, String> entry : gameBoard.entrySet()) {
+            Integer key = entry.getKey();
+            Object value = entry.getValue();
+
+            //try all empty spots and make them X and do minimax on the gamboard
+            if(value.equals("E")){
+                gameBoard.replace(key, "B");
+                int score = minimax(gameBoard, 0, false);
+                gameBoard.replace(key,"E");
+                if(score>bestScore) {
+                    bestScore = score;
+                    bestMove = key;
+                }
+            }
+        }
+        return bestMove;
+    }
+
+    public void updateGameBoard(Integer move, String player){
+        int key = move;
+        if(!online) {
+            if (player.equals("AI")) {//playerOne)) {
+                gameBoard.replace(key, "B");
+                getController().showPlayer(key);
+            } else {
+                gameBoard.replace(key, "W");
+            }
+        } else {
+            if (player.equals(playerOne)) {//playerOne)) {
+                gameBoard.replace(key, "B");
+            //    getController().showPlayer(key);
+            } else {
+                gameBoard.replace(key, "W");
+            }
+        }
+        System.out.println(player + " has placed move: " + move);
+        printGameState();
     }
 
     @Override
     public int minimax(Map<Integer,String> gameBoard,int steps, boolean isMaximizing) {
-        return 0;
-    }
+        //give a score to an outcome. the better the outcome, the higher score.
+        String result = checkWinner(gameBoard);
+        if(result != null){
+            int score = 0;
+            if(result.equals("TIE")){score = 0;}
+            if(result.equals("W")){score = -1;}
+            if(result.equals("B")){score = 1;}
+            return score;
+        }
 
-    @Override
-    public int openSpots(Map<Integer,String> gameBoard) {
-        return 0;
+        //if its the maximizing turn, the AI's turn, check all outcomes
+        if(isMaximizing){
+            int bestScore = -1000;
+            for (Map.Entry<Integer, String> entry : gameBoard.entrySet()) {
+                Integer key = entry.getKey();
+                Object value = entry.getValue();
+                if(value.equals("E")){
+                    gameBoard.replace(key, "X");
+                    int score = minimax(gameBoard,steps + 1, false);
+                    gameBoard.replace(key,"E");
+                    if(score>bestScore) {
+                        bestScore = score;
+                    }
+                }
+            }
+            return bestScore;
+            //if its the minimizing turn, the other player, check all outcomes
+        }else{
+            int bestScore = 1000;
+            for (Map.Entry<Integer, String> entry : gameBoard.entrySet()) {
+                Integer key = entry.getKey();
+                Object value = entry.getValue();
+                if(value.equals("E")){
+                    gameBoard.replace(key, "O");
+                    int score = minimax(gameBoard,steps + 1, true);
+                    gameBoard.replace(key,"E");
+                    if(score<bestScore) {
+                        bestScore = score;
+                    }
+                }
+            }
+            return bestScore;
+        }
     }
 
     @Override
     public String checkWinner(Map<Integer,String> gameBoard) {
-        return null;
+        String winner = null;
+        String a;
+        String b;
+        String c;
+        int position = 0;
+
+        //horizontal
+        for (int i = 0; i<3;i++){
+            a = gameBoard.get(position);
+            b = gameBoard.get(position+1);
+            c = gameBoard.get(position+2);
+            if (a.equals(b) && b.equals(c)){ if (!a.equals("E")){winner = a;}}
+            position += 3; }
+
+        //vertical
+        for (int i = 0; i<3;i++){
+            a = gameBoard.get(i);
+            b = gameBoard.get(i+3);
+            c = gameBoard.get(i+6);
+            if (a.equals(b) && b.equals(c)){ if (!a.equals("E")){winner = a;}}}
+
+        //diagonal
+        a = gameBoard.get(0);
+        b = gameBoard.get(4);
+        c = gameBoard.get(8);
+        if (a.equals(b) && b.equals(c)){ if (!a.equals("E")){winner = a;}}
+
+        a = gameBoard.get(2);
+        b = gameBoard.get(4);
+        c = gameBoard.get(6);
+        if (a.equals(b) && b.equals(c)){ if (!a.equals("E")){winner = a;}}
+
+
+
+        if(winner == null && openSpots(gameBoard) == 0){winner = "TIE";}
+        return winner;
     }
 }

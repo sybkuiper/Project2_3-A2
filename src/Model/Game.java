@@ -8,18 +8,22 @@ import java.util.Random;
 
 public abstract class Game {
 
-    private Map<Integer,String> gameBoard = new HashMap<>(); //game map
-    private Map<String, String> players;
+    protected Map<Integer,String> gameBoard = new HashMap<>(); //game map
+    protected Map<String, String> players;
     private int rows;
     private int columns;
-    private String playerOne;
+    protected String playerOne;
     protected String playersTurn;
     private ViewController controller;
+    protected String playerTwo;
+    protected boolean online;
 
     public Game(int rows, int columns, String playerOne, ViewController controller, boolean online){
         if(!online){
             // game is played offline
-            playersTurn = getFirstPlayer(controller.playerName);
+            //gecommented om othello te testen
+            //playersTurn = getFirstPlayer(controller.playerName);
+            playersTurn = playerOne; //"AI";
             if(playersTurn == "AI"){
                 makeMove(think(getGameBoard()));
             }
@@ -28,6 +32,36 @@ public abstract class Game {
         this.columns = columns;
         this.playerOne = playerOne;
         this.controller = controller;
+        this.online = online;
+        generateGameBoard();
+    }
+
+    public Game(int rows, int columns, String playerOne, String playerTwo, ViewController controller, boolean online){
+        if(!online){
+            // game is played offline
+            //gecommented om othello te testen
+            //playersTurn = getFirstPlayer(controller.playerName);
+            playersTurn = playerOne; //"AI";
+            if(playersTurn == "AI"){
+                makeMove(think(getGameBoard()));
+            }
+        }
+        this.players = new HashMap<>();
+        this.rows = rows;
+        this.columns = columns;
+        this.playerOne = playerOne;
+        this.playerTwo = playerTwo;
+        if(this instanceof TicTacToe){
+            if(playerOne.equals(controller.playerName)) {
+                players.put(playerOne, "X");
+                players.put(playerTwo, "O");
+            } else {
+                players.put(playerOne, "O");
+                players.put(playerTwo, "X");
+            }
+        }
+        this.controller = controller;
+        this.online = online;
         generateGameBoard();
     }
 
@@ -54,7 +88,13 @@ public abstract class Game {
         int sizeOfBoard = rows * columns;
         for(int field = 0; field < sizeOfBoard; field++){
             System.out.println(field);
-            gameBoard.put(field,"E");
+            if(field == 27 || field == 36){
+                gameBoard.put(field,"W");
+            } else if (field == 28 || field == 35){
+                gameBoard.put(field,"B");
+            } else {
+                gameBoard.put(field, "E");
+            }
         }
     }
 
@@ -65,18 +105,6 @@ public abstract class Game {
         } else {
             makeMove(think(getGameBoard()));
         }
-    }
-
-    public void updateGameBoard(Integer move, String player){
-        int key = move;
-        if(player.equals("AI")) {//playerOne)) {
-            gameBoard.replace(key, "X");
-            getController().showPlayer(key);
-        } else {
-            gameBoard.replace(key, "O");
-        }
-        System.out.println(player + " has placed move: " + move);
-        printGameState();
     }
 
     public String getPlayerOne() {
@@ -100,9 +128,31 @@ public abstract class Game {
         }
     }
 
-    public abstract void makeMove(Integer move);
+    public void makeMove(Integer move){
+        if (playersTurn.equals("AI")){
+            updateGameBoard(move,playersTurn);
+            playersTurn = playerOne;
+        } else if(players.equals(playerOne)){
+            updateGameBoard(move, playersTurn);
+            playersTurn = "AI";
+            makeMove(think(getGameBoard()));
+        }
+    }
+
+    public int openSpots(Map<Integer,String> gameBoard){
+        int openspots = 0;
+        for (Map.Entry<Integer, String> entry : gameBoard.entrySet()) {
+            Integer key = entry.getKey();
+            Object value = entry.getValue();
+            if(value.equals("E")){
+                openspots++;
+            }
+        }
+        return openspots;
+    }
+
+    public abstract void updateGameBoard(Integer move, String player);
     public abstract Integer think(Map<Integer,String> gameBoard);
     public abstract int minimax(Map<Integer,String> gameBoard,int steps, boolean isMaximizing);
-    public abstract int openSpots(Map<Integer,String> gameBoard);
     public abstract String checkWinner(Map<Integer,String> gameBoard);
 }

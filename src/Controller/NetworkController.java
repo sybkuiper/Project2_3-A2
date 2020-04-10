@@ -141,7 +141,7 @@ public class NetworkController extends Thread {
 
         if (input.startsWith("SVR GAME MATCH ")) {
             input = input.replace("SVR GAME MATCH ", "");
-            controller.initializeGame("Tic-tac-toe", createMap(input).get("PLAYERTOMOVE").replace("\"", ""));
+            controller.initializeGame("Tic-tac-toe", createMap(input).get("PLAYERTOMOVE").replace("\"", ""),createMap(input).get("OPPONENT").replace("\"", ""));
         }
         //Todo: Start game interface
 

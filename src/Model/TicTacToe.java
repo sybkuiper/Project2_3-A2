@@ -12,16 +12,9 @@ public class TicTacToe extends Game {
         controller.setGame(this);
     }
 
-    @Override
-    public void makeMove(Integer move){
-        if (playersTurn.equals("AI")){
-            updateGameBoard(move,playersTurn);
-            playersTurn = getController().playerName;
-        } else if(playersTurn.equals(getController().field.getText())){
-            updateGameBoard(move, playersTurn);
-            playersTurn = "AI";
-            makeMove(think(getGameBoard()));
-        }
+    public TicTacToe(int rows, int columns, String playerOne, String playerTwo, ViewController controller, boolean online){
+        super(rows, columns, playerOne, playerTwo, controller, online);
+        controller.setGame(this);
     }
 
     @Override
@@ -46,6 +39,22 @@ public class TicTacToe extends Game {
             }
         }
         return bestMove;
+    }
+
+    public void updateGameBoard(Integer move, String player){
+        int key = move;
+        if(!online) {
+            if (player.equals("AI")) {//playerOne)) {
+                gameBoard.replace(key, "X");
+                getController().showPlayer(key);
+            } else {
+                gameBoard.replace(key, "O");
+            }
+        } else {
+                gameBoard.replace(key,players.get(player));
+        }
+        System.out.println(player + " has placed move: " + move);
+        printGameState();
     }
 
     //looks to all posible outcomes of the game state
@@ -96,21 +105,6 @@ public class TicTacToe extends Game {
             return bestScore;
         }
     }
-
-    //check for open spots on the board
-    @Override
-    public int openSpots(Map<Integer,String> gameBoard){
-        int openspots = 0;
-        for (Map.Entry<Integer, String> entry : gameBoard.entrySet()) {
-            Integer key = entry.getKey();
-            Object value = entry.getValue();
-            if(value.equals("E")){
-                openspots++;
-            }
-        }
-        return openspots;
-    }
-
 
     //check if the gamestate has a winner and return the winner or TIE
     @Override
