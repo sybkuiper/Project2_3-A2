@@ -225,6 +225,13 @@ public class ViewController implements Initializable {
 		Stage stage = (Stage) Sp_R_Button.getScene().getWindow();
 		changeView(stage,"../View/OthelloView.fxml");
 		game.printGameState();
+		if(game instanceof Reversi){
+			System.out.println(((Reversi) game).getLegalMoves(game.getGameBoard(),"B"));
+			int moveToMake = ((Reversi) game).think(game.getGameBoard());
+			System.out.println("Best found move " + moveToMake);
+			game.updateGameBoard(moveToMake,"B");
+
+		}
 	}
 
 	void alertGameState(String state){
