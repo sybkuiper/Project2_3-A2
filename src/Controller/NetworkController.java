@@ -1,5 +1,8 @@
 package Controller;
 
+import Model.Reversi;
+import Model.TicTacToe;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
@@ -37,7 +40,6 @@ public class NetworkController extends Thread {
         logIN(player);
         //getGameList();
         getPlayerList();
-        this.start();
     }
 
     public void disconnect() throws IOException {
@@ -47,7 +49,10 @@ public class NetworkController extends Thread {
     }
 
     public void addToCommandQueue(String command){
-        commandQueue.add(command);
+        System.out.println(command);
+        //commandQueue.add(command);
+        out.println(command);
+        out.flush();
     }
 
     public void logIN(String name){
@@ -114,11 +119,12 @@ public class NetworkController extends Thread {
             input = input.replace("SVR PLAYERLIST ", "").replace("[", "").replace("]", "");
             if (input.contains(",")) {
                 String[] split = input.split(",");
+                onlinePlayers = new ArrayList<>();
                 onlinePlayers.addAll(Arrays.asList(split));
                 controller.setOnlinePlayers(onlinePlayers);
             } else {
+                onlinePlayers = new ArrayList<>();
                 onlinePlayers.add(input);
-                System.out.println(onlinePlayers);
                 controller.setOnlinePlayers(onlinePlayers);
             }
         }
@@ -141,16 +147,28 @@ public class NetworkController extends Thread {
 
         if (input.startsWith("SVR GAME MATCH ")) {
             input = input.replace("SVR GAME MATCH ", "");
-            controller.initializeGame("Tic-tac-toe", createMap(input).get("PLAYERTOMOVE").replace("\"", ""),createMap(input).get("OPPONENT").replace("\"", ""));
+            System.out.println("Initializing game....");
+            Map<String, String> map = createMap(input);
+            System.out.println("GameType " +map.get("GAMETYPE").replace("\"", ""));
+            System.out.println("PlayerOne " + map.get("PLAYERTOMOVE").replace("\"", ""));
+            System.out.println("Opponent " +map.get("OPPONENT").replace("\"", ""));
+            controller.initializeGame(map.get("GAMETYPE").replace("\"", ""), map.get("PLAYERTOMOVE").replace("\"", ""),map.get("OPPONENT").replace("\"", ""));
         }
         //Todo: Start game interface
 
         if(input.startsWith("SVR GAME MOVE ")){
             input = input.replace("SVR GAME MOVE ", "");
-            controller.getGame().updateGameBoard(Integer.parseInt(createMap(input).get("MOVE").replace("\"", "")), createMap(input).get("PLAYER").replace("\"", ""));
-        }
+            if(controller.getGame() instanceof TicTacToe) {
+                controller.getGame().updateGameBoard(Integer.parseInt(createMap(input).get("MOVE").replace("\"", "")), createMap(input).get("PLAYER").replace("\"", ""));
+            } else {
+                System.out.println(controller.getGame());
+                //controller.getGame().updateBoard(controller.getGame().getGameBoard(),Integer.parseInt(createMap(input).get("MOVE").replace("\"", "")) ,"B");
+                controller.getGame().updateGameBoard(Integer.parseInt(createMap(input).get("MOVE").replace("\"", "")) ,createMap(input).get("PLAYER").replace("\"", ""));
+            }
+            }
 
         if (input.startsWith("SVR GAME YOURTURN ")) {
+            System.out.println(controller.getGame());
             move(Integer.toString(controller.getGame().think(controller.getGame().getGameBoard())));
         }
 
@@ -168,17 +186,22 @@ public class NetworkController extends Thread {
     }
 
     public void run(){
-        this.isRunning = true;
-        while(this.isRunning){
+        while(true){
+            System.out.println(commandQueue.isEmpty());
             String newLine = in.nextLine();
+            //System.out.println(newLine);
             if(!ignoreList.contains(newLine)) {
                 parse(newLine);
             }
+            /*
             if(!commandQueue.isEmpty()){
+                System.out.println("kom ik hier");
                 out.println(commandQueue.get(0));
                 commandQueue.remove(commandQueue.get(0));
                 out.flush();
             }
+
+             */
         }
     }
 }

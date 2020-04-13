@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
 import Controller.NetworkController;
@@ -46,12 +47,11 @@ public class ViewController implements Initializable {
 	@FXML private TextField IP, port;
 	@FXML private Button nextbutton,menubutton,menu,xbutton,rematchButton;
 	@FXML private Label counterlabel;
-	@FXML private Button Sp_T_Button,AI_T_Button,Mp_T_Button,Sp_R_Button,Mp_R_Button;
+	@FXML private Button Sp_T_Button,AI_T_Button,Mp_T_Button,Sp_R_Button,Mp_R_Button, AI_R_Button;
 	private NetworkController networkController;
 	private List<String> onlinePlayers;
 	public String playerName;
 	private Game game;
-	private ViewController controller;
 
 	@FXML
 	void handleButtonTTT_SP(ActionEvent event) throws IOException {
@@ -66,9 +66,11 @@ public class ViewController implements Initializable {
 	}
 
 	void initializeGame(String gameType, String playerOne, String playerTwo){
-		if(gameType == "Reversi"){
+		if(gameType.equals("Reversi")){
+			System.out.println("Stage 2 online initialization..");
 			game = new Reversi(8,8, playerOne,playerTwo, this, true);
-		} else if (gameType == "Tic-tac-toe"){
+		} else if (gameType.equals("Tic-tac-toe")){
+			System.out.println("Stage 2 online initialization..");
 			game = new TicTacToe(3,3, playerOne,playerTwo, this, true);
 		}
 	}
@@ -88,6 +90,7 @@ public class ViewController implements Initializable {
 		if(online.isSelected()){
 			System.out.println(field.getText());
 			networkController = new NetworkController(this, field.getText(),IP.getText(),Integer.parseInt(port.getText()));
+			networkController.start();
 		}
 		stage = (Stage) menu.getScene().getWindow();
 		//root = FXMLLoader.load(getClass().getResource("../View/MenuWindowView.fxml"));
@@ -210,13 +213,13 @@ public class ViewController implements Initializable {
 
 	@FXML
 	void handleButtonR_AI(ActionEvent event) throws IOException{
-		Stage stage;
-        Parent root;
-		stage = (Stage) textOthello.getScene().getWindow();
-		root = FXMLLoader.load(getClass().getResource("../View/MenuWindowView.fxml"));
-		Scene scene = new Scene(root);
-		stage.setScene(scene);
-		stage.show();
+		Stage stage = (Stage) AI_R_Button.getScene().getWindow();
+		changeView(stage,"../View/OthelloView.fxml");
+		System.out.println(onlinePlayers);
+		System.out.println("invite player for AI vs AI: " );
+//		String username = scanner.nextLine();
+		networkController.challenge("test", "Reversi");
+		System.out.println("invited player: " + "test");
 	}
 
 	@FXML
@@ -248,10 +251,5 @@ public class ViewController implements Initializable {
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		// TODO Auto-generated method stub
 
-	}
-
-
-	public void setController(ViewController controller) {
-		this.controller = controller;
 	}
 }

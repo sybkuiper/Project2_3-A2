@@ -27,7 +27,7 @@
                         <Glow level="0.55" />
                      </effect>
                   </Button>
-                  <Button layoutX="297.0" layoutY="131.0" mnemonicParsing="false" onAction="#handleButtonR_AI" prefHeight="83.0" prefWidth="89.0" style="-fx-background-color: #9081a3;" text="R AI VS AI">
+                  <Button fx:id="AI_R_Button" layoutX="297.0" layoutY="131.0" mnemonicParsing="false" onAction="#handleButtonR_AI" prefHeight="83.0" prefWidth="89.0" style="-fx-background-color: #9081a3;" text="R AI VS AI">
                      <effect>
                         <Glow level="0.55" />
                      </effect>

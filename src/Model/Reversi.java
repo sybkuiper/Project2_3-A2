@@ -13,7 +13,7 @@ public class Reversi extends Game {
                           8, 0, 4, 0, 0, 4, 0, 8,
                           8, 0, 0, 1, 1, 0, 0, 8,
                           8, 0, 0, 1, 1, 0, 0, 8,
-                          8, 0, 4, 0, 0, 1, 0, 8,
+                          8, 0, 4, 0, 0, 4, 0, 8,
                          -8, -8, 0, 0, 0, 0, -8, -8,
                          64, -8, 8, 8, 8, 8, -8, 64};
 
@@ -21,6 +21,7 @@ public class Reversi extends Game {
     public Reversi(int rows, int columns, String playerOne, ViewController controller, boolean online){
         super(rows, columns, playerOne, controller, online);
         controller.setGame(this);
+        System.out.println("game initialized");
     }
 
     public Reversi(int rows, int columns, String playerOne, String playerTwo, ViewController controller, boolean online){
@@ -35,36 +36,52 @@ public class Reversi extends Game {
         Integer bestMove = 0;
         int bestScore = -1000;
         Map<Integer,String> cloneBoard = new HashMap<>(gameBoard);
-        for(Integer key : getLegalMoves(cloneBoard, "B")) {
-            //try all empty spots and make them X and do minimax on the gamboard
-            if (getGameBoard().get(key).equals("E")) {
-                updateBoard(cloneBoard,key, "B",true); // replace "B" by playersTurn
-                int score = minimax(cloneBoard, 0, false);
-                gameBoard.replace(key, "E");
-                if (score > bestScore) {
-                    bestScore = score;
-                    bestMove = key;
+        if(getController().playerName.equals(playerOne)) {
+            for (Integer key : getLegalMoves(cloneBoard, "B")) {
+                //try all empty spots and make them X and do minimax on the gamboard
+                if (getGameBoard().get(key).equals("E")) {
+                    updateBoard(cloneBoard, key, "B"); // replace "B" by playersTurn
+                    int score = minimax(cloneBoard, 0, false);
+                    gameBoard.replace(key, "E");
+                    if (score > bestScore) {
+                        bestScore = score;
+                        bestMove = key;
+                    }
                 }
             }
+            return bestMove;
+        } else {
+            for (Integer key : getLegalMoves(cloneBoard, "W")) {
+                //try all empty spots and make them X and do minimax on the gamboard
+                if (getGameBoard().get(key).equals("E")) {
+                    updateBoard(cloneBoard, key, "W"); // replace "B" by playersTurn
+                    int score = minimax(cloneBoard, 0, false);
+                    gameBoard.replace(key, "E");
+                    if (score > bestScore) {
+                        bestScore = score;
+                        bestMove = key;
+                    }
+                }
+            }
+            return bestMove;
         }
-        return bestMove;
     }
 
     public void updateGameBoard(Integer move, String player){
         int key = move;
         if(!online) {
             if (player.equals("AI")) {//playerOne)) {
-                gameBoard.replace(key, "B");
+                updateBoard(key, "B");
                 //getController().showPlayer(key);
             } else {
-                gameBoard.replace(key, "W");
+                updateBoard(key, "W");
             }
         } else {
             if (player.equals(playerOne)) {//playerOne)) {
-                gameBoard.replace(key, "B");
+                updateBoard(key, "B");
             //    getController().showPlayer(key);
             } else {
-                gameBoard.replace(key, "W");
+                updateBoard(key, "W");
             }
         }
         System.out.println(player + " has placed move: " + move);
@@ -86,29 +103,61 @@ public class Reversi extends Game {
         //if its the maximizing turn, the AI's turn, check all outcomes
         if(isMaximizing){
             bestScore = -1000;
-            for(Integer key : getLegalMoves(gameBoard, "B")) {
-                Object value = gameBoard.get(key);
-                if(value.equals("E")){
-                    int score = minimax(updateBoard(gameBoard, key, "B", true),steps + 1, false);
-                    if(score>bestScore) {
-                        bestScore = score;
+            if(getController().playerName.equals(playerOne)) {
+                for (Integer key : getLegalMoves(gameBoard, "B")) {
+                    Object value = gameBoard.get(key);
+                    if (value.equals("E")) {
+                        minimax(updateBoard(gameBoard, key, "B"), steps + 1, false);
+                        int score = evaluate_board(gameBoard, "B");
+                        if (score > bestScore) {
+                            bestScore = score;
+                        }
                     }
                 }
+                return bestScore;
+                //if its the minimizing turn, the other player, check all outcomes
+            } else {
+                for (Integer key : getLegalMoves(gameBoard, "W")) {
+                    Object value = gameBoard.get(key);
+                    if (value.equals("E")) {
+                        minimax(updateBoard(gameBoard, key, "W"), steps + 1, false);
+                        int score = evaluate_board(gameBoard, "W");
+                        if (score > bestScore) {
+                            bestScore = score;
+                        }
+                    }
+                }
+                return bestScore;
+                //if its the minimizing turn, the other player, check all outcomes
             }
-            return bestScore;
-            //if its the minimizing turn, the other player, check all outcomes
-        }else{
+        }else {
+            if (getController().playerName.equals(playerOne)) {
+                bestScore = 1000;
+                for (Integer key : getLegalMoves(gameBoard, "W")) {
+                    Object value = gameBoard.get(key);
+                    if (value.equals("E")) {
+                        minimax(updateBoard(gameBoard, key, "W"), steps + 1, true);
+                        int score = evaluate_board(gameBoard, "W");
+                        if (score < bestScore) {
+                            bestScore = score;
+                        }
+                    }
+                }
+                return bestScore;
+            } else {
             bestScore = 1000;
-            for(Integer key : getLegalMoves(gameBoard, "W")) {
+            for (Integer key : getLegalMoves(gameBoard, "B")) {
                 Object value = gameBoard.get(key);
-                if(value.equals("E")){
-                    int score = minimax(updateBoard(gameBoard, key, "W", false),steps + 1, true);
-                    if(score<bestScore) {
+                if (value.equals("E")) {
+                    minimax(updateBoard(gameBoard, key, "B"), steps + 1, true);
+                    int score = evaluate_board(gameBoard, "B");
+                    if (score < bestScore) {
                         bestScore = score;
                     }
                 }
             }
             return bestScore;
+        }
         }
     }
 
@@ -288,7 +337,7 @@ public class Reversi extends Game {
         return legalMoves;
     }
 
-    public  Map<Integer, String> updateBoard(Map<Integer, String> gameBoard, int madeMove, String color, boolean isMaximizing){
+    public  Map<Integer, String> updateBoard(Map<Integer, String> gameBoard, int madeMove, String color){
         List<Map<Integer,String>> lines = getAllLines(gameBoard);
         String enemy;
 
@@ -360,6 +409,80 @@ public class Reversi extends Game {
         //TODO: flip all in needToBeFlippedTotal
         System.out.println(needToBeFlippedTotal);
         return gameBoard;
+    }
+
+    // voor gebruik buiten minimax, dus voor het updaten van zetten op het bord, vervanging van updateGameBoard
+    public void updateBoard(int madeMove, String color){
+        List<Map<Integer,String>> lines = getAllLines(gameBoard);
+        String enemy;
+
+        //TODO: make move madeMove
+
+        gameBoard.replace(madeMove, color);
+
+        if(color.equals("B")){ enemy = "W";
+        }else{enemy = "B";}
+
+        boolean moveFound = false;
+        boolean ownPieceFound = false;
+        LinkedHashSet<Integer> needToBeFlippedTotal= new LinkedHashSet<>();
+
+
+        //check every line on the board if pieces need to be flipped
+        for (Map<Integer, String> line : lines) {
+            ArrayList<Integer> needToBeFlippedLR = new ArrayList<>();
+            ArrayList<Integer> needToBeFlippedRL = new ArrayList<>();
+
+            //left to right
+            if (line.containsKey(madeMove)){
+                for (Map.Entry<Integer, String> entry : line.entrySet()) {
+
+                    Integer key = entry.getKey();
+                    String value = entry.getValue();
+                    if(key == madeMove){ moveFound = true; }
+                    if(moveFound && value.equals(enemy)){
+                        needToBeFlippedLR.add(key);
+                    }
+                    if(moveFound && !needToBeFlippedLR.isEmpty() && value.equals(color)){
+                        needToBeFlippedTotal.addAll(needToBeFlippedLR);
+                        break;
+                    }
+                    if (moveFound && needToBeFlippedLR.isEmpty() && value.equals(color) && key != madeMove){
+                        break;
+                    }
+                }
+            }
+
+            //right to left
+            if (line.containsKey(madeMove)){
+                for (Map.Entry<Integer, String> entry : line.entrySet()) {
+                    Integer key = entry.getKey();
+                    String value = entry.getValue();
+                    if(value.equals(color)){
+                        ownPieceFound =  true;
+                    }
+                    if(ownPieceFound && value.equals(enemy)){
+                        needToBeFlippedRL.add(key);
+                    }
+                    if(ownPieceFound && !needToBeFlippedRL.isEmpty() && key == madeMove){
+                        needToBeFlippedTotal.addAll(needToBeFlippedRL);
+                        break;
+                    }
+                    if (value.equals("E")){
+                        ownPieceFound = false;
+                        needToBeFlippedRL = new ArrayList<>();
+                    }
+                }
+            }
+
+        }
+
+        for(Integer key : needToBeFlippedTotal){
+            gameBoard.replace(key, color);
+        }
+
+        //TODO: flip all in needToBeFlippedTotal
+        System.out.println(needToBeFlippedTotal);
     }
 
 }

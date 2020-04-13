@@ -155,4 +155,5 @@ public abstract class Game {
     public abstract Integer think(Map<Integer,String> gameBoard);
     public abstract int minimax(Map<Integer,String> gameBoard,int steps, boolean isMaximizing);
     public abstract String checkWinner(Map<Integer,String> gameBoard);
+    public abstract Map<Integer, String> updateBoard(Map<Integer, String> gameBoard, int madeMove, String color);
 }

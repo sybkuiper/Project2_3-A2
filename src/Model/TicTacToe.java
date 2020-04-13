@@ -41,6 +41,11 @@ public class TicTacToe extends Game {
         return bestMove;
     }
 
+    public Map<Integer, String> updateBoard(Map<Integer, String> gameBoard, int madeMove, String color){
+        return null;
+    }
+
+
     public void updateGameBoard(Integer move, String player){
         int key = move;
         if(!online) {
