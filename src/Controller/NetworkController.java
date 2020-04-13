@@ -181,6 +181,7 @@ public class NetworkController extends Thread {
         if(input.startsWith("SVR GAME ")){
             input = input.replace("SVR GAME ","");
             if(input.startsWith("WIN")){
+                System.out.println(input);
                 controller.alertGameState("WIN");
                 //Todo: verwerken reactie spel, hoe? testen
             } else if (input.startsWith("LOSS")){

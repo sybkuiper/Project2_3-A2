@@ -269,12 +269,12 @@ public class ViewController implements Initializable {
 			Integer rowIndex = GridPane.getRowIndex(node);
 			Integer columnIndex = GridPane.getColumnIndex(node);
 			if(columnIndex == null){columnIndex = 0;}
-			if(rowIndex	!= null) {
+			if(rowIndex	== null) {rowIndex = 0;}
+
 				if (rowIndex == row && columnIndex == column) {
 					result = node;
 					break;
 				}
-			}
 		}
 
 		return result;
@@ -298,7 +298,7 @@ public class ViewController implements Initializable {
 		System.out.println(onlinePlayers);
 		System.out.println("invite player for AI vs AI: " );
 //		String username = scanner.nextLine();
-		networkController.challenge("test", "Reversi");
+		networkController.challenge("Jasper", "Reversi");
 		System.out.println("invited player: " + "test");
 	}
 
