@@ -2,6 +2,8 @@ package Controller;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
@@ -27,10 +29,14 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -42,9 +48,11 @@ public class ViewController implements Initializable {
 	@FXML private BorderPane rootPane;
 	@FXML private Button test;
 	private BorderPane rPane;
+	@FXML private AnchorPane peopleOnline;
 	@FXML GridPane board;
 	@FXML public TextField field;
 	@FXML private Text textOthello;
+	@FXML private Text tWins, tLosses, tDraws, rWins, rLosses, rDraws;
 	@FXML private CheckBox online;
 	@FXML private Label label;
 	@FXML private TextField IP, port;
@@ -62,7 +70,7 @@ public class ViewController implements Initializable {
 		new TicTacToe(3,3,playerName, this, false);
 		Stage stage;
 		stage = (Stage) Sp_T_Button.getScene().getWindow();
-		changeView(stage,"../View/SpTicTacView.fxml");
+		changeView(stage,"../View/NewTTView.fxml");
 	}
 
 	public void setGame(Game game) {
@@ -95,10 +103,48 @@ public class ViewController implements Initializable {
 			System.out.println(field.getText());
 			networkController = new NetworkController(this, field.getText(),IP.getText(),Integer.parseInt(port.getText()));
 			networkController.start();
+			updateOnlinePlayers();
 		}
 		stage = (Stage) menu.getScene().getWindow();
 		//root = FXMLLoader.load(getClass().getResource("../View/MenuWindowView.fxml"));
-		changeView(stage,"../View/MenuWindowView.fxml");
+		changeView(stage,"../View/NewMenuWindowView.fxml");
+		updateWinsLosses();
+	}
+
+	@FXML
+	void updateWinsLosses() throws IOException{
+		String[] temp = new String[5];
+		try {
+			File file = new File("src/Data/Records");
+			if(file.exists()) {
+				Scanner reader = new Scanner(file);
+				while (reader.hasNextLine()) {
+					String data = reader.nextLine();
+					temp = data.split(",");
+				}
+				reader.close();
+			}
+		} catch(FileNotFoundException e) {
+			System.out.println("an error occured");
+			e.printStackTrace();
+		}
+		tWins.setText(temp[0]);
+		tLosses.setText(temp[1]);
+		tDraws.setText(temp[2]);
+		rWins.setText(temp[3]);
+		rLosses.setText(temp[4]);
+		rDraws.setText(temp[5]);
+	}
+
+	@FXML
+	void updateOnlinePlayers(){
+		HBox box = new HBox();
+		for(String person : onlinePlayers) {
+			Text t = new Text(person);
+
+			box.getChildren().add(t);
+		}
+		peopleOnline.getChildren().add(box);
 	}
 
 	private void changeView(Stage stage, String path) throws IOException {
@@ -118,7 +164,7 @@ public class ViewController implements Initializable {
 
 	@FXML
 	void showPlayer(ActionEvent event) throws IOException {
-		Image image = null;
+		Image image;
 		char player = 'O';
 		//TODO make sure we can check who plays with which symbol
 		if(player == 'X') {
@@ -186,47 +232,77 @@ public class ViewController implements Initializable {
 				rowIndex = 0;
 			}
 			System.out.println("Clicked: " + collIndex + ", " + rowIndex);
-			System.out.println((rowIndex*8 + collIndex));
+			//System.out.println((rowIndex*8 + collIndex));
 		}
-		if (clickedNode instanceof Circle) {
-			Circle clickedNodes = (Circle) clickedNode;
-			clickedNodes.setOpacity(1);
-			//TODO make a variable that declares who has which color
-			if (playersTurn	== 1) {
-				hideLegalMoves();
-				clickedNodes.setFill(BLACK);
-				clickedNodes.setStroke(BLACK);
-				Integer rowIndex = GridPane.getRowIndex(clickedNode);
-				Integer columnIndex = GridPane.getColumnIndex(clickedNode);
-				if(columnIndex == null){
-					columnIndex = 0;
-				}
-				if(rowIndex == null){
-					rowIndex = 0;
-				}
-				game.updateGameBoard((rowIndex*8 + columnIndex),"AI");
-				playersTurn = 2;
-				for(int move : game.getLegalMoves(game.getGameBoard(), "W")){
-					updateGrid(move, "legalMove");
-				}
-			} else {
-				hideLegalMoves();
-				clickedNodes.setFill(WHITE);
-				clickedNodes.setStroke(WHITE);
-				Integer rowIndex = GridPane.getRowIndex(clickedNode);
-				Integer columnIndex = GridPane.getColumnIndex(clickedNode);
-				if(columnIndex == null){
-					columnIndex = 0;
-				}
-				if(rowIndex == null){
-					rowIndex = 0;
-				}
-				game.updateGameBoard((rowIndex*8 + columnIndex),"test");
-				playersTurn = 1;
-				for(int move : game.getLegalMoves(game.getGameBoard(), "B")){
-					updateGrid(move, "legalMove");
+		if(game instanceof Reversi) {
+			if (clickedNode instanceof Circle) {
+				Circle clickedNodes = (Circle) clickedNode;
+				clickedNodes.setOpacity(1);
+				//TODO make a variable that declares who has which color
+				char color = 'Z';
+				if (color == 'Z') {
+					clickedNodes.setFill(BLACK);
+					clickedNodes.setStroke(BLACK);
+				} else {
+					clickedNodes.setFill(WHITE);
+					clickedNodes.setStroke(WHITE);
 				}
 			}
+		}
+		if(game instanceof TicTacToe) {
+			if(clickedNode instanceof javafx.scene.shape.Rectangle) {
+				Image image = null;
+				javafx.scene.shape.Rectangle rekt = (Rectangle) clickedNode;
+				char shape = 'X';
+				if(shape == 'X'){
+					image = new Image(getClass().getResourceAsStream("../Img/cross.png"));
+				}else{
+					image = new Image(getClass().getResourceAsStream("../Img/circle.png"));
+				}
+				if (image != null){
+					rekt.setFill(new ImagePattern(image));
+				}
+			}
+		//Todo: Onderstaande miniversie 1vAI integreren in Reversi class
+//		if (clickedNode instanceof Circle) {
+//			Circle clickedNodes = (Circle) clickedNode;
+//			clickedNodes.setOpacity(1);
+//			//TODO make a variable that declares who has which color
+//			if (playersTurn	== 1) {
+//				hideLegalMoves();
+//				clickedNodes.setFill(BLACK);
+//				clickedNodes.setStroke(BLACK);
+//				Integer rowIndex = GridPane.getRowIndex(clickedNode);
+//				Integer columnIndex = GridPane.getColumnIndex(clickedNode);
+//				if(columnIndex == null){
+//					columnIndex = 0;
+//				}
+//				if(rowIndex == null){
+//					rowIndex = 0;
+//				}
+//				game.updateGameBoard((rowIndex*8 + columnIndex),"AI");
+//				playersTurn = 2;
+//				for(int move : game.getLegalMoves(game.getGameBoard(), "W")){
+//					updateGrid(move, "legalMove");
+//				}
+//			} else {
+//				hideLegalMoves();
+//				clickedNodes.setFill(WHITE);
+//				clickedNodes.setStroke(WHITE);
+//				Integer rowIndex = GridPane.getRowIndex(clickedNode);
+//				Integer columnIndex = GridPane.getColumnIndex(clickedNode);
+//				if(columnIndex == null){
+//					columnIndex = 0;
+//				}
+//				if(rowIndex == null){
+//					rowIndex = 0;
+//				}
+//				game.updateGameBoard((rowIndex*8 + columnIndex),"test");
+//				playersTurn = 1;
+//				for(int move : game.getLegalMoves(game.getGameBoard(), "B")){
+//					updateGrid(move, "legalMove");
+//				}
+//			}
 		}
 	}
 
@@ -294,7 +370,7 @@ public class ViewController implements Initializable {
 	@FXML
 	void handleButtonR_AI(ActionEvent event) throws IOException{
 		Stage stage = (Stage) AI_R_Button.getScene().getWindow();
-		changeView(stage,"../View/OthelloView.fxml");
+		changeView(stage,"../View/NewOthelloView.fxml");
 		System.out.println(onlinePlayers);
 		System.out.println("invite player for AI vs AI: " );
 //		String username = scanner.nextLine();
@@ -306,19 +382,8 @@ public class ViewController implements Initializable {
 	void handleButtonR_SP(ActionEvent event) throws IOException{
 		new Reversi(8,8,playerName, this, false);
 		Stage stage = (Stage) Sp_R_Button.getScene().getWindow();
-		changeView(stage,"../View/OthelloView.fxml");
+		changeView(stage,"../View/NewOthelloView.fxml");
 		game.printGameState();
-		/*
-		if(game instanceof Reversi){
-			game.updateGameBoard(20,"W");
-			System.out.println(((Reversi) game).getLegalMoves(game.getGameBoard(),"B"));
-			int moveToMake = ((Reversi) game).think(game.getGameBoard());
-			System.out.println("Best found move " + moveToMake);
-			game.updateGameBoard(moveToMake,"AI");
-
-		}
-		*/
-
 	}
 
 	void alertGameState(String state){

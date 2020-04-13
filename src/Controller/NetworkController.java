@@ -8,30 +8,33 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.*;
 
-//sources:
-//https://stackoverflow.com/questions/26485964/how-to-convert-string-into-hashmap-in-java
-//https://stackoverflow.com/questions/7347856/how-to-convert-a-string-into-an-arraylist
-//https://stackoverflow.com/questions/9588516/how-to-convert-string-list-into-list-object-in-java
 
+/**
+ * The network controller for the game client handles all incoming and outbound traffic related to the application.
+ *
+ * Used sources:
+ *      https://cs.lmu.edu/~ray/notes/javanetexamples/
+ *      https://stackoverflow.com/questions/26485964/how-to-convert-string-into-hashmap-in-java
+ *      https://stackoverflow.com/questions/7347856/how-to-convert-a-string-into-an-arraylist
+ *      https://stackoverflow.com/questions/9588516/how-to-convert-string-list-into-list-object-in-java
+ *
+ * @author WJSchuringa && JasperSikkema
+ * @version 1.0
+ */
 public class NetworkController extends Thread {
 
     private Socket socket;
     private Scanner in;
     private PrintWriter out;
-    private List<String> commandQueue;
     private List<String> ignoreList;
-    //private List<String> availableGames;
     private List<String> onlinePlayers;
-    private boolean isRunning = false;
     private ViewController controller;
 
 
     public NetworkController(ViewController controller,String player,String ip_address, int port) throws IOException, InterruptedException {
         this.controller = controller;
         socket = new Socket(ip_address,port);
-        commandQueue = new ArrayList<>();
         ignoreList = new ArrayList<>();
-        //availableGames = new ArrayList<>();
         onlinePlayers = new ArrayList<>();
         ignoreList.add("Strategic Game Server Fixed [Version 1.1.0]");
         ignoreList.add("(C) Copyright 2015 Hanzehogeschool Groningen");
@@ -39,7 +42,6 @@ public class NetworkController extends Thread {
         in = new Scanner(socket.getInputStream());
         out = new PrintWriter(socket.getOutputStream(),true);
         logIN(player);
-        //getGameList();
         getPlayerList();
     }
 
@@ -51,7 +53,6 @@ public class NetworkController extends Thread {
 
     public void addToCommandQueue(String command){
         System.out.println(command);
-        //commandQueue.add(command);
         out.println(command);
         out.flush();
     }
@@ -85,10 +86,6 @@ public class NetworkController extends Thread {
     public void getPlayerList() {
         addToCommandQueue("get playerlist");
     }
-
-    /*public void getGameList(){
-        addToCommandQueue("get gamelist");
-    }*/
 
     private Map<String, String> createMap(String input) {
         input = input.substring(1, input.length() - 1);
@@ -194,21 +191,10 @@ public class NetworkController extends Thread {
 
     public void run(){
         while(true){
-            //System.out.println(commandQueue.isEmpty());
             String newLine = in.nextLine();
-            //System.out.println(newLine);
             if(!ignoreList.contains(newLine)) {
                 parse(newLine);
             }
-            /*
-            if(!commandQueue.isEmpty()){
-                System.out.println("kom ik hier");
-                out.println(commandQueue.get(0));
-                commandQueue.remove(commandQueue.get(0));
-                out.flush();
-            }
-
-             */
         }
     }
 }
