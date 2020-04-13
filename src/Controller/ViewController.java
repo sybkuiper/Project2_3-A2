@@ -1,6 +1,7 @@
 package Controller;
 
 import java.awt.event.MouseEvent;
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
@@ -11,6 +12,8 @@ import Controller.NetworkController;
 import Model.Game;
 import Model.Reversi;
 import Model.TicTacToe;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -19,8 +22,10 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBase;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -36,22 +41,44 @@ import static javafx.scene.paint.Color.*;
 public class ViewController implements Initializable {
 	private int counter = 0;
 	@FXML private BorderPane rootPane;
-	@FXML private Button test;
+	@FXML private Button test,inviteButton;
 	private BorderPane rPane;
 	@FXML GridPane board;
 	@FXML public TextField field;
 	@FXML private Text textOthello;
 	@FXML private CheckBox online;
 	@FXML private Label label;
-	@FXML private TextField IP, port;
+	@FXML private TextField IP, port,screen;
 	@FXML private Button nextbutton,menubutton,menu,xbutton,rematchButton;
 	@FXML private Label counterlabel;
 	@FXML private Button Sp_T_Button,AI_T_Button,Mp_T_Button,Sp_R_Button,Mp_R_Button;
+	@FXML private ListView<String> onlineListView;
 	private NetworkController networkController;
 	private List<String> onlinePlayers;
 	public String playerName;
 	private Game game;
 	private ViewController controller;
+	ObservableList<String> onlineList = FXCollections.observableArrayList();
+	
+	
+	@FXML
+	public void getOnlineList() {
+		// laat een lijst zien met spelers die online zijn
+		// moet nog echte data in
+		onlineList.removeAll();
+		onlineList.addAll("naam1","naam2","naam3","naam4","naam1","naam2","naam3","naam4","naam1","naam2","naam3","naam4","naam1","naam2","naam3","naam4");
+		onlineListView.getItems().addAll(onlineList);
+		
+		
+	}
+	@FXML
+	//selecteer een speler uit de onlineListView
+	public void inviteButton(ActionEvent event) {
+        String selectedPlayer=onlineListView.getSelectionModel().getSelectedItem();
+		System.out.println(selectedPlayer);
+	}
+	
+    
 
 	@FXML
 	void handleButtonTTT_SP(ActionEvent event) throws IOException {
@@ -86,7 +113,9 @@ public class ViewController implements Initializable {
 
 	@FXML
 	void gotomenuscreen(ActionEvent event) throws IOException, InterruptedException {
+
 		Stage stage;
+
 		playerName = field.getText();
 		if(online.isSelected()){
 			System.out.println(field.getText());
@@ -95,6 +124,8 @@ public class ViewController implements Initializable {
 		stage = (Stage) menu.getScene().getWindow();
 		//root = FXMLLoader.load(getClass().getResource("../View/MenuWindowView.fxml"));
 		changeView(stage,"../View/MenuWindowView.fxml");
+		getOnlineList();
+		
 
 	}
 
@@ -201,13 +232,49 @@ public class ViewController implements Initializable {
 		}
 	}
 
+	
+
 	@FXML
-	void givenUp(ActionEvent event) {
+	void TicTacToegridClicked(javafx.scene.input.MouseEvent event) {	
+		Image image = null;
+		char player = 'X';
+		//TODO make sure we can check who plays with which symbol
+		if(player == 'X') {
+			image = new Image(getClass().getResourceAsStream("../Img/cross.png"));
+		}else{
+			image = new Image(getClass().getResourceAsStream("../Img/circle.png"));
+		}
+		
+		Node clickedNode = event.getPickResult().getIntersectedNode();
+		if(clickedNode != board) {
+			Integer collIndex = GridPane.getColumnIndex(clickedNode);
+			Integer rowIndex = GridPane.getRowIndex(clickedNode);
+			if(collIndex == null){
+				collIndex = 0;
+			}
+			if(rowIndex == null){
+				rowIndex = 0;
+			}
+			collIndex += 1;
+			rowIndex += 1;
+			System.out.println("Clicked: " + collIndex + ", " + rowIndex);
+		}
+		if (clickedNode instanceof ImageView) {
+			ImageView clickedNodes = (ImageView) clickedNode;
+	        clickedNodes.setImage(image);
+		}
+	}
+
+	
+	
+	@FXML
+	void givenUp(ActionEvent event) throws IOException {
 		textOthello.setVisible(true);
 		textOthello.setText("Je hebt opgegeven");
 		Button button = (Button) event.getSource();
 		button.setVisible(false);
 		rematchButton.setVisible(true);
+
 	}
 
 
@@ -225,13 +292,10 @@ public class ViewController implements Initializable {
 
 	@FXML
 	void handleButtonR_SP(ActionEvent event) throws IOException{
+	
 		Stage stage;
-		Parent root;
 		stage = (Stage) Sp_R_Button.getScene().getWindow();
-		root = FXMLLoader.load(getClass().getResource("../View/MenuWindowView.fxml"));
-		Scene scene = new Scene(root);
-		stage.setScene(scene);
-		stage.show();
+		changeView(stage,"../View/OthelloView.fxml");
 	}
 
 	void alertGameState(String state){
