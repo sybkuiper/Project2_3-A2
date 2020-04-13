@@ -1,5 +1,6 @@
 package Controller;
 
+import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.net.URL;
@@ -26,6 +27,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -37,6 +40,7 @@ public class ViewController implements Initializable {
 	private int counter = 0;
 	@FXML private BorderPane rootPane;
 	@FXML private Button test;
+	@FXML private ScrollPane peopleOnline;
 	private BorderPane rPane;
 	@FXML GridPane board;
 	@FXML public TextField field;
@@ -97,6 +101,17 @@ public class ViewController implements Initializable {
 		changeView(stage,"../View/MenuWindowView.fxml");
 
 	}
+
+//	@FXML
+//	void updateOnlinePlayers(){
+//		VBox box = new VBox();
+//		for(String person : onlinePlayers) {
+//			Text t = new Text(person);
+//
+//			box.getChildren().add(t);
+//		}
+//		peopleOnline.
+//	}
 
 	private void changeView(Stage stage, String path) throws IOException {
 		Parent root;

@@ -15,7 +15,7 @@
 
 <!-- The id of this BorderPane should be rootPane fx:id="rootPane"-->
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #383b42;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="447.0" prefWidth="638.0" style="-fx-background-color: #383b42;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
     <top>
         <VBox prefHeight="19.0" prefWidth="600.0" BorderPane.alignment="CENTER">
             <children>
@@ -46,15 +46,27 @@
     <center>
         <AnchorPane prefHeight="260.0" prefWidth="312.0" BorderPane.alignment="CENTER">
             <children>
-                <HBox alignment="CENTER" layoutX="115.0" layoutY="161.0" spacing="20.0">
+                <HBox alignment="CENTER" layoutX="115.0" layoutY="161.0" prefHeight="186.0" prefWidth="214.0" spacing="20.0" AnchorPane.bottomAnchor="187.79999999999998" AnchorPane.leftAnchor="115.0" AnchorPane.rightAnchor="92.0" AnchorPane.topAnchor="161.0">
                     <children>
-                        <TextField fx:id="field" layoutX="201.0" layoutY="208.0" />
-                        <Button fx:id="menu" layoutX="381.0" layoutY="208.0" mnemonicParsing="false" onAction="#gotomenuscreen" text="Login" />
+                        <TextField fx:id="field" layoutX="201.0" layoutY="208.0" HBox.hgrow="ALWAYS" />
+                        <Button fx:id="menu" layoutX="381.0" layoutY="208.0" mnemonicParsing="false" onAction="#gotomenuscreen" text="Login" HBox.hgrow="ALWAYS" />
                     </children>
                 </HBox>
-                <CheckBox fx:id="online" layoutX="115.0" layoutY="202.0" mnemonicParsing="false" onAction="#onlinePlay" text="Online (unchecked is offline)" textFill="#fafafa" />
-                <TextField fx:id="IP" layoutX="115.0" layoutY="230.0" promptText="IP" visible="false" />
-                <TextField fx:id="port" layoutX="115.0" layoutY="266.0" promptText="Port" visible="false" />
+            <HBox alignment="CENTER" layoutX="110.0" layoutY="203.0" prefHeight="26.0" prefWidth="200.0" AnchorPane.bottomAnchor="144.99999999999997" AnchorPane.leftAnchor="110.0" AnchorPane.rightAnchor="110.80000000000001" AnchorPane.topAnchor="203.0">
+               <children>
+                      <CheckBox fx:id="online" mnemonicParsing="false" onAction="#onlinePlay" text="Online (unchecked is offline)" textFill="#fafafa" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" layoutX="110.0" layoutY="264.0" prefHeight="37.0" prefWidth="200.0" AnchorPane.bottomAnchor="75.19999999999999" AnchorPane.leftAnchor="110.0" AnchorPane.rightAnchor="110.80000000000001" AnchorPane.topAnchor="264.0">
+               <children>
+                      <TextField fx:id="IP" promptText="IP" visible="false" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" layoutX="110.0" layoutY="229.0" prefHeight="35.0" prefWidth="200.0" AnchorPane.bottomAnchor="110.19999999999999" AnchorPane.leftAnchor="110.0" AnchorPane.rightAnchor="110.80000000000001" AnchorPane.topAnchor="229.0">
+               <children>
+                      <TextField fx:id="port" promptText="Port" visible="false" />
+               </children>
+            </HBox>
             </children>
             <effect>
                 <Bloom />

@@ -10,7 +10,7 @@
    <center>
       <AnchorPane prefHeight="394.0" prefWidth="544.0" style="-fx-background-color: #222222;" BorderPane.alignment="CENTER">
          <children>
-            <Button layoutX="123.0" layoutY="57.0" text="0" mnemonicParsing="false" fx:id="test" onAction="#showPlayer" opacity="0" prefHeight="94.0" prefWidth="94.0" />
+            <Button layoutX="123.0" layoutY="57.0" text="0" mnemonicParsing="false" id="test" onAction="#showPlayer" opacity="0" prefHeight="94.0" prefWidth="94.0" />
             <Button layoutX="320.0" layoutY="251.0" text="8" mnemonicParsing="false" onAction="#showPlayer" opacity="0" prefHeight="92.0" prefWidth="95.0" />
             <Button layoutX="219.0" layoutY="250.0" text="7" mnemonicParsing="false" onAction="#showPlayer" opacity="0" prefHeight="93.0" prefWidth="97.0" />
             <Button layoutX="123.0" layoutY="250.0" text="6" mnemonicParsing="false" onAction="#showPlayer" opacity="0" prefHeight="95.0" prefWidth="94.0" />
