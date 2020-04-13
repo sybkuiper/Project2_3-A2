@@ -226,10 +226,11 @@ public class ViewController implements Initializable {
 		changeView(stage,"../View/OthelloView.fxml");
 		game.printGameState();
 		if(game instanceof Reversi){
+			game.updateGameBoard(20,"W");
 			System.out.println(((Reversi) game).getLegalMoves(game.getGameBoard(),"B"));
 			int moveToMake = ((Reversi) game).think(game.getGameBoard());
 			System.out.println("Best found move " + moveToMake);
-			game.updateGameBoard(moveToMake,"B");
+			game.updateGameBoard(moveToMake,"AI");
 
 		}
 	}

@@ -8,8 +8,15 @@ import java.util.*;
 
 public class Reversi extends Game {
 
-    int playerOneScore;
-    int playerTwoScore;
+    int[] boardWeight = {64, -8, 8, 8, 8, 8, -8, 64,
+                         -8, -8, 0, 0, 0, 0, -8, -8,
+                          8, 0, 4, 0, 0, 4, 0, 8,
+                          8, 0, 0, 1, 1, 0, 0, 8,
+                          8, 0, 0, 1, 1, 0, 0, 8,
+                          8, 0, 4, 0, 0, 1, 0, 8,
+                         -8, -8, 0, 0, 0, 0, -8, -8,
+                         64, -8, 8, 8, 8, 8, -8, 64};
+
 
     public Reversi(int rows, int columns, String playerOne, ViewController controller, boolean online){
         super(rows, columns, playerOne, controller, online);
@@ -31,7 +38,7 @@ public class Reversi extends Game {
         for(Integer key : getLegalMoves(cloneBoard, "B")) {
             //try all empty spots and make them X and do minimax on the gamboard
             if (getGameBoard().get(key).equals("E")) {
-                updateBoard(cloneBoard,key, "B"); // replace "B" by playersTurn
+                updateBoard(cloneBoard,key, "B",true); // replace "B" by playersTurn
                 int score = minimax(cloneBoard, 0, false);
                 gameBoard.replace(key, "E");
                 if (score > bestScore) {
@@ -48,7 +55,7 @@ public class Reversi extends Game {
         if(!online) {
             if (player.equals("AI")) {//playerOne)) {
                 gameBoard.replace(key, "B");
-                getController().showPlayer(key);
+                //getController().showPlayer(key);
             } else {
                 gameBoard.replace(key, "W");
             }
@@ -66,18 +73,23 @@ public class Reversi extends Game {
 
     @Override
     public int minimax(Map<Integer,String> gameBoard,int steps, boolean isMaximizing) {
-        int bestScore = 0;
-        if(steps>1){
-            return bestScore;
+        String result = checkWinner(getGameBoard());
+        if(result != null){
+            int score = 0;
+            if(result.equals("TIE")){score = 0;}
+            if(result.equals("W")){score = -1;}
+            if(result.equals("B")){score = 1;}
+            return score;
         }
+
+        int bestScore;
         //if its the maximizing turn, the AI's turn, check all outcomes
         if(isMaximizing){
             bestScore = -1000;
             for(Integer key : getLegalMoves(gameBoard, "B")) {
                 Object value = gameBoard.get(key);
                 if(value.equals("E")){
-                    updateBoard(gameBoard, key, "B");
-                    int score = minimax(gameBoard,steps + 1, false);
+                    int score = minimax(updateBoard(gameBoard, key, "B", true),steps + 1, false);
                     if(score>bestScore) {
                         bestScore = score;
                     }
@@ -87,11 +99,10 @@ public class Reversi extends Game {
             //if its the minimizing turn, the other player, check all outcomes
         }else{
             bestScore = 1000;
-            for(Integer key : getLegalMoves(gameBoard, "B")) {
+            for(Integer key : getLegalMoves(gameBoard, "W")) {
                 Object value = gameBoard.get(key);
                 if(value.equals("E")){
-                    updateBoard(gameBoard, key, "W");
-                    int score = minimax(gameBoard,steps + 1, true);
+                    int score = minimax(updateBoard(gameBoard, key, "W", false),steps + 1, true);
                     if(score<bestScore) {
                         bestScore = score;
                     }
@@ -101,20 +112,45 @@ public class Reversi extends Game {
         }
     }
 
+    public Integer evaluate_board(Map<Integer, String> gameBoard, String player){
+        int playerOneScore = 0;
+        int playerTwoScore = 0;
+        for(Integer key : gameBoard.keySet()){
+            if(gameBoard.get(key).equals("B")){
+                playerOneScore = playerOneScore + boardWeight[key];
+            } else if (gameBoard.get(key).equals("W")){
+                playerTwoScore = playerTwoScore + boardWeight[key];
+            }
+        }
+        if(player.equals("B")){
+            return playerOneScore;
+        } else {
+            return playerTwoScore;
+        }
+    }
+
     @Override
     public String checkWinner(Map<Integer,String> gameBoard) {
-        String winner = null;
-      /*  if(legalMoves.size() == 0){
-            if((amountOfBlackTiles - amountOfWhiteTiles) == 0){
-                return "TIE";
+        if((getLegalMoves(gameBoard,"B").size() + (getLegalMoves(gameBoard,"W").size()) == 0)){
+            int amountOfBlackTiles = 0;
+            int amountOfWhiteTiles = 0;
+            for(Integer key : gameBoard.keySet()){
+                if(gameBoard.get(key).equals("B")){
+                    amountOfBlackTiles = amountOfBlackTiles +1;
+                } else if (gameBoard.get(key).equals("W")){
+                    amountOfWhiteTiles = amountOfWhiteTiles+1;
+                }
             }
-            if(amountOfBlackTiles > amountOfWhiteTiles){
-                return "B";
-            }
-            if(amountOfBlackTiles < amountOfWhiteTiles){
-                return "W";
-            }
-        }*/
+           if((amountOfBlackTiles - amountOfWhiteTiles) == 0){
+               return "TIE";
+           }
+           if(amountOfBlackTiles > amountOfWhiteTiles){
+               return "B";
+           }
+           if(amountOfBlackTiles < amountOfWhiteTiles){
+               return "W";
+          }
+        }
         return "Error in victor selection";
     }
 
@@ -252,7 +288,7 @@ public class Reversi extends Game {
         return legalMoves;
     }
 
-    public  Map<Integer, String> updateBoard(Map<Integer, String> gameBoard, int madeMove, String color){
+    public  Map<Integer, String> updateBoard(Map<Integer, String> gameBoard, int madeMove, String color, boolean isMaximizing){
         List<Map<Integer,String>> lines = getAllLines(gameBoard);
         String enemy;
 
