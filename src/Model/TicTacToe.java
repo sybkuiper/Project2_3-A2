@@ -2,6 +2,7 @@ package Model;
 
 import Controller.ViewController;
 
+import java.util.LinkedHashSet;
 import java.util.Map;
 
 
@@ -42,6 +43,11 @@ public class TicTacToe extends Game {
     }
 
     public Map<Integer, String> updateBoard(Map<Integer, String> gameBoard, int madeMove, String color){
+        return null;
+    }
+
+    @Override
+    public LinkedHashSet<Integer> getLegalMoves(Map<Integer, String> gameBoard, String color) {
         return null;
     }
 

@@ -3,6 +3,7 @@ package Model;
 import Controller.ViewController;
 
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Random;
 
@@ -156,4 +157,6 @@ public abstract class Game {
     public abstract int minimax(Map<Integer,String> gameBoard,int steps, boolean isMaximizing);
     public abstract String checkWinner(Map<Integer,String> gameBoard);
     public abstract Map<Integer, String> updateBoard(Map<Integer, String> gameBoard, int madeMove, String color);
+
+    public abstract LinkedHashSet<Integer> getLegalMoves(Map<Integer, String> gameBoard, String color);
 }

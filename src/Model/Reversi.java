@@ -8,6 +8,7 @@ import java.util.*;
 
 public class Reversi extends Game {
 
+    ArrayList<String> debugmoves = new ArrayList<>();
     int[] boardWeight = {64, -8, 8, 8, 8, 8, -8, 64,
                          -8, -8, 0, 0, 0, 0, -8, -8,
                           8, 0, 4, 0, 0, 4, 0, 8,
@@ -85,6 +86,8 @@ public class Reversi extends Game {
             }
         }
         System.out.println(player + " has placed move: " + move);
+        debugmoves.add(player + " : " +move);
+        System.out.println(debugmoves);
         printGameState();
     }
 
@@ -206,13 +209,23 @@ public class Reversi extends Game {
     //==================================================
     // Jaspers code
 
+    @Override
     public LinkedHashSet<Integer> getLegalMoves(Map<Integer, String> gameBoard, String color){
-        LinkedHashSet<Integer> legalMoves= new LinkedHashSet<>();
+        LinkedHashSet<Integer> legalMoves = new LinkedHashSet<>();
         List<Map<Integer,String>> lines = getAllLines(gameBoard);
         for (Map<Integer, String> line : lines) {
-            LinkedHashSet<Integer> moveList = checkLineForMoves(line, color);
-            legalMoves.addAll(moveList);
+            if (color.equals(playerOne)) {
+                LinkedHashSet<Integer> moveList = checkLineForMoves(line, "B");
+                legalMoves.addAll(moveList);
+            } else if (color.equals(playerTwo)) {
+                LinkedHashSet<Integer> moveList = checkLineForMoves(line, "W");
+                legalMoves.addAll(moveList);
+            } else {
+                LinkedHashSet<Integer> moveList = checkLineForMoves(line, color);
+                legalMoves.addAll(moveList);
+            }
         }
+        System.out.println(legalMoves);
         return legalMoves;
     }
 
@@ -312,6 +325,9 @@ public class Reversi extends Game {
                 playerFound = false;
                 enemyFound = false;
                 legalMoves.add(key);
+            } if(value.equals("E") && playerFound && !enemyFound){
+                playerFound=false;
+                enemyFound=false;
             }
         }
 
@@ -348,13 +364,14 @@ public class Reversi extends Game {
         if(color.equals("B")){ enemy = "W";
         }else{enemy = "B";}
 
-        boolean moveFound = false;
-        boolean ownPieceFound = false;
         LinkedHashSet<Integer> needToBeFlippedTotal= new LinkedHashSet<>();
 
 
         //check every line on the board if pieces need to be flipped
         for (Map<Integer, String> line : lines) {
+
+            boolean moveFound = false;
+            boolean ownPieceFound = false;
             ArrayList<Integer> needToBeFlippedLR = new ArrayList<>();
             ArrayList<Integer> needToBeFlippedRL = new ArrayList<>();
 
@@ -375,6 +392,10 @@ public class Reversi extends Game {
                     if (moveFound && needToBeFlippedLR.isEmpty() && value.equals(color) && key != madeMove){
                         break;
                     }
+                    if(moveFound && value.equals("E") && key != madeMove){
+                        //System.out.println("hij komt hier");
+                        break;
+                    }
                 }
             }
 
@@ -385,6 +406,7 @@ public class Reversi extends Game {
                     String value = entry.getValue();
                     if(value.equals(color)){
                         ownPieceFound =  true;
+                        needToBeFlippedRL = new ArrayList<>();
                     }
                     if(ownPieceFound && value.equals(enemy)){
                         needToBeFlippedRL.add(key);
@@ -419,17 +441,19 @@ public class Reversi extends Game {
         //TODO: make move madeMove
 
         gameBoard.replace(madeMove, color);
+        getController().updateGrid(madeMove,color);
 
         if(color.equals("B")){ enemy = "W";
         }else{enemy = "B";}
 
-        boolean moveFound = false;
-        boolean ownPieceFound = false;
         LinkedHashSet<Integer> needToBeFlippedTotal= new LinkedHashSet<>();
 
 
         //check every line on the board if pieces need to be flipped
         for (Map<Integer, String> line : lines) {
+
+            boolean moveFound = false;
+            boolean ownPieceFound = false;
             ArrayList<Integer> needToBeFlippedLR = new ArrayList<>();
             ArrayList<Integer> needToBeFlippedRL = new ArrayList<>();
 
@@ -448,6 +472,10 @@ public class Reversi extends Game {
                         break;
                     }
                     if (moveFound && needToBeFlippedLR.isEmpty() && value.equals(color) && key != madeMove){
+                        break;
+                    }
+                    if(moveFound && value.equals("E") && key != madeMove){
+                        //System.out.println("hij komt hier");
                         break;
                     }
                 }
@@ -479,6 +507,7 @@ public class Reversi extends Game {
 
         for(Integer key : needToBeFlippedTotal){
             gameBoard.replace(key, color);
+            getController().updateGrid(key,color);
         }
 
         //TODO: flip all in needToBeFlippedTotal

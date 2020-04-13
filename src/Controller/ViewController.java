@@ -1,5 +1,6 @@
 package Controller;
 
+import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.net.URL;
@@ -12,6 +13,7 @@ import Controller.NetworkController;
 import Model.Game;
 import Model.Reversi;
 import Model.TicTacToe;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -27,6 +29,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -52,6 +55,7 @@ public class ViewController implements Initializable {
 	private List<String> onlinePlayers;
 	public String playerName;
 	private Game game;
+	int playersTurn = 1;
 
 	@FXML
 	void handleButtonTTT_SP(ActionEvent event) throws IOException {
@@ -181,23 +185,99 @@ public class ViewController implements Initializable {
 			if(rowIndex == null){
 				rowIndex = 0;
 			}
-			collIndex += 1;
-			rowIndex += 1;
 			System.out.println("Clicked: " + collIndex + ", " + rowIndex);
+			System.out.println((rowIndex*8 + collIndex));
 		}
 		if (clickedNode instanceof Circle) {
 			Circle clickedNodes = (Circle) clickedNode;
 			clickedNodes.setOpacity(1);
 			//TODO make a variable that declares who has which color
-			char color = 'Z';
-			if (color == 'Z') {
+			if (playersTurn	== 1) {
+				hideLegalMoves();
 				clickedNodes.setFill(BLACK);
 				clickedNodes.setStroke(BLACK);
+				Integer rowIndex = GridPane.getRowIndex(clickedNode);
+				Integer columnIndex = GridPane.getColumnIndex(clickedNode);
+				if(columnIndex == null){
+					columnIndex = 0;
+				}
+				if(rowIndex == null){
+					rowIndex = 0;
+				}
+				game.updateGameBoard((rowIndex*8 + columnIndex),"AI");
+				playersTurn = 2;
+				for(int move : game.getLegalMoves(game.getGameBoard(), "W")){
+					updateGrid(move, "legalMove");
+				}
 			} else {
+				hideLegalMoves();
 				clickedNodes.setFill(WHITE);
 				clickedNodes.setStroke(WHITE);
+				Integer rowIndex = GridPane.getRowIndex(clickedNode);
+				Integer columnIndex = GridPane.getColumnIndex(clickedNode);
+				if(columnIndex == null){
+					columnIndex = 0;
+				}
+				if(rowIndex == null){
+					rowIndex = 0;
+				}
+				game.updateGameBoard((rowIndex*8 + columnIndex),"test");
+				playersTurn = 1;
+				for(int move : game.getLegalMoves(game.getGameBoard(), "B")){
+					updateGrid(move, "legalMove");
+				}
 			}
 		}
+	}
+
+	public void updateGrid(int move, String color){
+		int row = move / 8;
+		int column = move % 8;
+
+		Node tile = getTile(row, column);
+		if(tile instanceof Circle){
+			tile.setOpacity(1);
+			if (color.equals("B")) {
+				((Circle) tile).setFill(BLACK);
+				((Circle) tile).setStroke(BLACK);
+			} else if(color.equals("W")) {
+				((Circle) tile).setFill(WHITE);
+				((Circle) tile).setStroke(WHITE);
+			} else if(color.equals("legalMove")){
+				((Circle) tile).setFill(GREEN);
+				((Circle) tile).setStroke(GREEN);
+			}
+		}
+	}
+
+	public void hideLegalMoves(){
+		for(Node node : board.getChildren()){
+			if(node instanceof Circle){
+				if(((Circle) node).getFill().equals(GREEN)){
+					node.setOpacity(0);
+					((Circle) node).setFill(WHITE);
+				}
+			}
+		}
+	}
+
+	public Node getTile (final int row, final int column) {
+		Node result = null;
+		ObservableList<Node> childrens = board.getChildren();
+		System.out.println(childrens.size());
+		for (Node node : childrens) {
+			Integer rowIndex = GridPane.getRowIndex(node);
+			Integer columnIndex = GridPane.getColumnIndex(node);
+			if(columnIndex == null){columnIndex = 0;}
+			if(rowIndex	!= null) {
+				if (rowIndex == row && columnIndex == column) {
+					result = node;
+					break;
+				}
+			}
+		}
+
+		return result;
 	}
 
 	@FXML
@@ -228,6 +308,7 @@ public class ViewController implements Initializable {
 		Stage stage = (Stage) Sp_R_Button.getScene().getWindow();
 		changeView(stage,"../View/OthelloView.fxml");
 		game.printGameState();
+		/*
 		if(game instanceof Reversi){
 			game.updateGameBoard(20,"W");
 			System.out.println(((Reversi) game).getLegalMoves(game.getGameBoard(),"B"));
@@ -236,6 +317,8 @@ public class ViewController implements Initializable {
 			game.updateGameBoard(moveToMake,"AI");
 
 		}
+		*/
+
 	}
 
 	void alertGameState(String state){

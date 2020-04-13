@@ -25,6 +25,7 @@ public class NetworkController extends Thread {
     private boolean isRunning = false;
     private ViewController controller;
 
+
     public NetworkController(ViewController controller,String player,String ip_address, int port) throws IOException, InterruptedException {
         this.controller = controller;
         socket = new Socket(ip_address,port);
@@ -153,15 +154,19 @@ public class NetworkController extends Thread {
             System.out.println("PlayerOne " + map.get("PLAYERTOMOVE").replace("\"", ""));
             System.out.println("Opponent " +map.get("OPPONENT").replace("\"", ""));
             controller.initializeGame(map.get("GAMETYPE").replace("\"", ""), map.get("PLAYERTOMOVE").replace("\"", ""),map.get("OPPONENT").replace("\"", ""));
+            for(int move : controller.getGame().getLegalMoves(controller.getGame().getGameBoard(), map.get("PLAYERTOMOVE").replace("\"", ""))){
+                controller.updateGrid(move, "legalMove");
+            }
         }
         //Todo: Start game interface
 
         if(input.startsWith("SVR GAME MOVE ")){
             input = input.replace("SVR GAME MOVE ", "");
+            controller.hideLegalMoves();
             if(controller.getGame() instanceof TicTacToe) {
                 controller.getGame().updateGameBoard(Integer.parseInt(createMap(input).get("MOVE").replace("\"", "")), createMap(input).get("PLAYER").replace("\"", ""));
             } else {
-                System.out.println(controller.getGame());
+//                System.out.println(controller.getGame());
                 //controller.getGame().updateBoard(controller.getGame().getGameBoard(),Integer.parseInt(createMap(input).get("MOVE").replace("\"", "")) ,"B");
                 controller.getGame().updateGameBoard(Integer.parseInt(createMap(input).get("MOVE").replace("\"", "")) ,createMap(input).get("PLAYER").replace("\"", ""));
             }
@@ -169,6 +174,7 @@ public class NetworkController extends Thread {
 
         if (input.startsWith("SVR GAME YOURTURN ")) {
             System.out.println(controller.getGame());
+
             move(Integer.toString(controller.getGame().think(controller.getGame().getGameBoard())));
         }
 
@@ -187,7 +193,7 @@ public class NetworkController extends Thread {
 
     public void run(){
         while(true){
-            System.out.println(commandQueue.isEmpty());
+            //System.out.println(commandQueue.isEmpty());
             String newLine = in.nextLine();
             //System.out.println(newLine);
             if(!ignoreList.contains(newLine)) {
