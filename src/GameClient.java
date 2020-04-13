@@ -13,7 +13,7 @@ public class GameClient extends Application {
     public void start(Stage stage) throws Exception {
         ViewController controller = new ViewController();
         controller.setController(controller);
-        FXMLLoader root = new FXMLLoader(getClass().getResource("View/NewMenuWindowView.fxml"));
+        FXMLLoader root = new FXMLLoader(getClass().getResource("View/NewLoginWindowView.fxml"));
         root.setController(controller);
         Parent parentroot = root.load();
         Scene scene = new Scene(parentroot);

@@ -2,10 +2,13 @@ package Controller;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
 import Controller.NetworkController;
@@ -25,11 +28,10 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
+import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -40,11 +42,12 @@ public class ViewController implements Initializable {
 	private int counter = 0;
 	@FXML private BorderPane rootPane;
 	@FXML private Button test;
-	@FXML private ScrollPane peopleOnline;
 	private BorderPane rPane;
+	@FXML private AnchorPane peopleOnline;
 	@FXML GridPane board;
 	@FXML public TextField field;
 	@FXML private Text textOthello;
+	@FXML private Text tWins, tLosses, tDraws, rWins, rLosses, rDraws;
 	@FXML private CheckBox online;
 	@FXML private Label label;
 	@FXML private TextField IP, port;
@@ -62,7 +65,7 @@ public class ViewController implements Initializable {
 		new TicTacToe(3,3,playerName, this, false);
 		Stage stage;
 		stage = (Stage) Sp_T_Button.getScene().getWindow();
-		changeView(stage,"../View/SpTicTacView.fxml");
+		changeView(stage,"../View/NewTTView.fxml");
 	}
 
 	public void setGame(Game game) {
@@ -91,27 +94,56 @@ public class ViewController implements Initializable {
 	@FXML
 	void gotomenuscreen(ActionEvent event) throws IOException, InterruptedException {
 		Stage stage;
-		playerName = field.getText();
+
+		if(game == null) {
+			playerName = field.getText();
+		}
 		if(online.isSelected()){
 			System.out.println(field.getText());
 			networkController = new NetworkController(this, field.getText(),IP.getText(),Integer.parseInt(port.getText()));
+			updateOnlinePlayers();
 		}
 		stage = (Stage) menu.getScene().getWindow();
 		//root = FXMLLoader.load(getClass().getResource("../View/MenuWindowView.fxml"));
-		changeView(stage,"../View/MenuWindowView.fxml");
-
+		changeView(stage,"../View/NewMenuWindowView.fxml");
+		updateWinsLosses();
 	}
 
-//	@FXML
-//	void updateOnlinePlayers(){
-//		VBox box = new VBox();
-//		for(String person : onlinePlayers) {
-//			Text t = new Text(person);
-//
-//			box.getChildren().add(t);
-//		}
-//		peopleOnline.
-//	}
+	@FXML
+	void updateWinsLosses() throws IOException{
+		String[] temp = new String[5];
+		try {
+			File file = new File("src/Data/Records");
+			if(file.exists()) {
+				Scanner reader = new Scanner(file);
+				while (reader.hasNextLine()) {
+					String data = reader.nextLine();
+					temp = data.split(",");
+				}
+				reader.close();
+			}
+		} catch(FileNotFoundException e) {
+			System.out.println("an error occured");
+			e.printStackTrace();
+		}
+		tWins.setText(temp[0]);
+		tLosses.setText(temp[1]);
+		tDraws.setText(temp[2]);
+		rWins.setText(temp[3]);
+		rLosses.setText(temp[4]);
+		rDraws.setText(temp[5]);
+	}
+
+	@FXML
+	void updateOnlinePlayers(){
+		HBox box = new HBox();
+		for(String person : onlinePlayers) {
+			Text t = new Text(person);
+
+			box.getChildren().add(t);
+		}
+		peopleOnline.getChildren().add(box);
+	}
 
 	private void changeView(Stage stage, String path) throws IOException {
 		Parent root;
@@ -201,17 +233,34 @@ public class ViewController implements Initializable {
 			rowIndex += 1;
 			System.out.println("Clicked: " + collIndex + ", " + rowIndex);
 		}
-		if (clickedNode instanceof Circle) {
-			Circle clickedNodes = (Circle) clickedNode;
-			clickedNodes.setOpacity(1);
-			//TODO make a variable that declares who has which color
-			char color = 'Z';
-			if (color == 'Z') {
-				clickedNodes.setFill(BLACK);
-				clickedNodes.setStroke(BLACK);
-			} else {
-				clickedNodes.setFill(WHITE);
-				clickedNodes.setStroke(WHITE);
+		if(game instanceof Reversi) {
+			if (clickedNode instanceof Circle) {
+				Circle clickedNodes = (Circle) clickedNode;
+				clickedNodes.setOpacity(1);
+				//TODO make a variable that declares who has which color
+				char color = 'Z';
+				if (color == 'Z') {
+					clickedNodes.setFill(BLACK);
+					clickedNodes.setStroke(BLACK);
+				} else {
+					clickedNodes.setFill(WHITE);
+					clickedNodes.setStroke(WHITE);
+				}
+			}
+		}
+		if(game instanceof TicTacToe) {
+			if(clickedNode instanceof Rectangle) {
+				Image image = null;
+				Rectangle rekt = (Rectangle) clickedNode;
+				char shape = 'X';
+				if(shape == 'X'){
+					image = new Image(getClass().getResourceAsStream("../Img/cross.png"));
+				}else{
+					image = new Image(getClass().getResourceAsStream("../Img/circle.png"));
+				}
+				if (image != null){
+					rekt.setFill(new ImagePattern(image));
+				}
 			}
 		}
 	}
@@ -240,13 +289,10 @@ public class ViewController implements Initializable {
 
 	@FXML
 	void handleButtonR_SP(ActionEvent event) throws IOException{
+		new Reversi(8,8,playerName, this, false);
 		Stage stage;
-		Parent root;
 		stage = (Stage) Sp_R_Button.getScene().getWindow();
-		root = FXMLLoader.load(getClass().getResource("../View/MenuWindowView.fxml"));
-		Scene scene = new Scene(root);
-		stage.setScene(scene);
-		stage.show();
+		changeView(stage,"../View/NewOthelloView.fxml");
 	}
 
 	void alertGameState(String state){

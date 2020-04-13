@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="610.0" prefWidth="751.0" style="-fx-background-color: #383b42;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <center>
+      <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+   </center>
+   <left>
+       <AnchorPane prefHeight="557.0" prefWidth="182.0" style="-fx-background-color: #3a3757; -fx-background-radius: 0 20 20 0;" BorderPane.alignment="CENTER">
+       <Text fill="WHITE" layoutX="7.0" layoutY="36.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Van den Broek" wrappingWidth="121.33670806884766">
+           <font>
+               <Font name="Century" size="22.0" />
+           </font>
+       </Text>
+       <Text fill="WHITE" layoutX="6.0" layoutY="84.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Spelen &amp; Vermaak">
+           <font>
+               <Font name="Century" size="14.0" />
+           </font>
+       </Text>
+       <VBox layoutX="1.0" layoutY="270.0" prefHeight="101.0" prefWidth="166.0" AnchorPane.bottomAnchor="116.39999999999998" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="0.5999999999999943" AnchorPane.topAnchor="270.0">
+           <children>
+               <Text fill="#ededed" strokeType="OUTSIDE" strokeWidth="0.0" text="Tic Tac Toe">
+                   <VBox.margin>
+                       <Insets bottom="10.0" />
+                   </VBox.margin>
+                   <font>
+                       <Font name="Arial" size="14.0" />
+                   </font>
+               </Text>
+               <HBox prefHeight="23.0" prefWidth="166.0">
+                   <children>
+                       <Text fill="#ececec" strokeType="OUTSIDE" strokeWidth="0.0" text="Wins: ">
+                           <HBox.margin>
+                               <Insets right="20.0" />
+                           </HBox.margin>
+                           <font>
+                               <Font name="Arial" size="12.0" />
+                           </font>
+                       </Text>
+                       <Text fx:id="tWins" fill="#ececec" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
+                           <font>
+                               <Font name="Arial" size="12.0" />
+                           </font>
+                       </Text>
+                   </children>
+               </HBox>
+               <HBox prefHeight="23.0" prefWidth="166.0">
+                   <children>
+                       <Text fill="#ececec" strokeType="OUTSIDE" strokeWidth="0.0" text="Losses: ">
+                           <HBox.margin>
+                               <Insets right="20.0" />
+                           </HBox.margin>
+                           <font>
+                               <Font name="Arial" size="12.0" />
+                           </font>
+                       </Text>
+                       <Text fx:id="tLosses" fill="#ececec" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
+                           <font>
+                               <Font name="Arial" size="12.0" />
+                           </font>
+                       </Text>
+                   </children>
+               </HBox>
+               <HBox prefHeight="23.0" prefWidth="166.0">
+                   <children>
+                       <Text fill="#ececec" strokeType="OUTSIDE" strokeWidth="0.0" text="Draws:  ">
+                           <HBox.margin>
+                               <Insets right="20.0" />
+                           </HBox.margin>
+                           <font>
+                               <Font name="Arial" size="12.0" />
+                           </font>
+                       </Text>
+                       <Text fx:id="tDraws" fill="#ececec" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
+                           <font>
+                               <Font name="Arial" size="12.0" />
+                           </font>
+                       </Text>
+                   </children>
+               </HBox>
+           </children>
+           <padding>
+               <Insets left="5.0" />
+           </padding>
+       </VBox>
+       <VBox layoutX="1.0" layoutY="372.0" prefHeight="116.0" prefWidth="166.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="0.5999999999999943" AnchorPane.topAnchor="372.0">
+           <children>
+               <Text fill="#ededed" strokeType="OUTSIDE" strokeWidth="0.0" text="Reversi">
+                   <VBox.margin>
+                       <Insets bottom="10.0" />
+                   </VBox.margin>
+                   <font>
+                       <Font size="14.0" />
+                   </font>
+               </Text>
+               <HBox prefHeight="23.0" prefWidth="166.0">
+                   <children>
+                       <Text fill="#ececec" strokeType="OUTSIDE" strokeWidth="0.0" text="Wins: ">
+                           <HBox.margin>
+                               <Insets right="20.0" />
+                           </HBox.margin>
+                       </Text>
+                       <Text fx:id="rWins" fill="#ececec" strokeType="OUTSIDE" strokeWidth="0.0" text="0" />
+                   </children>
+               </HBox>
+               <HBox prefHeight="23.0" prefWidth="166.0">
+                   <children>
+                       <Text fill="#ececec" strokeType="OUTSIDE" strokeWidth="0.0" text="Losses: ">
+                           <HBox.margin>
+                               <Insets right="20.0" />
+                           </HBox.margin>
+                       </Text>
+                       <Text fx:id="rLosses" fill="#ececec" strokeType="OUTSIDE" strokeWidth="0.0" text="0" />
+                   </children>
+               </HBox>
+               <HBox prefHeight="23.0" prefWidth="166.0">
+                   <children>
+                       <Text fill="#ececec" strokeType="OUTSIDE" strokeWidth="0.0" text="Draws:  ">
+                           <HBox.margin>
+                               <Insets right="20.0" />
+                           </HBox.margin>
+                       </Text>
+                       <Text fx:id="rDraws" fill="#ececec" strokeType="OUTSIDE" strokeWidth="0.0" text="0" />
+                   </children>
+               </HBox>
+           </children>
+           <padding>
+               <Insets left="5.0" />
+           </padding>
+       </VBox>
+       <Button fx:id="menu" layoutX="24.0" layoutY="550.0" mnemonicParsing="false" onAction="#gotomenuscreen" prefHeight="33.0" prefWidth="67.0" text="menu" />
+       </AnchorPane></left>
+</BorderPane>
