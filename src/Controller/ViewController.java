@@ -51,7 +51,7 @@ public class ViewController implements Initializable {
 	@FXML private AnchorPane peopleOnline;
 	@FXML GridPane board;
 	@FXML public TextField field;
-	@FXML private Text textOthello;
+	@FXML private Text numWhiteDisc, numBlackDisc;
 	@FXML private Label loginError;
 	@FXML private Text tWins, tLosses, tDraws, rWins, rLosses, rDraws;
 	@FXML private CheckBox online;
@@ -277,6 +277,7 @@ public class ViewController implements Initializable {
 					image = new Image(getClass().getResourceAsStream("../Img/circle.png"));
 				}
 				if (image != null){
+					rekt.setOpacity(1);
 					rekt.setFill(new ImagePattern(image));
 				}
 			}
@@ -372,16 +373,6 @@ public class ViewController implements Initializable {
 
 		return result;
 	}
-
-	@FXML
-	void givenUp(ActionEvent event) {
-		textOthello.setVisible(true);
-		textOthello.setText("Je hebt opgegeven");
-		Button button = (Button) event.getSource();
-		button.setVisible(false);
-		rematchButton.setVisible(true);
-	}
-
 
 
 	@FXML
