@@ -52,6 +52,7 @@ public class ViewController implements Initializable {
 	@FXML GridPane board;
 	@FXML public TextField field;
 	@FXML private Text textOthello;
+	@FXML private Label loginError;
 	@FXML private Text tWins, tLosses, tDraws, rWins, rLosses, rDraws;
 	@FXML private CheckBox online;
 	@FXML private Label label;
@@ -99,16 +100,32 @@ public class ViewController implements Initializable {
 	void gotomenuscreen(ActionEvent event) throws IOException, InterruptedException {
 		Stage stage;
 		playerName = field.getText();
-		if(online.isSelected()){
-			System.out.println(field.getText());
-			networkController = new NetworkController(this, field.getText(),IP.getText(),Integer.parseInt(port.getText()));
-			networkController.start();
-			//updateOnlinePlayers();
-		}
 		stage = (Stage) menu.getScene().getWindow();
-		//root = FXMLLoader.load(getClass().getResource("../View/MenuWindowView.fxml"));
-		changeView(stage,"../View/NewMenuWindowView.fxml");
-		updateWinsLosses();
+		//https://stackoverflow.com/questions/32866937/how-to-check-if-textfield-is-empty
+		if(playerName.trim().isEmpty()){
+			System.out.println("Dont allow login");
+			loginError.setText("Voer alstublieft een gebruikersnaam in alvorens in te loggen.");
+			loginError.setVisible(true);
+		} else {
+			System.out.println("Allow login for : " + playerName);
+			if(online.isSelected()) {
+				String ip_address = IP.getText();
+				String port_number = port.getText();
+				if(ip_address.trim().isEmpty() || port_number.trim().isEmpty()) {
+					System.out.println("Dont allow login, network error");
+					loginError.setText("Voer alstublieft correcte netwerkgegevens in alvorens in te loggen.");
+					loginError.setVisible(true);
+				} else {
+					networkController = new NetworkController(this, field.getText(), ip_address, Integer.parseInt(port_number));
+					networkController.start();
+					//updateOnlinePlayers();
+				}
+			}
+			loginError.setVisible(false);
+			System.out.println(field.getText());
+			changeView(stage,"../View/NewMenuWindowView.fxml");
+			updateWinsLosses();
+		}
 	}
 
 	@FXML

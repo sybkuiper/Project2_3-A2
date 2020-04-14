@@ -180,6 +180,7 @@ public class NetworkController extends Thread {
     public void run(){
         while(true){
             String newLine = in.nextLine();
+            System.out.println(newLine);
             if(!ignoreList.contains(newLine)) {
                 parse(newLine);
             }

@@ -15,7 +15,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="513.0" prefWidth="726.0" style="-fx-background-color: #383b42;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="513.0" prefWidth="726.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
     <center>
         <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
             <children>
@@ -38,7 +38,7 @@
             </children></AnchorPane>
     </center>
     <left>
-        <AnchorPane prefHeight="400.0" prefWidth="168.0" style="-fx-background-color: #3a3757; -fx-background-radius: 0 20 20 0;" BorderPane.alignment="CENTER">
+        <AnchorPane prefHeight="400.0" prefWidth="168.0" style="-fx-background-color: #00d1db; -fx-background-radius: 0 20 20 0;" BorderPane.alignment="CENTER">
             <children>
                 <Text fill="WHITE" layoutX="7.0" layoutY="36.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Van den Broek" wrappingWidth="121.33670806884766">
                     <font>
