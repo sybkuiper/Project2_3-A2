@@ -103,7 +103,7 @@ public class ViewController implements Initializable {
 			System.out.println(field.getText());
 			networkController = new NetworkController(this, field.getText(),IP.getText(),Integer.parseInt(port.getText()));
 			networkController.start();
-			updateOnlinePlayers();
+			//updateOnlinePlayers();
 		}
 		stage = (Stage) menu.getScene().getWindow();
 		//root = FXMLLoader.load(getClass().getResource("../View/MenuWindowView.fxml"));

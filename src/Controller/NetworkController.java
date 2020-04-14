@@ -101,18 +101,6 @@ public class NetworkController extends Thread {
 
 
     private void parse(String input) {
-        /*
-        if (input.startsWith("SVR GAMELIST ")) {
-            input = input.replace("SVR GAMELIST ", "").replace("[", "").replace("]", "");
-            String[] split = input.split(",");
-            for (String game : split) {
-                availableGames.add(game);
-                subscribe(game);
-            }
-            System.out.println(availableGames);
-            controller.setAvailableGames(availableGames);
-        }*/
-
         if (input.startsWith("SVR PLAYERLIST ")) {
             input = input.replace("SVR PLAYERLIST ", "").replace("[", "").replace("]", "");
             if (input.contains(",")) {
