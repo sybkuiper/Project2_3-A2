@@ -105,6 +105,31 @@
                   <Circle fill="RED" opacity="0.0" radius="26.0" stroke="BLACK" strokeType="INSIDE" GridPane.columnIndex="5" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
                </children>
             </GridPane>
+            <Text fx:id="beurt" layoutX="175.0" layoutY="41.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Jij bent aan de beurt!" visible="false">
+               <font>
+                  <Font size="25.0" />
+               </font>
+            </Text>
+            <Text layoutX="14.0" layoutY="539.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Aantal stenen zwart:">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Text>
+            <Text layoutX="407.0" layoutY="538.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Aantal stenen wit:">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Text>
+            <Text fx:id="numBlackDisc" layoutX="14.0" layoutY="565.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Text>
+            <Text fx:id="numWhiteDisc" layoutX="407.0" layoutY="565.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Text>
          </children></AnchorPane>
     </center>
     <left>
