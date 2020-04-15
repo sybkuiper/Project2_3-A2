@@ -9,6 +9,7 @@ import java.util.Random;
 
 public abstract class Game {
 
+    public String turn = "B";
     protected Map<Integer,String> gameBoard = new HashMap<>(); //game map
     protected Map<String, String> players;
     private int rows;

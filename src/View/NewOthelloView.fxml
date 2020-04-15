@@ -4,138 +4,281 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="610.0" prefWidth="751.0" style="-fx-background-color: #383b42;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="610.0" prefWidth="751.0" style="-fx-background-color: #383b42;" stylesheets="@application.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
     <center>
-        <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+        <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+            <children>
+                <GridPane fx:id="board" gridLinesVisible="true" layoutX="44.0" layoutY="54.0" onMouseClicked="#gridClicked" prefHeight="450.0" prefWidth="495.0">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                    <children>
+                        <Circle fill="WHITE" radius="26.0" stroke="BLACK" strokeType="INSIDE" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER" />
+                        <Circle radius="26.0" stroke="BLACK" strokeType="INSIDE" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER" />
+                        <Circle fill="WHITE" radius="26.0" stroke="BLACK" strokeType="INSIDE" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER" />
+                        <Circle radius="26.0" stroke="BLACK" strokeType="INSIDE" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER" />
+                        <Circle fill="RED" opacity="0.0" radius="26.0" stroke="BLACK" strokeType="INSIDE" GridPane.columnIndex="5" GridPane.halignment="CENTER" GridPane.rowIndex="6" GridPane.valignment="CENTER" />
+                        <Circle fill="RED" opacity="0.0" radius="26.0" stroke="BLACK" strokeType="INSIDE" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="6" GridPane.valignment="CENTER" />
+                        <Circle fill="RED" opacity="0.0" radius="26.0" stroke="BLACK" strokeType="INSIDE" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="6" GridPane.valignment="CENTER" />
+                        <Circle fill="RED" opacity="0.0" radius="26.0" stroke="BLACK" strokeType="INSIDE" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="6" GridPane.valignment="CENTER" />
+                        <Circle fill="RED" opacity="0.0" radius="26.0" stroke="BLACK" strokeType="INSIDE" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="6" GridPane.valignment="CENTER" />
+                        <Circle fill="RED" opacity="0.0" radius="26.0" stroke="BLACK" strokeType="INSIDE" GridPane.halignment="CENTER" GridPane.rowIndex="6" GridPane.valignment="CENTER" />
+                        <Circle fill="RED" opacity="0.0" radius="26.0" stroke="BLACK" strokeType="INSIDE" GridPane.halignment="CENTER" GridPane.rowIndex="7" GridPane.valignment="CENTER" />
+                        <Circle fill="RED" opacity="0.0" radius="26.0" stroke="BLACK" strokeType="INSIDE" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="7" GridPane.valignment="CENTER" />
+                        <Circle fill="RED" opacity="0.0" radius="26.0" stroke="BLACK" strokeType="INSIDE" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="7" GridPane.valignment="CENTER" />
+                        <Circle fill="RED" opacity="0.0" radius="26.0" stroke="BLACK" strokeType="INSIDE" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="7" GridPane.valignment="CENTER" />
+                        <Circle fill="RED" opacity="0.0" radius="26.0" stroke="BLACK" strokeType="INSIDE" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="7" GridPane.valignment="CENTER" />
+                        <Circle fill="RED" opacity="0.0" radius="26.0" stroke="BLACK" strokeType="INSIDE" GridPane.columnIndex="5" GridPane.halignment="CENTER" GridPane.rowIndex="7" GridPane.valignment="CENTER" />
+                        <Circle fill="RED" opacity="0.0" radius="26.0" stroke="BLACK" strokeType="INSIDE" GridPane.columnIndex="6" GridPane.halignment="CENTER" GridPane.rowIndex="7" GridPane.valignment="CENTER" />
+                        <Circle fill="RED" opacity="0.0" radius="26.0" stroke="BLACK" strokeType="INSIDE" GridPane.columnIndex="7" GridPane.halignment="CENTER" GridPane.rowIndex="7" GridPane.valignment="CENTER" />
+                        <Circle fill="RED" opacity="0.0" radius="26.0" stroke="BLACK" strokeType="INSIDE" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+                        <Circle fill="RED" opacity="0.0" radius="26.0" stroke="BLACK" strokeType="INSIDE" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+                        <Circle fill="RED" opacity="0.0" radius="26.0" stroke="BLACK" strokeType="INSIDE" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+                        <Circle fill="RED" opacity="0.0" radius="26.0" stroke="BLACK" strokeType="INSIDE" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+                        <Circle fill="RED" opacity="0.0" radius="26.0" stroke="BLACK" strokeType="INSIDE" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+                        <Circle fill="RED" opacity="0.0" radius="26.0" stroke="BLACK" strokeType="INSIDE" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+                        <Circle fill="RED" opacity="0.0" radius="26.0" stroke="BLACK" strokeType="INSIDE" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+                        <Circle fill="RED" opacity="0.0" radius="26.0" stroke="BLACK" strokeType="INSIDE" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER" />
+                        <Circle fill="RED" opacity="0.0" radius="26.0" stroke="BLACK" strokeType="INSIDE" GridPane.columnIndex="5" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER" />
+                        <Circle fill="RED" opacity="0.0" radius="26.0" stroke="BLACK" strokeType="INSIDE" GridPane.columnIndex="6" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER" />
+                        <Circle fill="RED" opacity="0.0" radius="26.0" stroke="BLACK" strokeType="INSIDE" GridPane.columnIndex="7" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER" />
+                        <Circle fill="RED" opacity="0.0" radius="26.0" stroke="BLACK" strokeType="INSIDE" GridPane.columnIndex="7" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER" />
+                        <Circle fill="RED" opacity="0.0" radius="26.0" stroke="BLACK" strokeType="INSIDE" GridPane.columnIndex="6" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER" />
+                        <Circle fill="RED" opacity="0.0" radius="26.0" stroke="BLACK" strokeType="INSIDE" GridPane.columnIndex="5" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER" />
+                        <Circle fill="RED" opacity="0.0" radius="26.0" stroke="BLACK" strokeType="INSIDE" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER" />
+                        <Circle fill="RED" opacity="0.0" radius="26.0" stroke="BLACK" strokeType="INSIDE" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER" />
+                        <Circle fill="RED" opacity="0.0" radius="26.0" stroke="BLACK" strokeType="INSIDE" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER" />
+                        <Circle fill="RED" opacity="0.0" radius="26.0" stroke="BLACK" strokeType="INSIDE" GridPane.halignment="CENTER" GridPane.rowIndex="5" GridPane.valignment="CENTER" />
+                        <Circle fill="RED" opacity="0.0" radius="26.0" stroke="BLACK" strokeType="INSIDE" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="5" GridPane.valignment="CENTER" />
+                        <Circle fill="RED" opacity="0.0" radius="26.0" stroke="BLACK" strokeType="INSIDE" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="5" GridPane.valignment="CENTER" />
+                        <Circle fill="RED" opacity="0.0" radius="26.0" stroke="BLACK" strokeType="INSIDE" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="5" GridPane.valignment="CENTER" />
+                        <Circle fill="RED" opacity="0.0" radius="26.0" stroke="BLACK" strokeType="INSIDE" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="5" GridPane.valignment="CENTER" />
+                        <Circle fill="RED" opacity="0.0" radius="26.0" stroke="BLACK" strokeType="INSIDE" GridPane.columnIndex="5" GridPane.halignment="CENTER" GridPane.rowIndex="5" GridPane.valignment="CENTER" />
+                        <Circle fill="RED" opacity="0.0" radius="26.0" stroke="BLACK" strokeType="INSIDE" GridPane.columnIndex="6" GridPane.halignment="CENTER" GridPane.rowIndex="5" GridPane.valignment="CENTER" />
+                        <Circle fill="RED" opacity="0.0" radius="26.0" stroke="BLACK" strokeType="INSIDE" GridPane.columnIndex="7" GridPane.halignment="CENTER" GridPane.rowIndex="5" GridPane.valignment="CENTER" />
+                        <Circle fill="RED" opacity="0.0" radius="26.0" stroke="BLACK" strokeType="INSIDE" GridPane.columnIndex="7" GridPane.halignment="CENTER" GridPane.rowIndex="6" GridPane.valignment="CENTER" />
+                        <Circle fill="RED" opacity="0.0" radius="26.0" stroke="BLACK" strokeType="INSIDE" GridPane.columnIndex="6" GridPane.halignment="CENTER" GridPane.rowIndex="6" GridPane.valignment="CENTER" />
+                        <Circle fill="RED" opacity="0.0" radius="26.0" stroke="BLACK" strokeType="INSIDE" GridPane.columnIndex="6" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+                        <Circle fill="RED" opacity="0.0" radius="26.0" stroke="BLACK" strokeType="INSIDE" GridPane.columnIndex="6" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+                        <Circle fill="RED" opacity="0.0" radius="26.0" stroke="BLACK" strokeType="INSIDE" GridPane.columnIndex="7" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+                        <Circle fill="RED" opacity="0.0" radius="26.0" stroke="BLACK" strokeType="INSIDE" GridPane.columnIndex="7" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+                        <Circle fill="RED" opacity="0.0" radius="26.0" stroke="BLACK" strokeType="INSIDE" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+                        <Circle fill="RED" opacity="0.0" radius="26.0" stroke="BLACK" strokeType="INSIDE" GridPane.columnIndex="7" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+                        <Circle fill="RED" opacity="0.0" radius="26.0" stroke="BLACK" strokeType="INSIDE" GridPane.columnIndex="6" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+                        <Circle fill="RED" opacity="0.0" radius="26.0" stroke="BLACK" strokeType="INSIDE" GridPane.columnIndex="5" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+                        <Circle fill="RED" opacity="0.0" radius="26.0" stroke="BLACK" strokeType="INSIDE" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+                        <Circle fill="RED" opacity="0.0" radius="26.0" stroke="BLACK" strokeType="INSIDE" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+                        <Circle fill="RED" opacity="0.0" radius="26.0" stroke="BLACK" strokeType="INSIDE" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+                        <Circle fill="RED" opacity="0.0" radius="26.0" stroke="BLACK" strokeType="INSIDE" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+                        <Circle fill="RED" opacity="0.0" radius="26.0" stroke="BLACK" strokeType="INSIDE" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+                        <Circle fill="RED" opacity="0.0" radius="26.0" stroke="BLACK" strokeType="INSIDE" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER" />
+                        <Circle fill="RED" opacity="0.0" radius="26.0" stroke="BLACK" strokeType="INSIDE" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER" />
+                        <Circle fill="RED" opacity="0.0" radius="26.0" stroke="BLACK" strokeType="INSIDE" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+                        <Circle fill="RED" opacity="0.0" radius="26.0" stroke="BLACK" strokeType="INSIDE" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+                        <Circle fill="RED" opacity="0.0" radius="26.0" stroke="BLACK" strokeType="INSIDE" GridPane.columnIndex="5" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+                        <Circle fill="RED" opacity="0.0" radius="26.0" stroke="BLACK" strokeType="INSIDE" GridPane.columnIndex="5" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
+                    </children>
+                </GridPane>
+                <Text fx:id="beurt" layoutX="175.0" layoutY="41.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Jij bent aan de beurt!" visible="false">
+                    <font>
+                        <Font size="25.0" />
+                    </font>
+                </Text>
+                <Text layoutX="14.0" layoutY="539.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Aantal stenen zwart:">
+                    <font>
+                        <Font size="14.0" />
+                    </font>
+                </Text>
+                <Text layoutX="407.0" layoutY="538.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Aantal stenen wit:">
+                    <font>
+                        <Font size="14.0" />
+                    </font>
+                </Text>
+                <Text fx:id="numBlackDisc" layoutX="14.0" layoutY="565.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
+                    <font>
+                        <Font size="20.0" />
+                    </font>
+                </Text>
+                <Text fx:id="numWhiteDisc" layoutX="407.0" layoutY="565.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
+                    <font>
+                        <Font size="20.0" />
+                    </font>
+                </Text>
+            </children></AnchorPane>
     </center>
     <left>
-        <AnchorPane prefHeight="557.0" prefWidth="182.0" style="-fx-background-color: #3a3757; -fx-background-radius: 0 20 20 0;" BorderPane.alignment="CENTER">
-            <Text fill="WHITE" layoutX="7.0" layoutY="36.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Van den Broek" wrappingWidth="121.33670806884766">
-                <font>
-                    <Font name="Century" size="22.0" />
-                </font>
-            </Text>
-            <Text fill="WHITE" layoutX="6.0" layoutY="84.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Spelen &amp; Vermaak">
-                <font>
-                    <Font name="Century" size="14.0" />
-                </font>
-            </Text>
-            <VBox layoutX="1.0" layoutY="270.0" prefHeight="101.0" prefWidth="166.0" AnchorPane.bottomAnchor="116.39999999999998" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="0.5999999999999943" AnchorPane.topAnchor="270.0">
-                <children>
-                    <Text fill="#ededed" strokeType="OUTSIDE" strokeWidth="0.0" text="Tic Tac Toe">
-                        <VBox.margin>
-                            <Insets bottom="10.0" />
-                        </VBox.margin>
-                        <font>
-                            <Font name="Arial" size="14.0" />
-                        </font>
-                    </Text>
-                    <HBox prefHeight="23.0" prefWidth="166.0">
-                        <children>
-                            <Text fill="#ececec" strokeType="OUTSIDE" strokeWidth="0.0" text="Wins: ">
-                                <HBox.margin>
-                                    <Insets right="20.0" />
-                                </HBox.margin>
-                                <font>
-                                    <Font name="Arial" size="12.0" />
-                                </font>
-                            </Text>
-                            <Text fx:id="tWins" fill="#ececec" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
-                                <font>
-                                    <Font name="Arial" size="12.0" />
-                                </font>
-                            </Text>
-                        </children>
-                    </HBox>
-                    <HBox prefHeight="23.0" prefWidth="166.0">
-                        <children>
-                            <Text fill="#ececec" strokeType="OUTSIDE" strokeWidth="0.0" text="Losses: ">
-                                <HBox.margin>
-                                    <Insets right="20.0" />
-                                </HBox.margin>
-                                <font>
-                                    <Font name="Arial" size="12.0" />
-                                </font>
-                            </Text>
-                            <Text fx:id="tLosses" fill="#ececec" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
-                                <font>
-                                    <Font name="Arial" size="12.0" />
-                                </font>
-                            </Text>
-                        </children>
-                    </HBox>
-                    <HBox prefHeight="23.0" prefWidth="166.0">
-                        <children>
-                            <Text fill="#ececec" strokeType="OUTSIDE" strokeWidth="0.0" text="Draws:  ">
-                                <HBox.margin>
-                                    <Insets right="20.0" />
-                                </HBox.margin>
-                                <font>
-                                    <Font name="Arial" size="12.0" />
-                                </font>
-                            </Text>
-                            <Text fx:id="tDraws" fill="#ececec" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
-                                <font>
-                                    <Font name="Arial" size="12.0" />
-                                </font>
-                            </Text>
-                        </children>
-                    </HBox>
-                </children>
-                <padding>
-                    <Insets left="5.0" />
-                </padding>
-            </VBox>
-            <VBox layoutX="1.0" layoutY="372.0" prefHeight="116.0" prefWidth="166.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="0.5999999999999943" AnchorPane.topAnchor="372.0">
-                <children>
-                    <Text fill="#ededed" strokeType="OUTSIDE" strokeWidth="0.0" text="Reversi">
-                        <VBox.margin>
-                            <Insets bottom="10.0" />
-                        </VBox.margin>
-                        <font>
-                            <Font size="14.0" />
-                        </font>
-                    </Text>
-                    <HBox prefHeight="23.0" prefWidth="166.0">
-                        <children>
-                            <Text fill="#ececec" strokeType="OUTSIDE" strokeWidth="0.0" text="Wins: ">
-                                <HBox.margin>
-                                    <Insets right="20.0" />
-                                </HBox.margin>
-                            </Text>
-                            <Text fx:id="rWins" fill="#ececec" strokeType="OUTSIDE" strokeWidth="0.0" text="0" />
-                        </children>
-                    </HBox>
-                    <HBox prefHeight="23.0" prefWidth="166.0">
-                        <children>
-                            <Text fill="#ececec" strokeType="OUTSIDE" strokeWidth="0.0" text="Losses: ">
-                                <HBox.margin>
-                                    <Insets right="20.0" />
-                                </HBox.margin>
-                            </Text>
-                            <Text fx:id="rLosses" fill="#ececec" strokeType="OUTSIDE" strokeWidth="0.0" text="0" />
-                        </children>
-                    </HBox>
-                    <HBox prefHeight="23.0" prefWidth="166.0">
-                        <children>
-                            <Text fill="#ececec" strokeType="OUTSIDE" strokeWidth="0.0" text="Draws:  ">
-                                <HBox.margin>
-                                    <Insets right="20.0" />
-                                </HBox.margin>
-                            </Text>
-                            <Text fx:id="rDraws" fill="#ececec" strokeType="OUTSIDE" strokeWidth="0.0" text="0" />
-                        </children>
-                    </HBox>
-                </children>
-                <padding>
-                    <Insets left="5.0" />
-                </padding>
-            </VBox>
-            <Button fx:id="menu" layoutX="24.0" layoutY="550.0" mnemonicParsing="false" onAction="#gotomenuscreen" prefHeight="33.0" prefWidth="67.0" text="menu" />
+        <AnchorPane prefHeight="400.0" prefWidth="168.0" style="-fx-background-color: #50E3C2; -fx-background-radius: 0 20 20 0;" BorderPane.alignment="CENTER">
+            <children>
+                <Text fill="WHITE" layoutX="6.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Van den Broek" wrappingWidth="119.7366714477539">
+                    <font>
+                        <Font name="Century" size="27.0" />
+                    </font>
+                </Text>
+                <Text fill="WHITE" layoutX="6.0" layoutY="84.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Spelen &amp; Vermaak">
+                    <font>
+                        <Font name="Century" size="18.0" />
+                    </font>
+                </Text>
+                <VBox layoutX="1.0" layoutY="287.0" prefHeight="102.0" prefWidth="166.0" AnchorPane.bottomAnchor="115.0" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="287.0">
+                    <children>
+                        <Text fill="#aa6fc9" strokeType="OUTSIDE" strokeWidth="0.0" text="Tic Tac Toe">
+                            <VBox.margin>
+                                <Insets bottom="10.0" />
+                            </VBox.margin>
+                            <font>
+                                <Font name="Arial" size="14.0" />
+                            </font>
+                        </Text>
+                        <HBox prefHeight="23.0" prefWidth="166.0">
+                            <children>
+                                <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Wins: ">
+                                    <HBox.margin>
+                                        <Insets right="20.0" />
+                                    </HBox.margin>
+                                    <font>
+                                        <Font name="Arial" size="14.0" />
+                                    </font>
+                                </Text>
+                                <Text fx:id="tWins" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
+                                    <font>
+                                        <Font name="Arial" size="14.0" />
+                                    </font>
+                                </Text>
+                            </children>
+                        </HBox>
+                        <HBox prefHeight="23.0" prefWidth="166.0">
+                            <children>
+                                <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Losses: ">
+                                    <HBox.margin>
+                                        <Insets right="20.0" />
+                                    </HBox.margin>
+                                    <font>
+                                        <Font name="Arial" size="14.0" />
+                                    </font>
+                                </Text>
+                                <Text fx:id="tLosses" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
+                                    <font>
+                                        <Font name="Arial" size="14.0" />
+                                    </font>
+                                </Text>
+                            </children>
+                        </HBox>
+                        <HBox prefHeight="23.0" prefWidth="166.0">
+                            <children>
+                                <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Draws:  ">
+                                    <HBox.margin>
+                                        <Insets right="20.0" />
+                                    </HBox.margin>
+                                    <font>
+                                        <Font name="Arial" size="14.0" />
+                                    </font>
+                                </Text>
+                                <Text fx:id="tDraws" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
+                                    <font>
+                                        <Font name="Arial" size="14.0" />
+                                    </font>
+                                </Text>
+                            </children>
+                        </HBox>
+                    </children>
+                    <padding>
+                        <Insets left="5.0" />
+                    </padding>
+                </VBox>
+                <VBox layoutX="1.0" layoutY="388.0" prefHeight="116.0" prefWidth="166.0" AnchorPane.bottomAnchor="106.0" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="388.0">
+                    <children>
+                        <Text fill="#aa6fc9" strokeType="OUTSIDE" strokeWidth="0.0" text="Reversi">
+                            <VBox.margin>
+                                <Insets bottom="10.0" />
+                            </VBox.margin>
+                            <font>
+                                <Font size="14.0" />
+                            </font>
+                        </Text>
+                        <HBox prefHeight="23.0" prefWidth="166.0">
+                            <children>
+                                <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Wins: ">
+                                    <HBox.margin>
+                                        <Insets right="20.0" />
+                                    </HBox.margin>
+                                    <font>
+                                        <Font size="14.0" />
+                                    </font>
+                                </Text>
+                                <Text fx:id="rWins" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
+                                    <font>
+                                        <Font size="14.0" />
+                                    </font></Text>
+                            </children>
+                        </HBox>
+                        <HBox prefHeight="23.0" prefWidth="166.0">
+                            <children>
+                                <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Losses: ">
+                                    <HBox.margin>
+                                        <Insets right="20.0" />
+                                    </HBox.margin>
+                                    <font>
+                                        <Font size="14.0" />
+                                    </font>
+                                </Text>
+                                <Text fx:id="rLosses" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
+                                    <font>
+                                        <Font size="14.0" />
+                                    </font></Text>
+                            </children>
+                        </HBox>
+                        <HBox prefHeight="23.0" prefWidth="166.0">
+                            <children>
+                                <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Draws:  ">
+                                    <HBox.margin>
+                                        <Insets right="20.0" />
+                                    </HBox.margin>
+                                    <font>
+                                        <Font size="14.0" />
+                                    </font>
+                                </Text>
+                                <Text fx:id="rDraws" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="0">
+                                    <font>
+                                        <Font size="14.0" />
+                                    </font></Text>
+                            </children>
+                        </HBox>
+                    </children>
+                    <padding>
+                        <Insets left="5.0" />
+                    </padding>
+                </VBox>
+                <Button fx:id="menu" layoutX="14.0" layoutY="562.0" mnemonicParsing="false" onAction="#gotomenuscreen" prefHeight="35.0" prefWidth="64.0" style="-fx-background-color: #aa6fc9;" text="Menu" textFill="WHITE">
+                    <font>
+                        <Font size="15.0" />
+                    </font>
+                </Button>
+            </children>
         </AnchorPane></left>
 </BorderPane>

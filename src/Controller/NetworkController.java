@@ -147,7 +147,7 @@ public class NetworkController extends Thread {
 
         if(input.startsWith("SVR GAME MOVE ")){
             input = input.replace("SVR GAME MOVE ", "");
-            controller.hideLegalMoves();
+            //controller.hideLegalMoves();
             if(controller.getGame() instanceof TicTacToe) {
                 controller.getGame().updateGameBoard(Integer.parseInt(createMap(input).get("MOVE").replace("\"", "")), createMap(input).get("PLAYER").replace("\"", ""));
             } else {

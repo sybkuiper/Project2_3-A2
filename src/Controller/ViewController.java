@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Scanner;
@@ -51,7 +52,7 @@ public class ViewController implements Initializable {
 	@FXML private AnchorPane peopleOnline;
 	@FXML GridPane board;
 	@FXML public TextField field;
-	@FXML private Text textOthello;
+	@FXML private Text numWhiteDisc, numBlackDisc;
 	@FXML private Label loginError;
 	@FXML private Text tWins, tLosses, tDraws, rWins, rLosses, rDraws;
 	@FXML private CheckBox online;
@@ -128,41 +129,41 @@ public class ViewController implements Initializable {
 		}
 	}
 
-	@FXML
-	void updateWinsLosses() throws IOException{
-		String[] temp = new String[5];
-		try {
-			File file = new File("src/Data/Records");
-			if(file.exists()) {
-				Scanner reader = new Scanner(file);
-				while (reader.hasNextLine()) {
-					String data = reader.nextLine();
-					temp = data.split(",");
-				}
-				reader.close();
-			}
-		} catch(FileNotFoundException e) {
-			System.out.println("an error occured");
-			e.printStackTrace();
-		}
-		tWins.setText(temp[0]);
-		tLosses.setText(temp[1]);
-		tDraws.setText(temp[2]);
-		rWins.setText(temp[3]);
-		rLosses.setText(temp[4]);
-		rDraws.setText(temp[5]);
-	}
+    @FXML
+    void updateWinsLosses() throws IOException{
+        String[] temp = new String[5];
+        try {
+            File file = new File("src/Data/Records");
+            if(file.exists()) {
+                Scanner reader = new Scanner(file);
+                while (reader.hasNextLine()) {
+                    String data = reader.nextLine();
+                    temp = data.split(",");
+                }
+                reader.close();
+            }
+        } catch(FileNotFoundException e) {
+            System.out.println("an error occured");
+            e.printStackTrace();
+        }
+        tWins.setText(temp[0]);
+        tLosses.setText(temp[1]);
+        tDraws.setText(temp[2]);
+        rWins.setText(temp[3]);
+        rLosses.setText(temp[4]);
+        rDraws.setText(temp[5]);
+    }
 
-	@FXML
-	void updateOnlinePlayers(){
-		HBox box = new HBox();
-		for(String person : onlinePlayers) {
-			Text t = new Text(person);
+    @FXML
+    void updateOnlinePlayers(){
+        HBox box = new HBox();
+        for(String person : onlinePlayers) {
+            Text t = new Text(person);
 
-			box.getChildren().add(t);
-		}
-		peopleOnline.getChildren().add(box);
-	}
+            box.getChildren().add(t);
+        }
+        peopleOnline.getChildren().add(box);
+    }
 
 	private void changeView(Stage stage, String path) throws IOException {
 		Parent root;
@@ -177,51 +178,6 @@ public class ViewController implements Initializable {
 
 	public void setOnlinePlayers(List<String> onlinePlayers) {
 		this.onlinePlayers = onlinePlayers;
-	}
-
-	@FXML
-	void showPlayer(ActionEvent event) throws IOException {
-		Image image;
-		char player = 'O';
-		//TODO make sure we can check who plays with which symbol
-		if(player == 'X') {
-			image = new Image(getClass().getResourceAsStream("../Img/cross.png"));
-		}else{
-			image = new Image(getClass().getResourceAsStream("../Img/circle.png"));
-		}
-		Button button = (Button) event.getSource();
-		button.setDisable(true);
-		button.setOpacity(1.0);
-		if(image != null) {
-			ImageView imageTemp = new ImageView(image);
-			imageTemp.setFitHeight(80);
-			imageTemp.setFitWidth(80);
-			button.setGraphic(imageTemp);
-		}
-		Integer test = Integer.parseInt(button.getText());
-		System.out.println(playerName);
-		System.out.println(game);
-		game.makeMove(test);
-	}
-
-	@FXML
-	public void showPlayer(Integer move){
-		Image image = null;
-		char player = 'X';
-		//TODO make sure we can check who plays with which symbol
-		if(player == 'X') {
-			image = new Image(getClass().getResourceAsStream("../Img/cross.png"));
-		}else{
-			image = new Image(getClass().getResourceAsStream("../Img/circle.png"));
-		}
-		test.setDisable(true);
-		test.setOpacity(1.0);
-		if(image != null) {
-			ImageView imageTemp = new ImageView(image);
-			imageTemp.setFitHeight(80);
-			imageTemp.setFitWidth(80);
-			test.setGraphic(imageTemp);
-		}
 	}
 
 	@FXML
@@ -277,6 +233,7 @@ public class ViewController implements Initializable {
 					image = new Image(getClass().getResourceAsStream("../Img/circle.png"));
 				}
 				if (image != null){
+				    rekt.setOpacity(1);
 					rekt.setFill(new ImagePattern(image));
 				}
 			}
@@ -337,21 +294,98 @@ public class ViewController implements Initializable {
 				((Circle) tile).setFill(WHITE);
 				((Circle) tile).setStroke(WHITE);
 			} else if(color.equals("legalMove")){
-				((Circle) tile).setFill(GREEN);
-				((Circle) tile).setStroke(GREEN);
+				((Circle) tile).setFill(Color.web("#aa6fc9"));
+				((Circle) tile).setStroke(Color.web("#aa6fc9"));
 			}
 		}
 	}
 
-	public void hideLegalMoves(){
+	/**
+	 * Performs an action on one or more tiles
+	 * @param action specifies the action that needs to be performed, which is evaluated by an if statement.
+	 */
+	public void performActionOnTile(String action){
 		for(Node node : board.getChildren()){
-			if(node instanceof Circle){
-				if(((Circle) node).getFill().equals(GREEN)){
-					node.setOpacity(0);
-					((Circle) node).setFill(WHITE);
+			if(game instanceof TicTacToe){
+
+			}
+			if(game instanceof Reversi) {
+				if (node instanceof Circle) {
+					if (action.equals("disableAllTiles")){
+						//when playing AI vs AI, or when a player is not allowed to move
+						node.setDisable(true);
+					} else if (action.equals("hideLegalMoves")) {
+						if (((Circle) node).getFill().equals(GREEN)) {
+							node.setOpacity(0);
+							((Circle) node).setFill(RED); //reset to default
+						}
+					}
 				}
 			}
 		}
+	}
+	/**
+	 * Performs an action on one or more tiles
+	 * @param action specifies the action that needs to be performed, which is evaluated by an if statement.
+	 * @param color specifies the color the action needs to be performed on.
+	 */
+	public void performActionOnTile(String action, Color color){
+		int colorCount = 0;
+		LinkedHashSet<Integer> legalMoves = null;
+		if(action.equals("disableIllegalMoves")) {
+			if (color.equals(WHITE)) {
+				if(game.turn != "W"){
+					performActionOnTile("disableAllTiles");
+				}
+				legalMoves = game.getLegalMoves(game.getGameBoard(), "W");
+			} else if (color.equals(BLACK)) {
+				if(game.turn != "B"){
+					performActionOnTile("disableAllTiles");
+				}
+				legalMoves = game.getLegalMoves(game.getGameBoard(), "B");
+			}
+		}
+		for(Node node : board.getChildren()){
+			if(game instanceof TicTacToe){
+
+			}
+			if(game instanceof Reversi) {
+				if (node instanceof Circle) {
+					if(action.equals("disableIllegalMoves")){
+						//Todo: disable tiles that are not legal, disable all tiles if turn is not for player, this is only really relevant for SinglePlayer.
+						if(legalMoves != null && !legalMoves.contains(translateTileToInt(node))){
+							node.setDisable(true);
+						} else {
+							node.setDisable(false);
+							updateGrid(translateTileToInt(node), "legalMove");
+						}
+					} else if (action.equals("updateTileAmounts")){
+						if(((Circle) node).getFill().equals(color)){
+							colorCount++;
+						}
+					}
+				}
+			}
+		}
+		if (action.equals("updateTileAmounts")){
+			if(color.equals(BLACK)){
+				numBlackDisc.setText(String.valueOf(colorCount));
+			} else if(color.equals(WHITE)){
+				numWhiteDisc.setText(String.valueOf(colorCount));
+			}
+		}
+	}
+
+	public Integer translateTileToInt(Node node){
+		Integer rowIndex = GridPane.getRowIndex(node);
+		Integer columnIndex = GridPane.getColumnIndex(node);
+		if(columnIndex == null){
+			columnIndex = 0;
+		}
+		if(rowIndex == null){
+			rowIndex = 0;
+		}
+		return(rowIndex*8 + columnIndex);
 	}
 
 	public Node getTile (final int row, final int column) {
@@ -374,17 +408,6 @@ public class ViewController implements Initializable {
 	}
 
 	@FXML
-	void givenUp(ActionEvent event) {
-		textOthello.setVisible(true);
-		textOthello.setText("Je hebt opgegeven");
-		Button button = (Button) event.getSource();
-		button.setVisible(false);
-		rematchButton.setVisible(true);
-	}
-
-
-
-	@FXML
 	void handleButtonR_AI(ActionEvent event) throws IOException{
 		Stage stage = (Stage) AI_R_Button.getScene().getWindow();
 		changeView(stage,"../View/NewOthelloView.fxml");
@@ -401,6 +424,9 @@ public class ViewController implements Initializable {
 		Stage stage = (Stage) Sp_R_Button.getScene().getWindow();
 		changeView(stage,"../View/NewOthelloView.fxml");
 		game.printGameState();
+		performActionOnTile("disableIllegalMoves",BLACK);
+		performActionOnTile("updateTileAmounts",BLACK);
+		performActionOnTile("updateTileAmounts",WHITE);
 	}
 
 	void alertGameState(String state){
