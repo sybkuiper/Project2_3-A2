@@ -130,6 +130,11 @@
                         <Font size="20.0" />
                     </font>
                 </Text>
+            <Text fx:id="duration" layoutX="509.0" layoutY="33.0" strokeType="OUTSIDE" strokeWidth="0.0" text="00:00">
+               <font>
+                  <Font size="25.0" />
+               </font>
+            </Text>
             </children></AnchorPane>
     </center>
     <left>
