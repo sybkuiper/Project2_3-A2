@@ -8,6 +8,9 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.*;
 
+import static javafx.scene.paint.Color.BLACK;
+import static javafx.scene.paint.Color.WHITE;
+
 
 /**
  * The network controller for the game client handles all incoming and outbound traffic related to the application.
@@ -138,29 +141,44 @@ public class NetworkController extends Thread {
             System.out.println("GameType " +map.get("GAMETYPE").replace("\"", ""));
             System.out.println("PlayerOne " + map.get("PLAYERTOMOVE").replace("\"", ""));
             System.out.println("Opponent " +map.get("OPPONENT").replace("\"", ""));
-            controller.initializeGame(map.get("GAMETYPE").replace("\"", ""), map.get("PLAYERTOMOVE").replace("\"", ""),map.get("OPPONENT").replace("\"", ""));
-            for(int move : controller.getGame().getLegalMoves(controller.getGame().getGameBoard(), map.get("PLAYERTOMOVE").replace("\"", ""))){
-                controller.updateGrid(move, "legalMove");
-            }
+            controller.initializeGame(map.get("GAMETYPE").replace("\"", ""),
+                                        map.get("PLAYERTOMOVE").replace("\"", ""),
+                                            map.get("OPPONENT").replace("\"", ""));
+            controller.setBeurt(map.get("PLAYERTOMOVE").replace("\"", "") + " is aan de beurt");
+            controller.performActionOnTile("disableAllTiles");
         }
         //Todo: Start game interface
 
         if(input.startsWith("SVR GAME MOVE ")){
             input = input.replace("SVR GAME MOVE ", "");
-            //controller.hideLegalMoves();
+            Map<String, String> map = createMap(input);
             if(controller.getGame() instanceof TicTacToe) {
-                controller.getGame().updateGameBoard(Integer.parseInt(createMap(input).get("MOVE").replace("\"", "")), createMap(input).get("PLAYER").replace("\"", ""));
+                controller.getGame().updateGameBoard(Integer.parseInt(map.get("MOVE").replace("\"", "")),
+                                                        map.get("PLAYER").replace("\"", ""));
             } else {
-//                System.out.println(controller.getGame());
-                //controller.getGame().updateBoard(controller.getGame().getGameBoard(),Integer.parseInt(createMap(input).get("MOVE").replace("\"", "")) ,"B");
-                controller.getGame().updateGameBoard(Integer.parseInt(createMap(input).get("MOVE").replace("\"", "")) ,createMap(input).get("PLAYER").replace("\"", ""));
+                controller.performActionOnTile("hideLegalMoves");
+                controller.getGame().updateGameBoard(Integer.parseInt(map.get("MOVE").replace("\"", "")) ,
+                                                        map.get("PLAYER").replace("\"", ""));
+
+                if(controller.getGame().getPlayersTurn().equals(controller.getGame().getPlayerOne())){
+                    controller.performActionOnTile("disableIllegalMoves",BLACK);
+                } else {
+                    controller.performActionOnTile("disableIllegalMoves",WHITE);
+                }
+                controller.setBeurt(controller.getGame().getPlayersTurn() + " is aan de beurt");
             }
             }
 
         if (input.startsWith("SVR GAME YOURTURN ")) {
+            controller.performActionOnTile("hideLegalMoves");
+            if(controller.getGame().getPlayersTurn().equals(controller.getGame().getPlayerOne())){
+                controller.performActionOnTile("disableIllegalMoves",BLACK);
+            } else {
+                controller.performActionOnTile("disableIllegalMoves",BLACK);
+            }
             System.out.println(controller.getGame());
-
             move(Integer.toString(controller.getGame().think(controller.getGame().getGameBoard())));
+            controller.performActionOnTile("hideLegalMoves");
         }
 
         if(input.startsWith("SVR GAME ")){

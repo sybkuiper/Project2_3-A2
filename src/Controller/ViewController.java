@@ -52,6 +52,7 @@ public class ViewController implements Initializable {
 	@FXML private AnchorPane peopleOnline;
 	@FXML GridPane board;
 	@FXML public TextField field;
+	@FXML public Text beurt;
 	@FXML private Text numWhiteDisc, numBlackDisc;
 	@FXML private Label loginError;
 	@FXML private Text tWins, tLosses, tDraws, rWins, rLosses, rDraws;
@@ -65,7 +66,6 @@ public class ViewController implements Initializable {
 	private List<String> onlinePlayers;
 	public String playerName;
 	private Game game;
-	int playersTurn = 1;
 
 	@FXML
 	void handleButtonTTT_SP(ActionEvent event) throws IOException {
@@ -95,6 +95,10 @@ public class ViewController implements Initializable {
 
 	public CheckBox getOnline() {
 		return online;
+	}
+
+	public void setBeurt(String beurt) {
+		this.beurt.setText(beurt);
 	}
 
 	@FXML
@@ -212,14 +216,15 @@ public class ViewController implements Initializable {
 				Circle clickedNodes = (Circle) clickedNode;
 				clickedNodes.setOpacity(1);
 				//TODO make a variable that declares who has which color
-				char color = 'Z';
-				if (color == 'Z') {
-					clickedNodes.setFill(BLACK);
-					clickedNodes.setStroke(BLACK);
-				} else {
-					clickedNodes.setFill(WHITE);
-					clickedNodes.setStroke(WHITE);
-				}
+//				char color = 'Z';
+//				if (color == 'Z') {
+//					clickedNodes.setFill(BLACK);
+//					clickedNodes.setStroke(BLACK);
+//				} else {
+//					clickedNodes.setFill(WHITE);
+//					clickedNodes.setStroke(WHITE);
+//				}
+				game.makeMove(translateTileToInt(clickedNode));
 			}
 		}
 		if(game instanceof TicTacToe) {
@@ -237,46 +242,6 @@ public class ViewController implements Initializable {
 					rekt.setFill(new ImagePattern(image));
 				}
 			}
-		//Todo: Onderstaande miniversie 1vAI integreren in Reversi class
-//		if (clickedNode instanceof Circle) {
-//			Circle clickedNodes = (Circle) clickedNode;
-//			clickedNodes.setOpacity(1);
-//			//TODO make a variable that declares who has which color
-//			if (playersTurn	== 1) {
-//				hideLegalMoves();
-//				clickedNodes.setFill(BLACK);
-//				clickedNodes.setStroke(BLACK);
-//				Integer rowIndex = GridPane.getRowIndex(clickedNode);
-//				Integer columnIndex = GridPane.getColumnIndex(clickedNode);
-//				if(columnIndex == null){
-//					columnIndex = 0;
-//				}
-//				if(rowIndex == null){
-//					rowIndex = 0;
-//				}
-//				game.updateGameBoard((rowIndex*8 + columnIndex),"AI");
-//				playersTurn = 2;
-//				for(int move : game.getLegalMoves(game.getGameBoard(), "W")){
-//					updateGrid(move, "legalMove");
-//				}
-//			} else {
-//				hideLegalMoves();
-//				clickedNodes.setFill(WHITE);
-//				clickedNodes.setStroke(WHITE);
-//				Integer rowIndex = GridPane.getRowIndex(clickedNode);
-//				Integer columnIndex = GridPane.getColumnIndex(clickedNode);
-//				if(columnIndex == null){
-//					columnIndex = 0;
-//				}
-//				if(rowIndex == null){
-//					rowIndex = 0;
-//				}
-//				game.updateGameBoard((rowIndex*8 + columnIndex),"test");
-//				playersTurn = 1;
-//				for(int move : game.getLegalMoves(game.getGameBoard(), "B")){
-//					updateGrid(move, "legalMove");
-//				}
-//			}
 		}
 	}
 
@@ -292,10 +257,10 @@ public class ViewController implements Initializable {
 				((Circle) tile).setStroke(BLACK);
 			} else if(color.equals("W")) {
 				((Circle) tile).setFill(WHITE);
-				((Circle) tile).setStroke(WHITE);
+				((Circle) tile).setStroke(BLACK);
 			} else if(color.equals("legalMove")){
 				((Circle) tile).setFill(Color.web("#aa6fc9"));
-				((Circle) tile).setStroke(Color.web("#aa6fc9"));
+				((Circle) tile).setStroke(BLACK);
 			}
 		}
 	}
@@ -315,7 +280,7 @@ public class ViewController implements Initializable {
 						//when playing AI vs AI, or when a player is not allowed to move
 						node.setDisable(true);
 					} else if (action.equals("hideLegalMoves")) {
-						if (((Circle) node).getFill().equals(GREEN)) {
+						if (((Circle) node).getFill().equals(Color.web("#aa6fc9"))) {
 							node.setOpacity(0);
 							((Circle) node).setFill(RED); //reset to default
 						}
@@ -334,14 +299,8 @@ public class ViewController implements Initializable {
 		LinkedHashSet<Integer> legalMoves = null;
 		if(action.equals("disableIllegalMoves")) {
 			if (color.equals(WHITE)) {
-				if(game.turn != "W"){
-					performActionOnTile("disableAllTiles");
-				}
 				legalMoves = game.getLegalMoves(game.getGameBoard(), "W");
 			} else if (color.equals(BLACK)) {
-				if(game.turn != "B"){
-					performActionOnTile("disableAllTiles");
-				}
 				legalMoves = game.getLegalMoves(game.getGameBoard(), "B");
 			}
 		}
@@ -420,13 +379,10 @@ public class ViewController implements Initializable {
 
 	@FXML
 	void handleButtonR_SP(ActionEvent event) throws IOException{
-		new Reversi(8,8,playerName, this, false);
 		Stage stage = (Stage) Sp_R_Button.getScene().getWindow();
 		changeView(stage,"../View/NewOthelloView.fxml");
+		new Reversi(8,8,playerName, this, false);
 		game.printGameState();
-		performActionOnTile("disableIllegalMoves",BLACK);
-		performActionOnTile("updateTileAmounts",BLACK);
-		performActionOnTile("updateTileAmounts",WHITE);
 	}
 
 	void alertGameState(String state){

@@ -4,11 +4,14 @@ import Controller.ViewController;
 
 import java.util.*;
 
+import static javafx.scene.paint.Color.BLACK;
+import static javafx.scene.paint.Color.WHITE;
+
 //https://www.baeldung.com/java-copy-hashmap
 
 public class Reversi extends Game {
 
-    ArrayList<String> debugmoves = new ArrayList<>();
+
     int[] boardWeight = {64, -8, 8, 8, 8, 8, -8, 64,
                          -8, -8, 0, 0, 0, 0, -8, -8,
                           8, 0, 4, 0, 0, 4, 0, 8,
@@ -37,13 +40,13 @@ public class Reversi extends Game {
         Integer bestMove = 0;
         int bestScore = -1000;
         Map<Integer,String> cloneBoard = new HashMap<>(gameBoard);
-        if(getController().playerName.equals(playerOne)) {
+        if(playersTurn.equals(playerOne)) {
             for (Integer key : getLegalMoves(cloneBoard, "B")) {
                 //try all empty spots and make them X and do minimax on the gamboard
                 if (getGameBoard().get(key).equals("E")) {
                     updateBoard(cloneBoard, key, "B"); // replace "B" by playersTurn
                     int score = minimax(cloneBoard, 0, false);
-                    gameBoard.replace(key, "E");
+                    cloneBoard.replace(key, "E");
                     if (score > bestScore) {
                         bestScore = score;
                         bestMove = key;
@@ -57,7 +60,7 @@ public class Reversi extends Game {
                 if (getGameBoard().get(key).equals("E")) {
                     updateBoard(cloneBoard, key, "W"); // replace "B" by playersTurn
                     int score = minimax(cloneBoard, 0, false);
-                    gameBoard.replace(key, "E");
+                    cloneBoard.replace(key, "E");
                     if (score > bestScore) {
                         bestScore = score;
                         bestMove = key;
@@ -70,24 +73,19 @@ public class Reversi extends Game {
 
     public void updateGameBoard(Integer move, String player){
         int key = move;
-        if(!online) {
-            if (player.equals("AI")) {//playerOne)) {
-                updateBoard(key, "B");
-                //getController().showPlayer(key);
-            } else {
-                updateBoard(key, "W");
-            }
+        getController().performActionOnTile("hideLegalMoves");
+        System.out.println("Kom ik wel hier");
+        if (player.equals(playerOne)) {//playerOne)) {
+            updateBoard(key, "B");
         } else {
-            if (player.equals(playerOne)) {//playerOne)) {
-                updateBoard(key, "B");
-            //    getController().showPlayer(key);
-            } else {
-                updateBoard(key, "W");
-            }
+            updateBoard(key, "W");
         }
         System.out.println(player + " has placed move: " + move);
         debugmoves.add(player + " : " +move);
         System.out.println(debugmoves);
+        getController().setBeurt(getPlayersTurn() + " is aan de beurt");
+        getController().performActionOnTile("updateTileAmounts",BLACK);
+        getController().performActionOnTile("updateTileAmounts",WHITE);
         printGameState();
     }
 
@@ -360,6 +358,7 @@ public class Reversi extends Game {
         //TODO: make move madeMove
 
         gameBoard.replace(madeMove, color);
+        //getController().updateGrid(madeMove,color);
 
         if(color.equals("B")){ enemy = "W";
         }else{enemy = "B";}
@@ -426,6 +425,7 @@ public class Reversi extends Game {
 
         for(Integer key : needToBeFlippedTotal){
             gameBoard.replace(key, color);
+            //getController().updateGrid(madeMove,color);
         }
 
         //TODO: flip all in needToBeFlippedTotal
@@ -511,7 +511,7 @@ public class Reversi extends Game {
         }
 
         //TODO: flip all in needToBeFlippedTotal
-        System.out.println(needToBeFlippedTotal);
+        System.out.println("Dit moet geflipped worden: " + needToBeFlippedTotal);
     }
 
 }

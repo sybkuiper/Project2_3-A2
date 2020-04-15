@@ -5,6 +5,9 @@ import Controller.ViewController;
 import java.util.LinkedHashSet;
 import java.util.Map;
 
+import static javafx.scene.paint.Color.BLACK;
+import static javafx.scene.paint.Color.WHITE;
+
 
 public class TicTacToe extends Game {
 
@@ -54,17 +57,11 @@ public class TicTacToe extends Game {
 
     public void updateGameBoard(Integer move, String player){
         int key = move;
-        if(!online) {
-            if (player.equals("AI")) {//playerOne)) {
-                gameBoard.replace(key, "X");
-                getController().showPlayer(key);
-            } else {
-                gameBoard.replace(key, "O");
-            }
-        } else {
-                gameBoard.replace(key,players.get(player));
-        }
+        gameBoard.replace(key,players.get(player));
         System.out.println(player + " has placed move: " + move);
+        getController().setBeurt(getPlayersTurn() + "is aan de beurt");
+        getController().performActionOnTile("updateTileAmounts",BLACK);
+        getController().performActionOnTile("updateTileAmounts",WHITE);
         printGameState();
     }
 
