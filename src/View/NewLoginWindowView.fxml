@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<BorderPane id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="470.0" prefWidth="682.0" style="-fx-background-color: #ffffff;" stylesheets="@application.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+    <center>
+        <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+            <children>
+                <FlowPane layoutX="117.0" layoutY="165.0" orientation="VERTICAL" prefHeight="176.0" prefWidth="299.0" AnchorPane.bottomAnchor="104.0" AnchorPane.leftAnchor="117.0" AnchorPane.rightAnchor="116.0" AnchorPane.topAnchor="165.0">
+                    <children>
+                        <TextField fx:id="field" prefHeight="36.0" prefWidth="201.0" promptText="Naam" style="-fx-background-radius: 20 20 20 20;">
+                            <FlowPane.margin>
+                                <Insets bottom="10.0" />
+                            </FlowPane.margin>
+                        </TextField>
+                        <HBox prefHeight="38.0" prefWidth="290.0">
+                            <children>
+                                <CheckBox fx:id="online" mnemonicParsing="false" onAction="#onlinePlay" prefHeight="36.0" prefWidth="209.0" text="Online(normaal offline)" />
+                                <Button fx:id="menu" mnemonicParsing="false" onAction="#gotomenuscreen" prefHeight="34.0" prefWidth="74.0" style="-fx-background-color: #aa6fc9;" text="Login" textFill="WHITE">
+                                    <font>
+                                        <Font name="SansSerif Regular" size="17.0" />
+                                    </font></Button>
+                            </children>
+                            <FlowPane.margin>
+                                <Insets bottom="5.0" />
+                            </FlowPane.margin>
+                        </HBox>
+                        <TextField fx:id="IP" prefHeight="31.0" prefWidth="290.0" promptText="IP" style="-fx-background-radius: 20 20 20 20;" visible="false">
+                            <FlowPane.margin>
+                                <Insets bottom="10.0" />
+                            </FlowPane.margin></TextField>
+                        <TextField fx:id="port" prefHeight="34.0" prefWidth="290.0" promptText="Port" style="-fx-background-radius: 20 20 20 20;" visible="false" />
+                        <Label fx:id="loginError" text="" textFill="#ff2626" visible="false">
+                            <FlowPane.margin>
+                                <Insets bottom="10.0" />
+                            </FlowPane.margin></Label>
+                    </children>
+                </FlowPane>
+            </children>
+        </AnchorPane>
+    </center>
+    <left>
+        <AnchorPane prefHeight="400.0" prefWidth="150.0" style="-fx-background-color: #50E3C2; -fx-background-radius: 0 20 20 0;" BorderPane.alignment="CENTER">
+            <children>
+                <Text fill="WHITE" layoutX="10.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Van den Broek" wrappingWidth="121.33670806884766">
+                    <font>
+                        <Font name="Century" size="22.0" />
+                    </font>
+                </Text>
+                <Text fill="WHITE" layoutX="10.0" layoutY="73.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Spelen &amp; Vermaak">
+                    <font>
+                        <Font name="Century" size="14.0" />
+                    </font>
+                </Text>
+            </children></AnchorPane>
+    </left>
+</BorderPane>
