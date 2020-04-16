@@ -31,10 +31,13 @@ public class TicTacToe extends Game {
         for (Map.Entry<Integer, String> entry : gameBoard.entrySet()) {
             Integer key = entry.getKey();
             Object value = entry.getValue();
-
             //try all empty spots and make them X and do minimax on the gamboard
             if(value.equals("E")){
-                gameBoard.replace(key, "X");
+                if(playersTurn.equals(playerOne)) {
+                    gameBoard.replace(key, "X");
+                } else {
+                    gameBoard.replace(key, "O");
+                }
                 int score = minimax(gameBoard, 0, false);
                 gameBoard.replace(key,"E");
                 if(score>bestScore) {
@@ -77,9 +80,15 @@ public class TicTacToe extends Game {
         String result = checkWinner(gameBoard);
         if(result != null){
             int score = 0;
-            if(result.equals("TIE")){score = 0;}
-            if(result.equals("O")){score = -1;}
-            if(result.equals("X")){score = 1;}
+            if(playersTurn.equals(playerOne)) {
+                if(result.equals("TIE")){score = 0;}
+                if(result.equals("O")){score = -1;}
+                if(result.equals("X")){score = 1;}
+            } else {
+                if(result.equals("TIE")){score = 0;}
+                if(result.equals("O")){score = 1;}
+                if(result.equals("X")){score = -1;}
+            }
             return score;
         }
 
@@ -91,7 +100,11 @@ public class TicTacToe extends Game {
                 Integer key = entry.getKey();
                 Object value = entry.getValue();
                 if(value.equals("E")){
-                    gameBoard.replace(key, "X");
+                    if(playersTurn.equals(playerOne)) {
+                        gameBoard.replace(key, "X");
+                    } else {
+                        gameBoard.replace(key,"O");
+                    }
                     int score = minimax(gameBoard,steps + 1, false);
                     gameBoard.replace(key,"E");
                     if(score>bestScore) {
@@ -107,7 +120,11 @@ public class TicTacToe extends Game {
                 Integer key = entry.getKey();
                 Object value = entry.getValue();
                 if(value.equals("E")){
-                    gameBoard.replace(key, "O");
+                    if(playersTurn.equals(playerOne)) {
+                        gameBoard.replace(key, "O");
+                    } else {
+                        gameBoard.replace(key,"X");
+                    }
                     int score = minimax(gameBoard,steps + 1, true);
                     gameBoard.replace(key,"E");
                     if(score<bestScore) {
