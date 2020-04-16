@@ -16,7 +16,7 @@
     <center>
         <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
             <children>
-                <FlowPane layoutX="117.0" layoutY="165.0" orientation="VERTICAL" prefHeight="176.0" prefWidth="299.0" AnchorPane.bottomAnchor="104.0" AnchorPane.leftAnchor="117.0" AnchorPane.rightAnchor="116.0" AnchorPane.topAnchor="165.0">
+                <FlowPane alignment="CENTER" columnHalignment="CENTER" layoutX="117.0" layoutY="165.0" orientation="VERTICAL" prefHeight="176.0" prefWidth="299.0" AnchorPane.bottomAnchor="104.0" AnchorPane.leftAnchor="117.0" AnchorPane.rightAnchor="116.0" AnchorPane.topAnchor="165.0">
                     <children>
                         <TextField fx:id="field" prefHeight="36.0" prefWidth="201.0" promptText="Naam" style="-fx-background-radius: 20 20 20 20;">
                             <FlowPane.margin>

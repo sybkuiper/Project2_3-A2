@@ -16,6 +16,7 @@ import Controller.NetworkController;
 import Model.Game;
 import Model.Reversi;
 import Model.TicTacToe;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -27,6 +28,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -60,12 +62,38 @@ public class ViewController implements Initializable {
 	@FXML private Label label;
 	@FXML private TextField IP, port;
 	@FXML private Button nextbutton,menubutton,menu,xbutton,rematchButton;
-	@FXML private Label counterlabel;
-	@FXML private Button Sp_T_Button,AI_T_Button,Mp_T_Button,Sp_R_Button,Mp_R_Button, AI_R_Button;
+	@FXML private Label counterlabel;	
+	@FXML private Button Sp_T_Button,AI_T_Button,Mp_T_Button,Sp_R_Button,Mp_R_Button, AI_R_Button,onlineInviteTButton,onlineInviteRButton;
 	private NetworkController networkController;
 	private List<String> onlinePlayers;
 	public String playerName;
 	private Game game;
+	ObservableList<String> onlineList = FXCollections.observableArrayList();
+	@FXML private ListView<String> onlineListView;
+
+	
+	@FXML
+	public void refreshOnlineList() {
+		onlineList.clear();
+		onlineList.addAll("naam1","naam2","naam3"); //hier moet dus networkController.getPlayerList();
+		onlineListView.getItems().clear();
+		onlineListView.getItems().addAll(onlineList); 
+		
+		
+	}
+	@FXML
+	public void onlineInviteTButton(ActionEvent event) {
+        String selectedPlayer=onlineListView.getSelectionModel().getSelectedItem();
+		System.out.println("invite " + selectedPlayer + " for a game of tictactoe");
+		//networkController.challenge(selectedPlayer,"Tic-tac-toe");
+	}
+	
+	@FXML
+	public void onlineInviteRButton(ActionEvent event) {
+        String selectedPlayer=onlineListView.getSelectionModel().getSelectedItem();
+		System.out.println("invite " + selectedPlayer + " for a game of reversi");
+		//networkController.challenge(selectedPlayer, "Reversi");
+	}
 
 	@FXML
 	void handleButtonTTT_SP(ActionEvent event) throws IOException {
