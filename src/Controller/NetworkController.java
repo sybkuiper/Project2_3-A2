@@ -145,7 +145,9 @@ public class NetworkController extends Thread {
                                         map.get("PLAYERTOMOVE").replace("\"", ""),
                                             map.get("OPPONENT").replace("\"", ""));
             controller.setBeurt(map.get("PLAYERTOMOVE").replace("\"", "") + " is aan de beurt");
-            controller.performActionOnTile("disableAllTiles");
+            if(controller.getGame() instanceof Reversi) {
+                controller.performActionOnTile("disableAllTiles");
+            }
         }
         //Todo: Start game interface
 
@@ -183,14 +185,15 @@ public class NetworkController extends Thread {
 
         if(input.startsWith("SVR GAME ")){
             input = input.replace("SVR GAME ","");
+            Map<String, String> map = createMap(input);
             if(input.startsWith("WIN")){
                 System.out.println(input);
-                controller.alertGameState("WIN");
+                controller.setBeurt(map.get(controller.playerName + " heeft gewonnen!"));
                 //Todo: verwerken reactie spel, hoe? testen
             } else if (input.startsWith("LOSS")){
-                controller.alertGameState("LOSS");
+                controller.setBeurt(map.get(controller.playerName + " heeft verloren!"));
             } else if (input.startsWith("DRAW")){
-                controller.alertGameState("DRAW");
+                controller.setBeurt("Het spel is geeindigd in gelijkspel!");
             }
         }
     }

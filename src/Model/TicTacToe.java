@@ -14,6 +14,7 @@ public class TicTacToe extends Game {
     public TicTacToe(int rows, int columns, String playerOne, ViewController controller, boolean online){
         super(rows, columns, playerOne, controller, online);
         controller.setGame(this);
+        System.out.println("game initialized");
     }
 
     public TicTacToe(int rows, int columns, String playerOne, String playerTwo, ViewController controller, boolean online){
@@ -58,10 +59,9 @@ public class TicTacToe extends Game {
     public void updateGameBoard(Integer move, String player){
         int key = move;
         gameBoard.replace(key,players.get(player));
+        getController().updateGrid(key, players.get(player));
         System.out.println(player + " has placed move: " + move);
-        getController().setBeurt(getPlayersTurn() + "is aan de beurt");
-        getController().performActionOnTile("updateTileAmounts",BLACK);
-        getController().performActionOnTile("updateTileAmounts",WHITE);
+        getController().setBeurt(getPlayersTurn() + " is aan de beurt");
         printGameState();
     }
 

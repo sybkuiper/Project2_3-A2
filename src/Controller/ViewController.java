@@ -69,10 +69,13 @@ public class ViewController implements Initializable {
 
 	@FXML
 	void handleButtonTTT_SP(ActionEvent event) throws IOException {
-		new TicTacToe(3,3,playerName, this, false);
 		Stage stage;
 		stage = (Stage) Sp_T_Button.getScene().getWindow();
 		changeView(stage,"../View/NewTTView.fxml");
+		if(!online.isSelected()) {
+			new TicTacToe(3, 3, playerName, this, false);
+			game.printGameState();
+		}
 	}
 
 	public void setGame(Game game) {
@@ -121,8 +124,10 @@ public class ViewController implements Initializable {
 					loginError.setText("Voer alstublieft correcte netwerkgegevens in alvorens in te loggen.");
 					loginError.setVisible(true);
 				} else {
-					networkController = new NetworkController(this, field.getText(), ip_address, Integer.parseInt(port_number));
-					networkController.start();
+					if(networkController == null) {
+						networkController = new NetworkController(this, field.getText(), ip_address, Integer.parseInt(port_number));
+						networkController.start();
+					}
 					//updateOnlinePlayers();
 				}
 			}
@@ -246,21 +251,42 @@ public class ViewController implements Initializable {
 	}
 
 	public void updateGrid(int move, String color){
-		int row = move / 8;
-		int column = move % 8;
+		if(game instanceof TicTacToe){
+			int row = move / 3;
+			int column = move % 3;
+			Node tile = getTile(row, column);
+			if(tile instanceof Rectangle){
+				if(color.equals("X")){
+					Image image = null;
+					image = new Image(getClass().getResourceAsStream("../Img/cross.png"));
+					((Rectangle) tile).setOpacity(1);
+					((Rectangle) tile).setFill(new ImagePattern(image));
+				} else {
+					Image image = null;
+					image = new Image(getClass().getResourceAsStream("../Img/circle.png"));
+					((Rectangle) tile).setOpacity(1);
+					((Rectangle) tile).setFill(new ImagePattern(image));
+				}
+			}
+		}
 
-		Node tile = getTile(row, column);
-		if(tile instanceof Circle){
-			tile.setOpacity(1);
-			if (color.equals("B")) {
-				((Circle) tile).setFill(BLACK);
-				((Circle) tile).setStroke(BLACK);
-			} else if(color.equals("W")) {
-				((Circle) tile).setFill(WHITE);
-				((Circle) tile).setStroke(BLACK);
-			} else if(color.equals("legalMove")){
-				((Circle) tile).setFill(Color.web("#aa6fc9"));
-				((Circle) tile).setStroke(BLACK);
+		if(game instanceof Reversi) {
+			int row = move / 8;
+			int column = move % 8;
+
+			Node tile = getTile(row, column);
+			if (tile instanceof Circle) {
+				tile.setOpacity(1);
+				if (color.equals("B")) {
+					((Circle) tile).setFill(BLACK);
+					((Circle) tile).setStroke(BLACK);
+				} else if (color.equals("W")) {
+					((Circle) tile).setFill(WHITE);
+					((Circle) tile).setStroke(BLACK);
+				} else if (color.equals("legalMove")) {
+					((Circle) tile).setFill(Color.web("#aa6fc9"));
+					((Circle) tile).setStroke(BLACK);
+				}
 			}
 		}
 	}
@@ -270,10 +296,8 @@ public class ViewController implements Initializable {
 	 * @param action specifies the action that needs to be performed, which is evaluated by an if statement.
 	 */
 	public void performActionOnTile(String action){
+		System.out.println(board);
 		for(Node node : board.getChildren()){
-			if(game instanceof TicTacToe){
-
-			}
 			if(game instanceof Reversi) {
 				if (node instanceof Circle) {
 					if (action.equals("disableAllTiles")){
@@ -374,31 +398,20 @@ public class ViewController implements Initializable {
 	}
 
 	@FXML
-	void handleButtonR_AI(ActionEvent event) throws IOException{
-		Stage stage = (Stage) AI_R_Button.getScene().getWindow();
-		changeView(stage,"../View/NewOthelloView.fxml");
-		System.out.println(onlinePlayers);
-		System.out.println("invite player for AI vs AI: " );
-//		String username = scanner.nextLine();
-		networkController.challenge("Jasper", "Reversi");
-		System.out.println("invited player: " + "test");
-	}
-
-	@FXML
 	void handleButtonR_SP(ActionEvent event) throws IOException{
 		Stage stage = (Stage) Sp_R_Button.getScene().getWindow();
 		changeView(stage,"../View/NewOthelloView.fxml");
-		new Reversi(8,8,playerName, this, false);
-		game.printGameState();
-	}
-
-	void alertGameState(String state){
-
-	}
-
-	@FXML
-	void handleButtonTTT_AI(ActionEvent event) {
-
+		if(!online.isSelected()) {
+			new Reversi(8, 8, playerName, this, false);
+			game.printGameState();
+		} else {
+			System.out.println(onlinePlayers);
+			System.out.println("invite player for AI vs AI: " );
+			if(!playerName.equals("Local")) {
+				networkController.challenge("Local", "Reversi");
+			}
+			System.out.println("invited player: " + "test");
+		}
 	}
 
 	@Override

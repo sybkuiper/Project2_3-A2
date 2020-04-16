@@ -11,17 +11,6 @@ import static javafx.scene.paint.Color.WHITE;
 
 public class Reversi extends Game {
 
-
-    int[] boardWeight = {64, -8, 8, 8, 8, 8, -8, 64,
-                         -8, -8, 0, 0, 0, 0, -8, -8,
-                          8, 0, 4, 0, 0, 4, 0, 8,
-                          8, 0, 0, 1, 1, 0, 0, 8,
-                          8, 0, 0, 1, 1, 0, 0, 8,
-                          8, 0, 4, 0, 0, 4, 0, 8,
-                         -8, -8, 0, 0, 0, 0, -8, -8,
-                         64, -8, 8, 8, 8, 8, -8, 64};
-
-
     public Reversi(int rows, int columns, String playerOne, ViewController controller, boolean online){
         super(rows, columns, playerOne, controller, online);
         controller.setGame(this);
@@ -31,8 +20,6 @@ public class Reversi extends Game {
     public Reversi(int rows, int columns, String playerOne, String playerTwo, ViewController controller, boolean online){
         super(rows, columns, playerOne, playerTwo, controller, online);
         controller.setGame(this);
-
-        //Todo: initialize scores based on players turn
     }
 
     @Override
@@ -185,6 +172,7 @@ public class Reversi extends Game {
         int playerTwoScore = 0;
         for(Integer key : gameBoard.keySet()){
             if(gameBoard.get(key).equals("B")){
+                //System.out.println(boardWeight);
                 playerOneScore = playerOneScore + boardWeight[key];
             } else if (gameBoard.get(key).equals("W")){
                 playerTwoScore = playerTwoScore + boardWeight[key];

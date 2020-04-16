@@ -20,6 +20,15 @@ public abstract class Game {
     private ViewController controller;
     protected String playerTwo;
     protected boolean online;
+    protected int[] boardWeight = {64, -8, 8, 8, 8, 8, -8, 64,
+            -8, -8, 0, 0, 0, 0, -8, -8,
+            8, 0, 4, 0, 0, 4, 0, 8,
+            8, 0, 0, 1, 1, 0, 0, 8,
+            8, 0, 0, 1, 1, 0, 0, 8,
+            8, 0, 4, 0, 0, 4, 0, 8,
+            -8, -8, 0, 0, 0, 0, -8, -8,
+            64, -8, 8, 8, 8, 8, -8, 64};
+
 
     public Game(int rows, int columns, String playerOne, ViewController controller, boolean online){
         controller.setGame(this);
