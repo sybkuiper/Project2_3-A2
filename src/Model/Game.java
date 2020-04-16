@@ -32,6 +32,7 @@ public abstract class Game {
 
     public Game(int rows, int columns, String playerOne, ViewController controller, boolean online){
         controller.setGame(this);
+        this.players = new HashMap<>();
         this.rows = rows;
         this.columns = columns;
         this.playerOne = playerOne;
@@ -39,10 +40,13 @@ public abstract class Game {
         this.online = online;
         this.gameBoard = generateGameBoard();
         if(!online){
-            // game is played offline
-            //gecommented om othello te testen
-            //playersTurn = getFirstPlayer(controller.playerName);
+
             controller.setBeurt(selectPlayerOne(playerOne, "AI") + " is aan de beurt");
+            if(this instanceof TicTacToe){
+                if(playersTurn.equals("AI")){
+                    makeMove(think(getGameBoard()));
+                }
+            }
             if(this instanceof Reversi) {
                 controller.performActionOnTile("updateTileAmounts", BLACK);
                 controller.performActionOnTile("updateTileAmounts", WHITE);
@@ -60,9 +64,6 @@ public abstract class Game {
 
     public Game(int rows, int columns, String playerOne, String playerTwo, ViewController controller, boolean online){
         if(!online){
-            // game is played offline
-            //gecommented om othello te testen
-            //playersTurn = getFirstPlayer(controller.playerName);
             playersTurn = playerOne; //"AI";
             if(playersTurn == "AI"){
                 makeMove(think(getGameBoard()));
@@ -167,48 +168,68 @@ public abstract class Game {
     }
 
     public void makeMove(Integer move){
-        controller.performActionOnTile("hideLegalMoves");
-        if (playersTurn.equals(playerTwo)){
-            updateGameBoard(move,playersTurn);
-            //this makes skipping turns possible
-            if(this instanceof Reversi){
-                if(!(getLegalMoves(gameBoard,"B").size() == 0)){
-                    playersTurn = playerOne;
-                    controller.performActionOnTile("disableIllegalMoves",BLACK);
+        if(this instanceof TicTacToe){
+            if(playersTurn.equals(playerTwo)) {
+                updateGameBoard(move, playersTurn);
+                playersTurn = playerOne;
+            } else {
+                updateGameBoard(move, playersTurn);
+                playersTurn = playerTwo;
+            }
+
+            String winner = checkWinner(getGameBoard());
+            if (winner != null) {
+                if (winner.equals("gelijkspel")) {
+                    getController().setBeurt("Het spel is afgelopen in gelijkspel!");
                 } else {
+                    getController().setBeurt(winner + " heeft het spel gewonnen!");
+                }
+            } else {
+                getController().setBeurt(getPlayersTurn() + " is aan de beurt");
+                // in order to ensure the AI makes a play
+                if (playersTurn.equals("AI")) {
+                    makeMove(think(getGameBoard()));
+                }
+            }
+        }
+        if(this instanceof Reversi) {
+            controller.performActionOnTile("hideLegalMoves");
+            if (playersTurn.equals(playerTwo)) {
+                updateGameBoard(move, playersTurn);
+                //this makes skipping turns possible
+                if (this instanceof Reversi) {
+                    if (!(getLegalMoves(gameBoard, "B").size() == 0)) {
+                        playersTurn = playerOne;
+                        controller.performActionOnTile("disableIllegalMoves", BLACK);
+                    } else {
+                        playersTurn = playerTwo;
+                    }
+                }
+
+            } else if (playersTurn.equals(playerOne)) {
+                updateGameBoard(move, playersTurn);
+                if (!(getLegalMoves(gameBoard, "W").size() == 0)) {
                     playersTurn = playerTwo;
-                    System.out.println("gaat het hier fout" +playersTurn + getLegalMoves(gameBoard,"B"));
-                    System.out.println("BlackMoves: " + getLegalMoves(gameBoard,"B").size());
-                    System.out.println("WhiteMoves: " + getLegalMoves(gameBoard,"W").size());
+                    controller.performActionOnTile("disableIllegalMoves", WHITE);
+                } else {
+                    playersTurn = playerOne;
+                    controller.performActionOnTile("disableIllegalMoves", BLACK);
                 }
             }
 
-        } else if(playersTurn.equals(playerOne)){
-            updateGameBoard(move, playersTurn);
-            if(!(getLegalMoves(gameBoard,"W").size() == 0)) {
-                playersTurn = playerTwo;
-                controller.performActionOnTile("disableIllegalMoves", WHITE);
+            String winner = checkWinner(getGameBoard());
+            if (winner != null) {
+                if (winner.equals("gelijkspel")) {
+                    getController().setBeurt("Het spel is afgelopen in gelijkspel!");
+                } else {
+                    getController().setBeurt(winner + " heeft het spel gewonnen!");
+                }
             } else {
-                playersTurn = playerOne;
-                controller.performActionOnTile("disableIllegalMoves", BLACK);
-                System.out.println("gaat het hier fout 2" + playersTurn+ getLegalMoves(gameBoard,"W"));
-                System.out.println("BlackMoves: " + getLegalMoves(gameBoard,"B").size());
-                System.out.println("WhiteMoves: " + getLegalMoves(gameBoard,"W").size());
-            }
-        }
-
-        String winner = checkWinner(getGameBoard());
-        if(winner != null){
-            if(winner.equals("gelijkspel")){
-                getController().setBeurt("Het spel is afgelopen in gelijkspel!");
-            } else {
-                getController().setBeurt(winner + " heeft het spel gewonnen!");
-            }
-        } else {
-            getController().setBeurt(getPlayersTurn() + " is aan de beurt");
-            // in order to ensure the AI makes a play
-            if (playersTurn.equals("AI")) {
-                makeMove(think(getGameBoard()));
+                getController().setBeurt(getPlayersTurn() + " is aan de beurt");
+                // in order to ensure the AI makes a play
+                if (playersTurn.equals("AI")) {
+                    makeMove(think(getGameBoard()));
+                }
             }
         }
     }

@@ -220,35 +220,17 @@ public class ViewController implements Initializable {
 			if (clickedNode instanceof Circle) {
 				Circle clickedNodes = (Circle) clickedNode;
 				clickedNodes.setOpacity(1);
-				//TODO make a variable that declares who has which color
-//				char color = 'Z';
-//				if (color == 'Z') {
-//					clickedNodes.setFill(BLACK);
-//					clickedNodes.setStroke(BLACK);
-//				} else {
-//					clickedNodes.setFill(WHITE);
-//					clickedNodes.setStroke(WHITE);
-//				}
 				game.makeMove(translateTileToInt(clickedNode));
 			}
 		}
 		if(game instanceof TicTacToe) {
 			if(clickedNode instanceof javafx.scene.shape.Rectangle) {
-				Image image = null;
 				javafx.scene.shape.Rectangle rekt = (Rectangle) clickedNode;
-				char shape = 'X';
-				if(shape == 'X'){
-					image = new Image(getClass().getResourceAsStream("../Img/cross.png"));
-				}else{
-					image = new Image(getClass().getResourceAsStream("../Img/circle.png"));
-				}
-				if (image != null){
-				    rekt.setOpacity(1);
-					rekt.setFill(new ImagePattern(image));
-				}
+				game.makeMove(translateTileToInt(clickedNode));
 			}
 		}
 	}
+
 
 	public void updateGrid(int move, String color){
 		if(game instanceof TicTacToe){
@@ -256,6 +238,7 @@ public class ViewController implements Initializable {
 			int column = move % 3;
 			Node tile = getTile(row, column);
 			if(tile instanceof Rectangle){
+				System.out.println(color);
 				if(color.equals("X")){
 					Image image = null;
 					image = new Image(getClass().getResourceAsStream("../Img/cross.png"));
@@ -375,7 +358,12 @@ public class ViewController implements Initializable {
 		if(rowIndex == null){
 			rowIndex = 0;
 		}
-		return(rowIndex*8 + columnIndex);
+		if(game instanceof Reversi) {
+			return (rowIndex * 8 + columnIndex);
+		} else if (game instanceof TicTacToe) {
+			return (rowIndex * 3 + columnIndex);
+		}
+		return null;
 	}
 
 	public Node getTile (final int row, final int column) {

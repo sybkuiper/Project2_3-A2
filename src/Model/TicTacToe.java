@@ -58,8 +58,13 @@ public class TicTacToe extends Game {
 
     public void updateGameBoard(Integer move, String player){
         int key = move;
-        gameBoard.replace(key,players.get(player));
-        getController().updateGrid(key, players.get(player));
+        if(playersTurn.equals(playerOne)) {
+            gameBoard.replace(key,"X");
+            getController().updateGrid(key, "X");
+        } else{
+            gameBoard.replace(key,"O");
+            getController().updateGrid(key, "O");
+        }
         System.out.println(player + " has placed move: " + move);
         getController().setBeurt(getPlayersTurn() + " is aan de beurt");
         printGameState();
