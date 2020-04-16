@@ -161,7 +161,13 @@ public class ViewController implements Initializable {
 			}
 			loginError.setVisible(false);
 			System.out.println(field.getText());
-			changeView(stage,"../View/NewMenuWindowView.fxml");
+			if(online.isSelected()) { 
+				changeView(stage,"../View/NewMenuWindowView.fxml");
+				} 
+			else { 
+				changeView(stage,"../View/NewMenuWindowViewOffline.fxml");
+				}
+			
 			updateWinsLosses();
 		}
 	}
@@ -208,8 +214,10 @@ public class ViewController implements Initializable {
 		loader.setLocation(getClass().getResource(path));
 		loader.setController(this);
 		root = loader.load();
-		Scene scene = new Scene(root);
+		Scene scene = new Scene(root, 830, 600);
 		stage.setScene(scene);
+		stage.setMinHeight(600);
+		stage.setMinWidth(830);
 		stage.show();
 	}
 

@@ -15,8 +15,10 @@ public class GameClient extends Application {
         FXMLLoader root = new FXMLLoader(getClass().getResource("View/NewLoginWindowView.fxml"));
         root.setController(controller);
         Parent parentroot = root.load();
-        Scene scene = new Scene(parentroot);
+        Scene scene = new Scene(parentroot,830,600);
         stage.setScene(scene);
+        stage.setMinHeight(600);
+		stage.setMinWidth(830);
         stage.show();
     }
 
