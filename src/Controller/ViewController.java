@@ -250,6 +250,7 @@ public class ViewController implements Initializable {
 					((Rectangle) tile).setOpacity(1);
 					((Rectangle) tile).setFill(new ImagePattern(image));
 				}
+				tile.setDisable(true);
 			}
 		}
 
@@ -270,6 +271,7 @@ public class ViewController implements Initializable {
 					((Circle) tile).setFill(Color.web("#aa6fc9"));
 					((Circle) tile).setStroke(BLACK);
 				}
+				tile.setDisable(true);
 			}
 		}
 	}
@@ -281,6 +283,11 @@ public class ViewController implements Initializable {
 	public void performActionOnTile(String action){
 		System.out.println(board);
 		for(Node node : board.getChildren()){
+			if(game instanceof TicTacToe){
+				if(action.equals("disableAllTiles")){
+					node.setDisable(true);
+				}
+			}
 			if(game instanceof Reversi) {
 				if (node instanceof Circle) {
 					if (action.equals("disableAllTiles")){
