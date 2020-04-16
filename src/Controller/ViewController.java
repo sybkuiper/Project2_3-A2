@@ -311,7 +311,6 @@ public class ViewController implements Initializable {
 			if(game instanceof Reversi) {
 				if (node instanceof Circle) {
 					if(action.equals("disableIllegalMoves")){
-						//Todo: disable tiles that are not legal, disable all tiles if turn is not for player, this is only really relevant for SinglePlayer.
 						if(legalMoves != null && !legalMoves.contains(translateTileToInt(node))){
 							node.setDisable(true);
 						} else {
@@ -333,6 +332,14 @@ public class ViewController implements Initializable {
 				numWhiteDisc.setText(String.valueOf(colorCount));
 			}
 		}
+	}
+
+	public Integer getNumBlackDisc() {
+		return Integer.parseInt(numBlackDisc.getText());
+	}
+
+	public Integer getNumWhiteDisc(){
+		return Integer.parseInt(numWhiteDisc.getText());
 	}
 
 	public Integer translateTileToInt(Node node){

@@ -71,6 +71,24 @@ public class Reversi extends Game {
         }
     }
 
+    @Override
+    public String checkWinner(Map<Integer,String> gameBoard) {
+        if((getLegalMoves(gameBoard,"B").size() + (getLegalMoves(gameBoard,"W").size()) == 0)){
+            int amountOfBlackTiles = getController().getNumBlackDisc();
+            int amountOfWhiteTiles = getController().getNumWhiteDisc();
+            if((amountOfBlackTiles - amountOfWhiteTiles) == 0){
+                return "gelijkspel";
+            }
+            if(amountOfBlackTiles > amountOfWhiteTiles){
+                return getPlayerOne();
+            }
+            if(amountOfBlackTiles < amountOfWhiteTiles){
+                return getPlayerTwo();
+            }
+        }
+        return null;
+    }
+
     public void updateGameBoard(Integer move, String player){
         int key = move;
         getController().performActionOnTile("hideLegalMoves");
@@ -80,10 +98,10 @@ public class Reversi extends Game {
         } else {
             updateBoard(key, "W");
         }
+        checkWinner(getGameBoard());
         System.out.println(player + " has placed move: " + move);
         debugmoves.add(player + " : " +move);
         System.out.println(debugmoves);
-        getController().setBeurt(getPlayersTurn() + " is aan de beurt");
         getController().performActionOnTile("updateTileAmounts",BLACK);
         getController().performActionOnTile("updateTileAmounts",WHITE);
         printGameState();
@@ -177,31 +195,6 @@ public class Reversi extends Game {
         } else {
             return playerTwoScore;
         }
-    }
-
-    @Override
-    public String checkWinner(Map<Integer,String> gameBoard) {
-        if((getLegalMoves(gameBoard,"B").size() + (getLegalMoves(gameBoard,"W").size()) == 0)){
-            int amountOfBlackTiles = 0;
-            int amountOfWhiteTiles = 0;
-            for(Integer key : gameBoard.keySet()){
-                if(gameBoard.get(key).equals("B")){
-                    amountOfBlackTiles = amountOfBlackTiles +1;
-                } else if (gameBoard.get(key).equals("W")){
-                    amountOfWhiteTiles = amountOfWhiteTiles+1;
-                }
-            }
-           if((amountOfBlackTiles - amountOfWhiteTiles) == 0){
-               return "TIE";
-           }
-           if(amountOfBlackTiles > amountOfWhiteTiles){
-               return "B";
-           }
-           if(amountOfBlackTiles < amountOfWhiteTiles){
-               return "W";
-          }
-        }
-        return "Error in victor selection";
     }
 
     //==================================================
