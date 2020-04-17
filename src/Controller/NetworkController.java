@@ -105,7 +105,7 @@ public class NetworkController extends Thread {
 
 
 
-    private void parse(String input) throws IOException {
+    private void parse(String input) throws IOException, InterruptedException {
         if (input.startsWith("SVR PLAYERLIST ")) {
             input = input.replace("SVR PLAYERLIST ", "").replace("[", "").replace("]", "");
             if (input.contains(",")) {
@@ -114,8 +114,16 @@ public class NetworkController extends Thread {
                 onlinePlayers.addAll(Arrays.asList(split));
                 controller.getOnlineListView().getItems().clear();
                 //https://stackoverflow.com/questions/13784333/platform-runlater-and-task-in-javafx
+//                Platform.runLater(() -> {
+//                    controller.getOnlineListView().getItems().addAll(onlinePlayers);
+//                });
+                //https://stackoverflow.com/questions/47221250/modify-javafx-application-scene-from-different-thread
                 Platform.runLater(() -> {
-                    controller.getOnlineListView().getItems().addAll(onlinePlayers);
+                    try {
+                        controller.updateOnlinePlayers(onlinePlayers);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 });
                 controller.setOnlinePlayers(onlinePlayers);
             } else {
@@ -148,12 +156,19 @@ public class NetworkController extends Thread {
             System.out.println("GameType " +map.get("GAMETYPE").replace("\"", ""));
             System.out.println("PlayerOne " + map.get("PLAYERTOMOVE").replace("\"", ""));
             System.out.println("Opponent " +map.get("OPPONENT").replace("\"", ""));
+            Platform.runLater(() -> {
+                try {
+                    controller.changeView(map.get("GAMETYPE").replace("\"",""));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
             controller.initializeGame(map.get("GAMETYPE").replace("\"", ""),
                                         map.get("PLAYERTOMOVE").replace("\"", ""),
                                             map.get("OPPONENT").replace("\"", ""));
-            controller.setBeurt(map.get("PLAYERTOMOVE").replace("\"", "") + " is aan de beurt");
+            //controller.setBeurt(map.get("PLAYERTOMOVE").replace("\"", "") + " is aan de beurt");
             if(controller.getGame() instanceof Reversi) {
-                controller.performActionOnTile("disableAllTiles");
+                //controller.performActionOnTile("disableAllTiles");
             }
         }
         //Todo: Start game interface
@@ -164,30 +179,50 @@ public class NetworkController extends Thread {
             if(controller.getGame() instanceof TicTacToe) {
                 controller.getGame().updateGameBoard(Integer.parseInt(map.get("MOVE").replace("\"", "")),
                                                         map.get("PLAYER").replace("\"", ""));
+                System.out.println("Ik ben hier als: " +controller.getGame().getPlayersTurn());
+                if(controller.getGame().getPlayersTurn().equals(controller.getGame().getPlayerOne())) {
+                    System.out.println("Ik ben hier (2) als: " +controller.getGame().getPlayersTurn());
+                    controller.getGame().setPlayersTurn(controller.getGame().playerTwo);
+                    System.out.println("PlayerOne: " + controller.getGame().getPlayerOne());
+                    System.out.println("PlayerTwo: " + controller.getGame().getPlayerTwo());
+                    System.out.println("Ik ben hier (3) als: " +controller.getGame().getPlayersTurn());
+                } else {
+                    System.out.println("Ik ben hier (4) als: " +controller.getGame().getPlayersTurn());
+                    controller.getGame().setPlayersTurn(controller.getGame().getPlayerOne());
+                    System.out.println("Ik ben hier (5) als: " +controller.getGame().getPlayersTurn());
+                }
             } else {
                 controller.performActionOnTile("hideLegalMoves");
                 controller.getGame().updateGameBoard(Integer.parseInt(map.get("MOVE").replace("\"", "")) ,
                                                         map.get("PLAYER").replace("\"", ""));
 
                 if(controller.getGame().getPlayersTurn().equals(controller.getGame().getPlayerOne())){
-                    controller.performActionOnTile("disableIllegalMoves",BLACK);
-                } else {
+                    controller.getGame().setPlayersTurn(controller.getGame().getPlayerTwo());
                     controller.performActionOnTile("disableIllegalMoves",WHITE);
+                } else {
+                    controller.getGame().setPlayersTurn(controller.getGame().getPlayerOne());
+                    controller.performActionOnTile("disableIllegalMoves",BLACK);
                 }
-                controller.setBeurt(controller.getGame().getPlayersTurn() + " is aan de beurt");
             }
+            controller.setBeurt(controller.getGame().getPlayersTurn() + " is aan de beurt");
             }
 
         if (input.startsWith("SVR GAME YOURTURN ")) {
-            controller.performActionOnTile("hideLegalMoves");
-            if(controller.getGame().getPlayersTurn().equals(controller.getGame().getPlayerOne())){
-                controller.performActionOnTile("disableIllegalMoves",BLACK);
-            } else {
-                controller.performActionOnTile("disableIllegalMoves",BLACK);
+            Thread.sleep(1000);
+            if(controller.getGame() instanceof Reversi) {
+                controller.performActionOnTile("hideLegalMoves");
+                if (controller.getGame().getPlayersTurn().equals(controller.getGame().getPlayerOne())) {
+                    controller.performActionOnTile("disableIllegalMoves", BLACK);
+                } else {
+                    controller.performActionOnTile("disableIllegalMoves", WHITE);
+                }
             }
-            System.out.println(controller.getGame());
+            System.out.println("Ik ben hier (6) als: " +controller.getGame().getPlayersTurn());
             move(Integer.toString(controller.getGame().think(controller.getGame().getGameBoard())));
-            controller.performActionOnTile("hideLegalMoves");
+
+            if(controller.getGame() instanceof Reversi) {
+                controller.performActionOnTile("hideLegalMoves");
+            }
         }
 
         if(input.startsWith("SVR GAME ")){
@@ -206,16 +241,17 @@ public class NetworkController extends Thread {
     }
 
     public void run(){
-        while(true){
+        while(socket.isConnected()){
             String newLine = in.nextLine();
             System.out.println(newLine);
             if(!ignoreList.contains(newLine)) {
                 try {
                     parse(newLine);
-                } catch (IOException e) {
+                } catch (IOException | InterruptedException e) {
                     e.printStackTrace();
                 }
             }
         }
+        System.out.println("Socket disconnected due to inactivity");
     }
 }

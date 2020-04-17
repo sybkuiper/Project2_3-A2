@@ -33,7 +33,7 @@ public class Reversi extends Game {
                 if (getGameBoard().get(key).equals("E")) {
                     updateBoard(cloneBoard, key, "B"); // replace "B" by playersTurn
                     int score = minimax(cloneBoard, 0, false);
-                    cloneBoard.replace(key, "E");
+                    gameBoard.replace(key, "E");
                     if (score > bestScore) {
                         bestScore = score;
                         bestMove = key;
@@ -47,7 +47,7 @@ public class Reversi extends Game {
                 if (getGameBoard().get(key).equals("E")) {
                     updateBoard(cloneBoard, key, "W"); // replace "B" by playersTurn
                     int score = minimax(cloneBoard, 0, false);
-                    cloneBoard.replace(key, "E");
+                    gameBoard.replace(key, "E");
                     if (score > bestScore) {
                         bestScore = score;
                         bestMove = key;

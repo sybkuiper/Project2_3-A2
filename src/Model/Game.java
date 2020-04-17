@@ -18,7 +18,7 @@ public abstract class Game {
     protected String playerOne;
     protected String playersTurn;
     private ViewController controller;
-    protected String playerTwo;
+    public String playerTwo;
     protected boolean online;
     protected int[] boardWeight = {64, -8, 8, 8, 8, 8, -8, 64,
             -8, -8, 0, 0, 0, 0, -8, -8,
@@ -74,15 +74,6 @@ public abstract class Game {
         this.columns = columns;
         this.playerOne = playerOne;
         this.playerTwo = playerTwo;
-        if(this instanceof TicTacToe){
-            if(playerOne.equals(controller.playerName)) {
-                players.put(playerOne, "X");
-                players.put(playerTwo, "O");
-            } else {
-                players.put(playerOne, "O");
-                players.put(playerTwo, "X");
-            }
-        }
         this.controller = controller;
         this.online = online;
         setPlayersTurn(playerOne);

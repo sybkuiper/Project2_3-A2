@@ -138,7 +138,8 @@ public class ViewController implements Initializable {
 	void gotomenuscreen(ActionEvent event) throws IOException, InterruptedException {
 		Stage stage;
 		playerName = field.getText();
-		stage = (Stage) menu.getScene().getWindow();
+		stage = (Stage)((Node) event.getSource()).getScene().getWindow();
+			//(Stage) menu.getScene().getWindow();
 		//https://stackoverflow.com/questions/32866937/how-to-check-if-textfield-is-empty
 		if(playerName.trim().isEmpty()){
 			System.out.println("Dont allow login");
@@ -196,16 +197,19 @@ public class ViewController implements Initializable {
         rDraws.setText(temp[5]);
     }
 
-    @FXML
-    void updateOnlinePlayers(){
-        HBox box = new HBox();
-        for(String person : onlinePlayers) {
-            Text t = new Text(person);
-
-            box.getChildren().add(t);
-        }
-        peopleOnline.getChildren().add(box);
+    public void updateOnlinePlayers(List<String> onlinePlayers) throws IOException {
+		getOnlineListView().getItems().addAll(onlinePlayers);
     }
+
+    public void changeView(String gameType) throws IOException {
+		if(gameType.equals("Reversi")){
+			Stage stage = (Stage) Sp_R_Button.getScene().getWindow();
+			changeView(stage,"../View/NewOthelloView.fxml");
+		} else if (gameType.equals("Tic-tac-toe")){
+			Stage stage = (Stage) Sp_T_Button.getScene().getWindow();
+			changeView(stage,"../View/NewTTView.fxml");
+		}
+	}
 
 	private void changeView(Stage stage, String path) throws IOException {
 		Parent root;
@@ -435,14 +439,8 @@ public class ViewController implements Initializable {
 		if(!online.isSelected()) {
 			new Reversi(8, 8, playerName, this, false);
 			game.printGameState();
-		} else {
-			System.out.println(onlinePlayers);
-			System.out.println("invite player for AI vs AI: " );
-			if(!playerName.equals("Local")) {
-				networkController.challenge("Local", "Reversi");
-			}
-			System.out.println("invited player: " + "test");
 		}
+
 	}
 
 	@Override
