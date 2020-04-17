@@ -180,7 +180,7 @@ public abstract class Game {
             String winner = checkWinner(getGameBoard());
             if (winner != null) {
                 controller.performActionOnTile("disableAllTiles");
-                if (winner.equals("gelijkspel")) {
+                if (winner.equals("TIE")) {
                     getController().setBeurt("Het spel is afgelopen in gelijkspel!");
                 } else {
                     getController().setBeurt(winner + " heeft het spel gewonnen!");

@@ -16,6 +16,7 @@ import Controller.NetworkController;
 import Model.Game;
 import Model.Reversi;
 import Model.TicTacToe;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -24,8 +25,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -66,6 +67,35 @@ public class ViewController implements Initializable {
 	private List<String> onlinePlayers;
 	public String playerName;
 	private Game game;
+	ObservableList<String> onlineList = FXCollections.observableArrayList();
+	@FXML private ListView<String> onlineListView;
+
+
+	@FXML
+	public void refreshOnlineList() {
+		onlineList.clear();
+		networkController.getPlayerList();
+	}
+
+	public ListView<String> getOnlineListView() {
+		return onlineListView;
+	}
+
+	@FXML
+	public void onlineInviteTButton(ActionEvent event) throws IOException {
+		String selectedPlayer=onlineListView.getSelectionModel().getSelectedItem();
+		networkController.challenge(selectedPlayer,"Tic-tac-toe");
+		Stage stage = (Stage) Sp_T_Button.getScene().getWindow();
+		changeView(stage,"../View/NewTTView.fxml");
+	}
+
+	@FXML
+	public void onlineInviteRButton(ActionEvent event) throws IOException {
+		String selectedPlayer=onlineListView.getSelectionModel().getSelectedItem();
+		networkController.challenge(selectedPlayer, "Reversi");
+		Stage stage = (Stage) Sp_R_Button.getScene().getWindow();
+		changeView(stage,"../View/NewOthelloView.fxml");
+	}
 
 	@FXML
 	void handleButtonTTT_SP(ActionEvent event) throws IOException {
@@ -82,7 +112,7 @@ public class ViewController implements Initializable {
 		this.game = game;
 	}
 
-	void initializeGame(String gameType, String playerOne, String playerTwo){
+	void initializeGame(String gameType, String playerOne, String playerTwo) throws IOException {
 		if(gameType.equals("Reversi")){
 			System.out.println("Stage 2 online initialization..");
 			game = new Reversi(8,8, playerOne,playerTwo, this, true);
@@ -124,6 +154,7 @@ public class ViewController implements Initializable {
 					loginError.setText("Voer alstublieft correcte netwerkgegevens in alvorens in te loggen.");
 					loginError.setVisible(true);
 				} else {
+					changeView(stage,"../View/NewMenuWindowView.fxml");
 					if(networkController == null) {
 						networkController = new NetworkController(this, field.getText(), ip_address, Integer.parseInt(port_number));
 						networkController.start();
@@ -133,7 +164,9 @@ public class ViewController implements Initializable {
 			}
 			loginError.setVisible(false);
 			System.out.println(field.getText());
-			changeView(stage,"../View/NewMenuWindowView.fxml");
+			if(!online.isSelected()) {
+				changeView(stage,"../View/NewMenuWindowViewOffline.fxml");
+			}
 			updateWinsLosses();
 		}
 	}
@@ -180,10 +213,13 @@ public class ViewController implements Initializable {
 		loader.setLocation(getClass().getResource(path));
 		loader.setController(this);
 		root = loader.load();
-		Scene scene = new Scene(root);
+		Scene scene = new Scene(root, 830, 600);
 		stage.setScene(scene);
+		stage.setMinHeight(600);
+		stage.setMinWidth(830);
 		stage.show();
 	}
+
 
 	public void setOnlinePlayers(List<String> onlinePlayers) {
 		this.onlinePlayers = onlinePlayers;

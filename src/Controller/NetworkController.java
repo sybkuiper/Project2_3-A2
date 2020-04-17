@@ -2,6 +2,8 @@ package Controller;
 
 import Model.Reversi;
 import Model.TicTacToe;
+import javafx.application.Platform;
+import javafx.concurrent.Task;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -103,13 +105,18 @@ public class NetworkController extends Thread {
 
 
 
-    private void parse(String input) {
+    private void parse(String input) throws IOException {
         if (input.startsWith("SVR PLAYERLIST ")) {
             input = input.replace("SVR PLAYERLIST ", "").replace("[", "").replace("]", "");
             if (input.contains(",")) {
-                String[] split = input.split(",");
+                String[] split = input.replace("\"","").trim().split(",");
                 onlinePlayers = new ArrayList<>();
                 onlinePlayers.addAll(Arrays.asList(split));
+                controller.getOnlineListView().getItems().clear();
+                //https://stackoverflow.com/questions/13784333/platform-runlater-and-task-in-javafx
+                Platform.runLater(() -> {
+                    controller.getOnlineListView().getItems().addAll(onlinePlayers);
+                });
                 controller.setOnlinePlayers(onlinePlayers);
             } else {
                 onlinePlayers = new ArrayList<>();
@@ -203,7 +210,11 @@ public class NetworkController extends Thread {
             String newLine = in.nextLine();
             System.out.println(newLine);
             if(!ignoreList.contains(newLine)) {
-                parse(newLine);
+                try {
+                    parse(newLine);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
