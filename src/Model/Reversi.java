@@ -4,20 +4,12 @@ import Controller.ViewController;
 
 import java.util.*;
 
+import static javafx.scene.paint.Color.BLACK;
+import static javafx.scene.paint.Color.WHITE;
+
 //https://www.baeldung.com/java-copy-hashmap
 
 public class Reversi extends Game {
-
-    ArrayList<String> debugmoves = new ArrayList<>();
-    int[] boardWeight = {64, -8, 8, 8, 8, 8, -8, 64,
-                         -8, -8, 0, 0, 0, 0, -8, -8,
-                          8, 0, 4, 0, 0, 4, 0, 8,
-                          8, 0, 0, 1, 1, 0, 0, 8,
-                          8, 0, 0, 1, 1, 0, 0, 8,
-                          8, 0, 4, 0, 0, 4, 0, 8,
-                         -8, -8, 0, 0, 0, 0, -8, -8,
-                         64, -8, 8, 8, 8, 8, -8, 64};
-
 
     public Reversi(int rows, int columns, String playerOne, ViewController controller, boolean online){
         super(rows, columns, playerOne, controller, online);
@@ -28,8 +20,6 @@ public class Reversi extends Game {
     public Reversi(int rows, int columns, String playerOne, String playerTwo, ViewController controller, boolean online){
         super(rows, columns, playerOne, playerTwo, controller, online);
         controller.setGame(this);
-
-        //Todo: initialize scores based on players turn
     }
 
     @Override
@@ -37,7 +27,7 @@ public class Reversi extends Game {
         Integer bestMove = 0;
         int bestScore = -1000;
         Map<Integer,String> cloneBoard = new HashMap<>(gameBoard);
-        if(getController().playerName.equals(playerOne)) {
+        if(playersTurn.equals(playerOne)) {
             for (Integer key : getLegalMoves(cloneBoard, "B")) {
                 //try all empty spots and make them X and do minimax on the gamboard
                 if (getGameBoard().get(key).equals("E")) {
@@ -68,26 +58,39 @@ public class Reversi extends Game {
         }
     }
 
-    public void updateGameBoard(Integer move, String player){
-        int key = move;
-        if(!online) {
-            if (player.equals("AI")) {//playerOne)) {
-                updateBoard(key, "B");
-                //getController().showPlayer(key);
-            } else {
-                updateBoard(key, "W");
+    @Override
+    public String checkWinner(Map<Integer,String> gameBoard) {
+        if((getLegalMoves(gameBoard,"B").size() + (getLegalMoves(gameBoard,"W").size()) == 0)){
+            int amountOfBlackTiles = getController().getNumBlackDisc();
+            int amountOfWhiteTiles = getController().getNumWhiteDisc();
+            if((amountOfBlackTiles - amountOfWhiteTiles) == 0){
+                return "gelijkspel";
             }
-        } else {
-            if (player.equals(playerOne)) {//playerOne)) {
-                updateBoard(key, "B");
-            //    getController().showPlayer(key);
-            } else {
-                updateBoard(key, "W");
+            if(amountOfBlackTiles > amountOfWhiteTiles){
+                return getPlayerOne();
+            }
+            if(amountOfBlackTiles < amountOfWhiteTiles){
+                return getPlayerTwo();
             }
         }
+        return null;
+    }
+
+    public void updateGameBoard(Integer move, String player){
+        int key = move;
+        getController().performActionOnTile("hideLegalMoves");
+        System.out.println("Kom ik wel hier");
+        if (player.equals(playerOne)) {//playerOne)) {
+            updateBoard(key, "B");
+        } else {
+            updateBoard(key, "W");
+        }
+        checkWinner(getGameBoard());
         System.out.println(player + " has placed move: " + move);
         debugmoves.add(player + " : " +move);
         System.out.println(debugmoves);
+        getController().performActionOnTile("updateTileAmounts",BLACK);
+        getController().performActionOnTile("updateTileAmounts",WHITE);
         printGameState();
     }
 
@@ -169,6 +172,7 @@ public class Reversi extends Game {
         int playerTwoScore = 0;
         for(Integer key : gameBoard.keySet()){
             if(gameBoard.get(key).equals("B")){
+                //System.out.println(boardWeight);
                 playerOneScore = playerOneScore + boardWeight[key];
             } else if (gameBoard.get(key).equals("W")){
                 playerTwoScore = playerTwoScore + boardWeight[key];
@@ -179,31 +183,6 @@ public class Reversi extends Game {
         } else {
             return playerTwoScore;
         }
-    }
-
-    @Override
-    public String checkWinner(Map<Integer,String> gameBoard) {
-        if((getLegalMoves(gameBoard,"B").size() + (getLegalMoves(gameBoard,"W").size()) == 0)){
-            int amountOfBlackTiles = 0;
-            int amountOfWhiteTiles = 0;
-            for(Integer key : gameBoard.keySet()){
-                if(gameBoard.get(key).equals("B")){
-                    amountOfBlackTiles = amountOfBlackTiles +1;
-                } else if (gameBoard.get(key).equals("W")){
-                    amountOfWhiteTiles = amountOfWhiteTiles+1;
-                }
-            }
-           if((amountOfBlackTiles - amountOfWhiteTiles) == 0){
-               return "TIE";
-           }
-           if(amountOfBlackTiles > amountOfWhiteTiles){
-               return "B";
-           }
-           if(amountOfBlackTiles < amountOfWhiteTiles){
-               return "W";
-          }
-        }
-        return "Error in victor selection";
     }
 
     //==================================================
@@ -360,6 +339,7 @@ public class Reversi extends Game {
         //TODO: make move madeMove
 
         gameBoard.replace(madeMove, color);
+        //getController().updateGrid(madeMove,color);
 
         if(color.equals("B")){ enemy = "W";
         }else{enemy = "B";}
@@ -426,6 +406,7 @@ public class Reversi extends Game {
 
         for(Integer key : needToBeFlippedTotal){
             gameBoard.replace(key, color);
+            //getController().updateGrid(madeMove,color);
         }
 
         //TODO: flip all in needToBeFlippedTotal
@@ -511,7 +492,7 @@ public class Reversi extends Game {
         }
 
         //TODO: flip all in needToBeFlippedTotal
-        System.out.println(needToBeFlippedTotal);
+        System.out.println("Dit moet geflipped worden: " + needToBeFlippedTotal);
     }
 
 }

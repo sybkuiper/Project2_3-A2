@@ -5,12 +5,16 @@ import Controller.ViewController;
 import java.util.LinkedHashSet;
 import java.util.Map;
 
+import static javafx.scene.paint.Color.BLACK;
+import static javafx.scene.paint.Color.WHITE;
+
 
 public class TicTacToe extends Game {
 
     public TicTacToe(int rows, int columns, String playerOne, ViewController controller, boolean online){
         super(rows, columns, playerOne, controller, online);
         controller.setGame(this);
+        System.out.println("game initialized");
     }
 
     public TicTacToe(int rows, int columns, String playerOne, String playerTwo, ViewController controller, boolean online){
@@ -27,10 +31,13 @@ public class TicTacToe extends Game {
         for (Map.Entry<Integer, String> entry : gameBoard.entrySet()) {
             Integer key = entry.getKey();
             Object value = entry.getValue();
-
             //try all empty spots and make them X and do minimax on the gamboard
             if(value.equals("E")){
-                gameBoard.replace(key, "X");
+                if(playersTurn.equals(playerOne)) {
+                    gameBoard.replace(key, "X");
+                } else {
+                    gameBoard.replace(key, "O");
+                }
                 int score = minimax(gameBoard, 0, false);
                 gameBoard.replace(key,"E");
                 if(score>bestScore) {
@@ -54,17 +61,15 @@ public class TicTacToe extends Game {
 
     public void updateGameBoard(Integer move, String player){
         int key = move;
-        if(!online) {
-            if (player.equals("AI")) {//playerOne)) {
-                gameBoard.replace(key, "X");
-                getController().showPlayer(key);
-            } else {
-                gameBoard.replace(key, "O");
-            }
-        } else {
-                gameBoard.replace(key,players.get(player));
+        if(playersTurn.equals(playerOne)) {
+            gameBoard.replace(key,"X");
+            getController().updateGrid(key, "X");
+        } else{
+            gameBoard.replace(key,"O");
+            getController().updateGrid(key, "O");
         }
         System.out.println(player + " has placed move: " + move);
+        getController().setBeurt(getPlayersTurn() + " is aan de beurt");
         printGameState();
     }
 
@@ -75,9 +80,15 @@ public class TicTacToe extends Game {
         String result = checkWinner(gameBoard);
         if(result != null){
             int score = 0;
-            if(result.equals("TIE")){score = 0;}
-            if(result.equals("O")){score = -1;}
-            if(result.equals("X")){score = 1;}
+            if(playersTurn.equals(playerOne)) {
+                if(result.equals("TIE")){score = 0;}
+                if(result.equals("O")){score = -1;}
+                if(result.equals("X")){score = 1;}
+            } else {
+                if(result.equals("TIE")){score = 0;}
+                if(result.equals("O")){score = 1;}
+                if(result.equals("X")){score = -1;}
+            }
             return score;
         }
 
@@ -89,7 +100,11 @@ public class TicTacToe extends Game {
                 Integer key = entry.getKey();
                 Object value = entry.getValue();
                 if(value.equals("E")){
-                    gameBoard.replace(key, "X");
+                    if(playersTurn.equals(playerOne)) {
+                        gameBoard.replace(key, "X");
+                    } else {
+                        gameBoard.replace(key,"O");
+                    }
                     int score = minimax(gameBoard,steps + 1, false);
                     gameBoard.replace(key,"E");
                     if(score>bestScore) {
@@ -105,7 +120,11 @@ public class TicTacToe extends Game {
                 Integer key = entry.getKey();
                 Object value = entry.getValue();
                 if(value.equals("E")){
-                    gameBoard.replace(key, "O");
+                    if(playersTurn.equals(playerOne)) {
+                        gameBoard.replace(key, "O");
+                    } else {
+                        gameBoard.replace(key,"X");
+                    }
                     int score = minimax(gameBoard,steps + 1, true);
                     gameBoard.replace(key,"E");
                     if(score<bestScore) {
