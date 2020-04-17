@@ -46,21 +46,6 @@ import static javafx.scene.paint.Color.*;
 
 
 public class ViewController implements Initializable {
-	//A counter used for testing purposes
-	private int counter = 0;
-
-	//Is not being used for now
-	@FXML private BorderPane rootPane;
-
-	//Is not being used for now, was a button used for testing purposes
-	@FXML private Button test;
-
-	//Is not being used now
-	private BorderPane rPane;
-
-	//Is not being used now
-	@FXML private AnchorPane peopleOnline;
-
 	//Is the ID for both the board of Tic Tac Toe and Reversi
 	@FXML GridPane board;
 
@@ -79,20 +64,11 @@ public class ViewController implements Initializable {
 	//Checks whether the player wants to play online
 	@FXML private CheckBox online;
 
-	//Is not being used at the moment
-	@FXML private Label label;
-
 	//Returns the values needed for the player to play online
 	@FXML private TextField IP, port;
 
-	//None of these buttons are currently being used
-	@FXML private Button nextbutton,menubutton,menu,xbutton,rematchButton;
-
-	//Is currently not being used
-	@FXML private Label counterlabel;
-
 	//The only buttons that have a use now are Sp_T_Button and Sp_R_Button the rest is not being used
-	@FXML private Button Sp_T_Button,AI_T_Button,Mp_T_Button,Sp_R_Button,Mp_R_Button, AI_R_Button;
+	@FXML private Button Sp_T_Button, Sp_R_Button;
 
 	//Initialises the networkController
 	private NetworkController networkController;
@@ -135,7 +111,7 @@ public class ViewController implements Initializable {
 	/**
 	 * When you accept a challenge to Tic Tac Toe this method will
 	 * start a game between you and the challenger
-	 * @param event
+	 * @param event the current event
 	 * @throws IOException
 	 */
 	@FXML
@@ -149,7 +125,7 @@ public class ViewController implements Initializable {
 	/**
 	 * When you accept a challenge this method starts a game
 	 * between you and the challenger
-	 * @param event
+	 * @param event the current event
 	 * @throws IOException
 	 */
 	@FXML
@@ -163,7 +139,7 @@ public class ViewController implements Initializable {
 	/**
 	 * When you click the button to start a game of Tic Tac Toe this method starts the view and
 	 * initialses the board for Tic Tac Toe
-	 * @param event
+	 * @param event the current event
 	 * @throws IOException
 	 */
 	@FXML
@@ -179,7 +155,7 @@ public class ViewController implements Initializable {
 
 	/**
 	 * Sets the game to the current game being played
-	 * @param game
+	 * @param game the game which is being played
 	 */
 	public void setGame(Game game) {
 		this.game = game;
@@ -187,10 +163,10 @@ public class ViewController implements Initializable {
 
 	/**
 	 * initializes the game for both Reversi and Tic Tac Toe
-	 * @param gameType
-	 * @param playerOne
-	 * @param playerTwo
-	 * @throws IOException
+	 * @param gameType the game that is being played
+	 * @param playerOne the playerOne of this game
+	 * @param playerTwo the playerTwo of this game
+	 * @throws IOException Checks wheter the game is being intitialized properly
 	 */
 	void initializeGame(String gameType, String playerOne, String playerTwo) throws IOException {
 		if(gameType.equals("Reversi")){
@@ -220,7 +196,7 @@ public class ViewController implements Initializable {
 
 	/**
 	 * Shows whose turn it is to make a move
-	 * @param beurt
+	 * @param beurt whose turn it is
 	 */
 	public void setBeurt(String beurt) {
 		this.beurt.setText(beurt);
@@ -228,7 +204,7 @@ public class ViewController implements Initializable {
 
 	/**
 	 * Starts the menuscreen and checks wheter the login is viable
-	 * @param event
+	 * @param event the current event
 	 * @throws IOException
 	 * @throws InterruptedException
 	 */
@@ -277,8 +253,8 @@ public class ViewController implements Initializable {
 
 	/**
 	 * Updates the list for online players
-	 * @param onlinePlayers
-	 * @throws IOException
+	 * @param onlinePlayers The list of players that is currently online
+	 * @throws IOException checks whether retrieving data went correct
 	 */
     public void updateOnlinePlayers(List<String> onlinePlayers) throws IOException {
 		getOnlineListView().getItems().addAll(onlinePlayers);
@@ -286,8 +262,8 @@ public class ViewController implements Initializable {
 
 	/**
 	 * Changes the view to the selected game
-	 * @param gameType
-	 * @throws IOException
+	 * @param gameType the game currently being played
+	 * @throws IOException checks whether the game is being loaded correctly
 	 */
     public void changeView(String gameType) throws IOException {
 		if(gameType.equals("Reversi")){
@@ -301,9 +277,9 @@ public class ViewController implements Initializable {
 
 	/**
 	 * Changes the view to the given view
-	 * @param stage
-	 * @param path
-	 * @throws IOException
+	 * @param stage the current stage
+	 * @param path the path of the view that should be loaded
+	 * @throws IOException Checks whether the stage is being loaded correctly
 	 */
 	private void changeView(Stage stage, String path) throws IOException {
 		Parent root;
@@ -320,7 +296,7 @@ public class ViewController implements Initializable {
 
 	/**
 	 * Sets the list for current online players
-	 * @param onlinePlayers
+	 * @param onlinePlayers the list of players currently online
 	 */
 	public void setOnlinePlayers(List<String> onlinePlayers) {
 		this.onlinePlayers = onlinePlayers;
@@ -328,8 +304,8 @@ public class ViewController implements Initializable {
 
 	/**
 	 * Shows the IP and Port textField if the online checkBox is selected
-	 * @param event
-	 * @throws IOException
+	 * @param event the current event
+	 * @throws IOException checks whether the event being done correctly
 	 */
 	@FXML
 	void onlinePlay(ActionEvent event) throws IOException {
@@ -346,7 +322,7 @@ public class ViewController implements Initializable {
 	/**
 	 * Checks what grid is clicked and returns the row and collum of the clicked grid
 	 * source: https://stackoverflow.com/questions/50012463/how-can-i-click-a-gridpane-cell-and-have-it-perform-an-action
-	 * @param event
+	 * @param event the current event
 	 */
 	@FXML
 	void gridClicked(javafx.scene.input.MouseEvent event) {
@@ -382,8 +358,8 @@ public class ViewController implements Initializable {
 
 	/**
 	 * Updates the grids to show the move that has been made
-	 * @param move
-	 * @param color
+	 * @param move The value of the move that has been made
+	 * @param color the color of the current player
 	 */
 	public void updateGrid(int move, String color){
 		//Checks wheter the current game is Tic-Tac-Toe
@@ -522,7 +498,7 @@ public class ViewController implements Initializable {
 
 	/**
 	 * Translate the clicked tile to an int
-	 * @param node
+	 * @param node TODO ik weet niet wat hier moet
 	 * @return the number of the grid which has been clicked
 	 */
 	public Integer translateTileToInt(Node node){
@@ -544,8 +520,8 @@ public class ViewController implements Initializable {
 
 	/**
 	 * Returns TODO ik weet niet wat ik hiet moet zetten
-	 * @param row
-	 * @param column
+	 * @param row the row of the current move
+	 * @param column the collum of the current move
 	 * @return
 	 */
 	public Node getTile (final int row, final int column) {
@@ -569,8 +545,8 @@ public class ViewController implements Initializable {
 
 	/**
 	 * Starts a game of Reversi
-	 * @param event
-	 * @throws IOException
+	 * @param event the current event
+	 * @throws IOException checks whether the event is done correctly
 	 */
 	@FXML
 	void handleButtonR_SP(ActionEvent event) throws IOException{
