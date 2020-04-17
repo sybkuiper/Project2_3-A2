@@ -46,41 +46,98 @@ import static javafx.scene.paint.Color.*;
 
 
 public class ViewController implements Initializable {
+	//A counter used for testing purposes
 	private int counter = 0;
+
+	//Is not being used for now
 	@FXML private BorderPane rootPane;
+
+	//Is not being used for now, was a button used for testing purposes
 	@FXML private Button test;
+
+	//Is not being used now
 	private BorderPane rPane;
+
+	//Is not being used now
 	@FXML private AnchorPane peopleOnline;
+
+	//Is the ID for both the board of Tic Tac Toe and Reversi
 	@FXML GridPane board;
+
+	//Is the name the user is currently using
 	@FXML public TextField field;
+
+	//Gives whose turn it is to move
 	@FXML public Text beurt;
+
+	//retuns the number of disc each player has in Reversi
 	@FXML private Text numWhiteDisc, numBlackDisc;
+
+	//returns which error has been made while logging in
 	@FXML private Label loginError;
-	@FXML private Text tWins, tLosses, tDraws, rWins, rLosses, rDraws;
+
+	//Checks whether the player wants to play online
 	@FXML private CheckBox online;
+
+	//Is not being used at the moment
 	@FXML private Label label;
+
+	//Returns the values needed for the player to play online
 	@FXML private TextField IP, port;
+
+	//None of these buttons are currently being used
 	@FXML private Button nextbutton,menubutton,menu,xbutton,rematchButton;
+
+	//Is currently not being used
 	@FXML private Label counterlabel;
+
+	//The only buttons that have a use now are Sp_T_Button and Sp_R_Button the rest is not being used
 	@FXML private Button Sp_T_Button,AI_T_Button,Mp_T_Button,Sp_R_Button,Mp_R_Button, AI_R_Button;
+
+	//Initialises the networkController
 	private NetworkController networkController;
+
+	//Returns the players that are currently online
+	//Only functions when online is selected
 	private List<String> onlinePlayers;
+
+	//Holds the name of the player
 	public String playerName;
+
+	//Holds which game is currently being played
+	//default = null
 	private Game game;
+
+	//Used to update the online players
 	ObservableList<String> onlineList = FXCollections.observableArrayList();
+
+	//TODO ik kan er niet uitkomen waar deze variabele voor is
 	@FXML private ListView<String> onlineListView;
 
 
+	/**
+	 * Refreshes the current online list
+	 */
 	@FXML
 	public void refreshOnlineList() {
 		onlineList.clear();
 		networkController.getPlayerList();
 	}
 
+	/**
+	 * Returns the current onlineListView
+	 * @return the current onlineListView
+	 */
 	public ListView<String> getOnlineListView() {
 		return onlineListView;
 	}
 
+	/**
+	 * When you accept a challenge to Tic Tac Toe this method will
+	 * start a game between you and the challenger
+	 * @param event
+	 * @throws IOException
+	 */
 	@FXML
 	public void onlineInviteTButton(ActionEvent event) throws IOException {
 		String selectedPlayer=onlineListView.getSelectionModel().getSelectedItem();
@@ -89,6 +146,12 @@ public class ViewController implements Initializable {
 		changeView(stage,"../View/NewTTView.fxml");
 	}
 
+	/**
+	 * When you accept a challenge this method starts a game
+	 * between you and the challenger
+	 * @param event
+	 * @throws IOException
+	 */
 	@FXML
 	public void onlineInviteRButton(ActionEvent event) throws IOException {
 		String selectedPlayer=onlineListView.getSelectionModel().getSelectedItem();
@@ -97,6 +160,12 @@ public class ViewController implements Initializable {
 		changeView(stage,"../View/NewOthelloView.fxml");
 	}
 
+	/**
+	 * When you click the button to start a game of Tic Tac Toe this method starts the view and
+	 * initialses the board for Tic Tac Toe
+	 * @param event
+	 * @throws IOException
+	 */
 	@FXML
 	void handleButtonTTT_SP(ActionEvent event) throws IOException {
 		Stage stage;
@@ -108,10 +177,21 @@ public class ViewController implements Initializable {
 		}
 	}
 
+	/**
+	 * Sets the game to the current game being played
+	 * @param game
+	 */
 	public void setGame(Game game) {
 		this.game = game;
 	}
 
+	/**
+	 * initializes the game for both Reversi and Tic Tac Toe
+	 * @param gameType
+	 * @param playerOne
+	 * @param playerTwo
+	 * @throws IOException
+	 */
 	void initializeGame(String gameType, String playerOne, String playerTwo) throws IOException {
 		if(gameType.equals("Reversi")){
 			System.out.println("Stage 2 online initialization..");
@@ -122,24 +202,43 @@ public class ViewController implements Initializable {
 		}
 	}
 
+	/**
+	 * Returns the game
+	 * @return the current game type
+	 */
 	public Game getGame() {
 		return game;
 	}
 
+	/**
+	 * Returns wheter the players wants to play online or not
+	 * @return if the player wants to play online
+	 */
 	public CheckBox getOnline() {
 		return online;
 	}
 
+	/**
+	 * Shows whose turn it is to make a move
+	 * @param beurt
+	 */
 	public void setBeurt(String beurt) {
 		this.beurt.setText(beurt);
 	}
 
+	/**
+	 * Starts the menuscreen and checks wheter the login is viable
+	 * @param event
+	 * @throws IOException
+	 * @throws InterruptedException
+	 */
 	@FXML
 	void gotomenuscreen(ActionEvent event) throws IOException, InterruptedException {
 		Stage stage;
 		playerName = field.getText();
 		stage = (Stage)((Node) event.getSource()).getScene().getWindow();
 			//(Stage) menu.getScene().getWindow();
+		//Checks whether the login name is empty
 		//https://stackoverflow.com/questions/32866937/how-to-check-if-textfield-is-empty
 		if(playerName.trim().isEmpty()){
 			System.out.println("Dont allow login");
@@ -147,15 +246,18 @@ public class ViewController implements Initializable {
 			loginError.setVisible(true);
 		} else {
 			System.out.println("Allow login for : " + playerName);
+			//Check whether online is selected
 			if(online.isSelected()) {
 				String ip_address = IP.getText();
 				String port_number = port.getText();
+				//Checks wheter IP and/or Port are left empty
 				if(ip_address.trim().isEmpty() || port_number.trim().isEmpty()) {
 					System.out.println("Dont allow login, network error");
 					loginError.setText("Voer alstublieft correcte netwerkgegevens in alvorens in te loggen.");
 					loginError.setVisible(true);
 				} else {
 					changeView(stage,"../View/NewMenuWindowView.fxml");
+					//initializes the networkController ig there isn't one already
 					if(networkController == null) {
 						networkController = new NetworkController(this, field.getText(), ip_address, Integer.parseInt(port_number));
 						networkController.start();
@@ -165,42 +267,28 @@ public class ViewController implements Initializable {
 			}
 			loginError.setVisible(false);
 			System.out.println(field.getText());
+			//If the player does not want to play online starts the offline menuView
 			if(!online.isSelected()) {
 				changeView(stage,"../View/NewMenuWindowViewOffline.fxml");
 			}
-			updateWinsLosses();
 		}
 	}
 
-    @FXML
-    void updateWinsLosses() throws IOException{
-        String[] temp = new String[5];
-        try {
-            File file = new File("src/Data/Records");
-            if(file.exists()) {
-                Scanner reader = new Scanner(file);
-                while (reader.hasNextLine()) {
-                    String data = reader.nextLine();
-                    temp = data.split(",");
-                }
-                reader.close();
-            }
-        } catch(FileNotFoundException e) {
-            System.out.println("an error occured");
-            e.printStackTrace();
-        }
-        tWins.setText(temp[0]);
-        tLosses.setText(temp[1]);
-        tDraws.setText(temp[2]);
-        rWins.setText(temp[3]);
-        rLosses.setText(temp[4]);
-        rDraws.setText(temp[5]);
-    }
 
+	/**
+	 * Updates the list for online players
+	 * @param onlinePlayers
+	 * @throws IOException
+	 */
     public void updateOnlinePlayers(List<String> onlinePlayers) throws IOException {
 		getOnlineListView().getItems().addAll(onlinePlayers);
     }
 
+	/**
+	 * Changes the view to the selected game
+	 * @param gameType
+	 * @throws IOException
+	 */
     public void changeView(String gameType) throws IOException {
 		if(gameType.equals("Reversi")){
 			Stage stage = (Stage) Sp_R_Button.getScene().getWindow();
@@ -211,6 +299,12 @@ public class ViewController implements Initializable {
 		}
 	}
 
+	/**
+	 * Changes the view to the given view
+	 * @param stage
+	 * @param path
+	 * @throws IOException
+	 */
 	private void changeView(Stage stage, String path) throws IOException {
 		Parent root;
 		FXMLLoader loader = new FXMLLoader();
@@ -224,11 +318,19 @@ public class ViewController implements Initializable {
 		stage.show();
 	}
 
-
+	/**
+	 * Sets the list for current online players
+	 * @param onlinePlayers
+	 */
 	public void setOnlinePlayers(List<String> onlinePlayers) {
 		this.onlinePlayers = onlinePlayers;
 	}
 
+	/**
+	 * Shows the IP and Port textField if the online checkBox is selected
+	 * @param event
+	 * @throws IOException
+	 */
 	@FXML
 	void onlinePlay(ActionEvent event) throws IOException {
 		CheckBox box = (CheckBox) event.getSource();
@@ -241,6 +343,11 @@ public class ViewController implements Initializable {
 		}
 	}
 
+	/**
+	 * Checks what grid is clicked and returns the row and collum of the clicked grid
+	 * source: https://stackoverflow.com/questions/50012463/how-can-i-click-a-gridpane-cell-and-have-it-perform-an-action
+	 * @param event
+	 */
 	@FXML
 	void gridClicked(javafx.scene.input.MouseEvent event) {
 		Node clickedNode = event.getPickResult().getIntersectedNode();
@@ -256,6 +363,7 @@ public class ViewController implements Initializable {
 			System.out.println("Clicked: " + collIndex + ", " + rowIndex);
 			//System.out.println((rowIndex*8 + collIndex));
 		}
+		//Checks whether the current game is Reversi
 		if(game instanceof Reversi) {
 			if (clickedNode instanceof Circle) {
 				Circle clickedNodes = (Circle) clickedNode;
@@ -263,6 +371,7 @@ public class ViewController implements Initializable {
 				game.makeMove(translateTileToInt(clickedNode));
 			}
 		}
+		//Checks whether the current game is Tic-Tac-Toe
 		if(game instanceof TicTacToe) {
 			if(clickedNode instanceof javafx.scene.shape.Rectangle) {
 				javafx.scene.shape.Rectangle rekt = (Rectangle) clickedNode;
@@ -271,8 +380,13 @@ public class ViewController implements Initializable {
 		}
 	}
 
-
+	/**
+	 * Updates the grids to show the move that has been made
+	 * @param move
+	 * @param color
+	 */
 	public void updateGrid(int move, String color){
+		//Checks wheter the current game is Tic-Tac-Toe
 		if(game instanceof TicTacToe){
 			int row = move / 3;
 			int column = move % 3;
@@ -293,7 +407,7 @@ public class ViewController implements Initializable {
 				tile.setDisable(true);
 			}
 		}
-
+		//Checks whether the current game is Reversi
 		if(game instanceof Reversi) {
 			int row = move / 8;
 			int column = move % 8;
@@ -390,14 +504,27 @@ public class ViewController implements Initializable {
 		}
 	}
 
+	/**
+	 * Returns the number of black discs as an int
+	 * @return numBlackDisc
+	 */
 	public Integer getNumBlackDisc() {
 		return Integer.parseInt(numBlackDisc.getText());
 	}
 
+	/**
+	 * Returns the number of white discs as an int
+	 * @return numWhiteDisc
+	 */
 	public Integer getNumWhiteDisc(){
 		return Integer.parseInt(numWhiteDisc.getText());
 	}
 
+	/**
+	 * Translate the clicked tile to an int
+	 * @param node
+	 * @return the number of the grid which has been clicked
+	 */
 	public Integer translateTileToInt(Node node){
 		Integer rowIndex = GridPane.getRowIndex(node);
 		Integer columnIndex = GridPane.getColumnIndex(node);
@@ -415,6 +542,12 @@ public class ViewController implements Initializable {
 		return null;
 	}
 
+	/**
+	 * Returns TODO ik weet niet wat ik hiet moet zetten
+	 * @param row
+	 * @param column
+	 * @return
+	 */
 	public Node getTile (final int row, final int column) {
 		Node result = null;
 		ObservableList<Node> childrens = board.getChildren();
@@ -434,6 +567,11 @@ public class ViewController implements Initializable {
 		return result;
 	}
 
+	/**
+	 * Starts a game of Reversi
+	 * @param event
+	 * @throws IOException
+	 */
 	@FXML
 	void handleButtonR_SP(ActionEvent event) throws IOException{
 		Stage stage = (Stage) Sp_R_Button.getScene().getWindow();
