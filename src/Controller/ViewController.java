@@ -311,7 +311,9 @@ public class ViewController implements Initializable {
 					((Circle) tile).setFill(Color.web("#aa6fc9"));
 					((Circle) tile).setStroke(BLACK);
 				}
-				tile.setDisable(true);
+				if(online.isSelected()) {
+					tile.setDisable(true);
+				}
 			}
 		}
 	}
