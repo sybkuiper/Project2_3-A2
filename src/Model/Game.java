@@ -74,9 +74,11 @@ public abstract class Game {
         this.columns = columns;
         this.playerOne = playerOne;
         this.playerTwo = playerTwo;
+        System.out.println("Initiele playerOne: " + this.playerOne);
+        System.out.println("Initiele playerTwo: " + this.playerTwo);
         this.controller = controller;
         this.online = online;
-        setPlayersTurn(playerOne);
+        playersTurn = playerOne;
         this.gameBoard = generateGameBoard();
     }
 

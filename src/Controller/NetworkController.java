@@ -163,9 +163,15 @@ public class NetworkController extends Thread {
                     e.printStackTrace();
                 }
             });
-            controller.initializeGame(map.get("GAMETYPE").replace("\"", ""),
-                                        map.get("PLAYERTOMOVE").replace("\"", ""),
-                                            map.get("OPPONENT").replace("\"", ""));
+            if(map.get("PLAYERTOMOVE").replace("\"", "").equals(controller.playerName)){
+                controller.initializeGame(map.get("GAMETYPE").replace("\"", ""),
+                        map.get("PLAYERTOMOVE").replace("\"", ""),
+                        map.get("OPPONENT").replace("\"", ""));
+            } else {
+                controller.initializeGame(map.get("GAMETYPE").replace("\"", ""),
+                        map.get("PLAYERTOMOVE").replace("\"", ""),
+                        controller.playerName);
+            }
             //controller.setBeurt(map.get("PLAYERTOMOVE").replace("\"", "") + " is aan de beurt");
             if(controller.getGame() instanceof Reversi) {
                 //controller.performActionOnTile("disableAllTiles");
