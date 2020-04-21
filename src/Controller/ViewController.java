@@ -118,8 +118,8 @@ public class ViewController implements Initializable {
 	public void onlineInviteTButton(ActionEvent event) throws IOException {
 		String selectedPlayer=onlineListView.getSelectionModel().getSelectedItem();
 		networkController.challenge(selectedPlayer,"Tic-tac-toe");
-		Stage stage = (Stage) Sp_T_Button.getScene().getWindow();
-		changeView(stage,"../View/NewTTView.fxml");
+//		Stage stage = (Stage) Sp_T_Button.getScene().getWindow();
+//		changeView(stage,"/View/NewTTView.fxml");
 	}
 
 	/**
@@ -132,8 +132,8 @@ public class ViewController implements Initializable {
 	public void onlineInviteRButton(ActionEvent event) throws IOException {
 		String selectedPlayer=onlineListView.getSelectionModel().getSelectedItem();
 		networkController.challenge(selectedPlayer, "Reversi");
-		Stage stage = (Stage) Sp_R_Button.getScene().getWindow();
-		changeView(stage,"../View/NewOthelloView.fxml");
+//		Stage stage = (Stage) Sp_R_Button.getScene().getWindow();
+//		changeView(stage,"../View/NewOthelloView.fxml");
 	}
 
 	/**
@@ -146,7 +146,7 @@ public class ViewController implements Initializable {
 	void handleButtonTTT_SP(ActionEvent event) throws IOException {
 		Stage stage;
 		stage = (Stage) Sp_T_Button.getScene().getWindow();
-		changeView(stage,"../View/NewTTView.fxml");
+		changeView(stage,"/View/NewTTView.fxml");
 		if(!online.isSelected()) {
 			new TicTacToe(3, 3, playerName, this, false);
 			game.printGameState();
@@ -232,7 +232,7 @@ public class ViewController implements Initializable {
 					loginError.setText("Voer alstublieft correcte netwerkgegevens in alvorens in te loggen.");
 					loginError.setVisible(true);
 				} else {
-					changeView(stage,"../View/NewMenuWindowView.fxml");
+					changeView(stage,"/View/NewMenuWindowView.fxml");
 					//initializes the networkController ig there isn't one already
 					if(networkController == null) {
 						networkController = new NetworkController(this, field.getText(), ip_address, Integer.parseInt(port_number));
@@ -245,7 +245,7 @@ public class ViewController implements Initializable {
 			System.out.println(field.getText());
 			//If the player does not want to play online starts the offline menuView
 			if(!online.isSelected()) {
-				changeView(stage,"../View/NewMenuWindowViewOffline.fxml");
+				changeView(stage,"/View/NewMenuWindowViewOffline.fxml");
 			}
 		}
 	}
@@ -268,10 +268,10 @@ public class ViewController implements Initializable {
     public void changeView(String gameType) throws IOException {
 		if(gameType.equals("Reversi")){
 			Stage stage = (Stage) Sp_R_Button.getScene().getWindow();
-			changeView(stage,"../View/NewOthelloView.fxml");
+			changeView(stage,"/View/NewOthelloView.fxml");
 		} else if (gameType.equals("Tic-tac-toe")){
 			Stage stage = (Stage) Sp_T_Button.getScene().getWindow();
-			changeView(stage,"../View/NewTTView.fxml");
+			changeView(stage,"/View/NewTTView.fxml");
 		}
 	}
 
@@ -371,12 +371,12 @@ public class ViewController implements Initializable {
 				System.out.println(color);
 				if(color.equals("X")){
 					Image image = null;
-					image = new Image(getClass().getResourceAsStream("../Img/cross.png"));
+					image = new Image(getClass().getResourceAsStream("/Img/cross.png"));
 					((Rectangle) tile).setOpacity(1);
 					((Rectangle) tile).setFill(new ImagePattern(image));
 				} else {
 					Image image = null;
-					image = new Image(getClass().getResourceAsStream("../Img/circle.png"));
+					image = new Image(getClass().getResourceAsStream("/Img/circle.png"));
 					((Rectangle) tile).setOpacity(1);
 					((Rectangle) tile).setFill(new ImagePattern(image));
 				}
@@ -551,7 +551,7 @@ public class ViewController implements Initializable {
 	@FXML
 	void handleButtonR_SP(ActionEvent event) throws IOException{
 		Stage stage = (Stage) Sp_R_Button.getScene().getWindow();
-		changeView(stage,"../View/NewOthelloView.fxml");
+		changeView(stage,"/View/NewOthelloView.fxml");
 		if(!online.isSelected()) {
 			new Reversi(8, 8, playerName, this, false);
 			game.printGameState();
